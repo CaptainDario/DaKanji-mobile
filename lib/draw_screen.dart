@@ -101,32 +101,22 @@ class _DrawState extends State<Draw> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class DrawingPainter extends CustomPainter {
-  DrawingPainter({this.pointsList});
-  List<DrawingPoints> pointsList;
-  List<Offset> offsetPoints = List();
-  @override
-  void paint(Canvas canvas, Size size) {
-    for (int i = 0; i < pointsList.length - 1; i++) {
-      if (pointsList[i] != null && pointsList[i + 1] != null) {
-        canvas.drawLine(pointsList[i].points, pointsList[i + 1].points,
-            pointsList[i].paint);
-      } else if (pointsList[i] != null && pointsList[i + 1] == null) {
-        offsetPoints.clear();
-        offsetPoints.add(pointsList[i].points);
-        offsetPoints.add(Offset(
-            pointsList[i].points.dx + 0.1, pointsList[i].points.dy + 0.1));
-        canvas.drawPoints(PointMode.points, offsetPoints, pointsList[i].paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(DrawingPainter oldDelegate) => true;
+          ),
+          Row(children: [
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 1"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 2"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 3"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 4"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 5")))
+          ]),
+          Row(children: [
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 6"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 7"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 8"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 9"))),
+            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 10")))
+          ]),
+        ]));
 }
 
 class DrawingPoints {
