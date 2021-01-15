@@ -64,7 +64,12 @@ class _DrawState extends State<Draw> {
               ),
             )),
       ),
-      body: GestureDetector(
+        body: Column(children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 3 / 4,
+            height: MediaQuery.of(context).size.width * 3 / 4,
+            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 8),
+            child: GestureDetector(
         onPanUpdate: (details) {
           setState(() {
             RenderBox renderBox = context.findRenderObject();
