@@ -33,26 +33,27 @@ class DrawingPainter extends CustomPainter {
   }
 
   void paintKanjiDrawingAid(Canvas canvas, Size size) {
-    int dash_amount = 20;
-    int dashes = (size.width / (dash_amount + 1.0)).floor();
+    int dashAmount = 16;
+    double dashLength = (size.width / (dashAmount + 1));
 
     // square
     Paint paint = Paint()
       ..strokeWidth = 6.0
       ..style = PaintingStyle.stroke;
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+
     // vertical
     paint.strokeWidth = 3.0;
-    for (int i = 0; i < dash_amount + 1; i++) {
+    for (int i = 0; i < dashAmount + 1; i++) {
       if (i % 2 == 1) continue;
-      canvas.drawLine(Offset(size.width / 2.0, dashes * (i * 1.0)),
-          Offset(size.width / 2.0, dashes * (i + 1.0)), paint);
+      canvas.drawLine(Offset(size.width / 2.0, dashLength * (i * 1.0)),
+          Offset(size.width / 2.0, dashLength * (i + 1.0)), paint);
     }
     // horizontal
-    for (int i = 0; i < dash_amount + 1; i++) {
+    for (int i = 0; i < dashAmount + 1; i++) {
       if (i % 2 == 1) continue;
-      canvas.drawLine(Offset(dashes * (i * 1.0), size.width / 2.0),
-          Offset(dashes * (i + 1.0), size.width / 2.0), paint);
+      canvas.drawLine(Offset(dashLength * (i * 1.0), size.width / 2.0),
+          Offset(dashLength * (i + 1.0), size.width / 2.0), paint);
     }
   }
 
