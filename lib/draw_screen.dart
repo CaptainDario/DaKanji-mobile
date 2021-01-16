@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'DrawingPoints.dart';
 import 'DrawingPainter.dart';
 
 class Draw extends StatefulWidget {
@@ -12,10 +11,7 @@ class Draw extends StatefulWidget {
 }
 
 class _DrawState extends State<Draw> {
-  Color selectedColor = Colors.black;
-  double strokeWidth = 3.0;
-  List<DrawingPoints> points = List();
-  StrokeCap strokeCap = (Platform.isAndroid) ? StrokeCap.butt : StrokeCap.round;
+  List<List<Offset>> points = new List();
 
   @override
   Widget build(BuildContext context) {
@@ -60,35 +56,28 @@ class _DrawState extends State<Draw> {
         ),
         body: Column(children: [
           Container(
-            width: MediaQuery.of(context).size.width * 3 / 4,
-            height: MediaQuery.of(context).size.width * 3 / 4,
-            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 8),
+            width: MediaQuery.of(context).size.width * 5 / 6,
+            height: MediaQuery.of(context).size.width * 5 / 6,
+            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
             child: GestureDetector(
               onPanUpdate: (details) {
                 setState(() {
                   RenderBox renderBox = context.findRenderObject();
-                  points.add(DrawingPoints(
-                      points: renderBox.globalToLocal(details.globalPosition),
-                      paint: Paint()
-                        ..strokeCap = strokeCap
-                        ..isAntiAlias = true
-                        ..strokeWidth = strokeWidth));
+                  Offset point = renderBox.globalToLocal(details.localPosition);
+                  points[points.length - 1].add(point);
                 });
               },
               onPanStart: (details) {
                 setState(() {
+                  points.add(new List());
                   RenderBox renderBox = context.findRenderObject();
-                  points.add(DrawingPoints(
-                      points: renderBox.globalToLocal(details.globalPosition),
-                      paint: Paint()
-                        ..strokeCap = strokeCap
-                        ..isAntiAlias = true
-                        ..strokeWidth = strokeWidth));
+                  Offset point = renderBox.globalToLocal(details.localPosition);
+                  points[points.length - 1].add(point);
                 });
               },
               onPanEnd: (details) {
                 setState(() {
-                  points.add(null);
+                  // add inference here
                 });
               },
               child: CustomPaint(
