@@ -79,14 +79,174 @@ class _DrawState extends State<Draw> {
                 });
               }),
         ]),
+        // first prediction row
+        Row(children: [
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
           ]),
+        // second prediction row
           Row(children: [
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 6"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 7"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 8"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 9"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 10")))
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
+          Expanded(
+              child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                      margin: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(0),
+                      child: RaisedButton(
+                          color: Colors.white.withAlpha(50),
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {},
+                          child: FittedBox(
+                              child: Text(
+                            "漢",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(fontSize: 1000.0),
+                          )))))),
           ]),
-        ]));
+        Spacer(),
+      ],
+    ));
   }
 }
