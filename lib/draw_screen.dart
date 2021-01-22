@@ -51,13 +51,34 @@ class _DrawState extends State<Draw> {
                 ),
               ),
             ),
-          ),
+        Spacer(),
+        // undo / clear buttons
           Row(children: [
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 1"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 2"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 3"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 4"))),
-            Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 5")))
+          IconButton(
+              icon: Icon(Icons.undo),
+              onPressed: () {
+                setState(() {
+                  points.removeLast();
+                });
+              }),
+          Spacer(),
+          /*
+        Switch(
+          value: openInJisho,
+          onChanged: (value) {
+            setState(() {
+              openInJisho = value;
+            });
+          },
+        ),*/
+          IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                setState(() {
+                  points.clear();
+                });
+              }),
+        ]),
           ]),
           Row(children: [
             Expanded(child: FlatButton(onPressed: () {}, child: Text("漢字 6"))),
