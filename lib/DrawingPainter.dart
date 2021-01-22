@@ -3,21 +3,29 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class DrawingPainter extends CustomPainter {
-  DrawingPainter({this.pointsList});
   List<List<Offset>> pointsList;
   List<Offset> offsetPoints = List();
+  bool darkMode = false;
+
+  DrawingPainter(List<List<Offset>> pointsList, bool darkMode) {
+    this.pointsList = pointsList;
+    this.darkMode = darkMode;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
-    //set the background color of the canvas
-    canvas.drawColor(Color.fromARGB(255, 0, 0, 255), BlendMode.srcATop);
 
     this.paintKanjiDrawingAid(canvas, size);
 
     Paint paint = Paint()
       ..strokeWidth = 3.0
       ..strokeCap = StrokeCap.round;
+
+    if (this.darkMode)
+      paint.color = Colors.white;
+    else
+      paint.color = Colors.black;
 
     // iterate over all strokes
     for (int s = 0; s < pointsList.length; s++) {
@@ -33,10 +41,16 @@ class DrawingPainter extends CustomPainter {
     int dashAmount = 16;
     double dashLength = (size.width / (dashAmount + 1));
 
-    // square
     Paint paint = Paint()
       ..strokeWidth = 6.0
       ..style = PaintingStyle.stroke;
+
+    if (this.darkMode)
+      paint.color = Colors.white;
+    else
+      paint.color = Colors.black;
+
+    // the frame around the drawing canvas
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
 
     // vertical

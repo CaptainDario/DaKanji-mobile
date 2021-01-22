@@ -12,49 +12,15 @@ class Draw extends StatefulWidget {
 
 class _DrawState extends State<Draw> {
   List<List<Offset>> points = new List();
+  bool darkModeOn = false;
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50.0),
-                  color: Colors.greenAccent),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        // undo button
-                        IconButton(
-                            icon: Icon(Icons.undo),
-                            onPressed: () {
-                              setState(() {
-                                points.removeLast();
-                              });
-                            }),
-
-                        // clear button
-                        IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              setState(() {
-                                points.clear();
-                              });
-                            }),
-                      ],
-                    ),
-                  ],
-                ),
-              )),
-        ),
-        body: Column(children: [
+        body: Column(
+      children: [
           Container(
             width: MediaQuery.of(context).size.width * 5 / 6,
             height: MediaQuery.of(context).size.width * 5 / 6,
@@ -81,8 +47,7 @@ class _DrawState extends State<Draw> {
                 });
               },
               child: CustomPaint(
-                painter: DrawingPainter(
-                  pointsList: points,
+              painter: new DrawingPainter(points, darkModeOn),
                 ),
               ),
             ),
