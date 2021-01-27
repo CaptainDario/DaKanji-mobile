@@ -12,6 +12,7 @@ class Draw extends StatefulWidget {
 
 class _DrawState extends State<Draw> {
   List<List<Offset>> points = new List();
+  bool openInJisho = false;
   bool darkModeOn = false;
 
   @override
@@ -22,6 +23,23 @@ class _DrawState extends State<Draw> {
         body: Column(
       children: [
           Container(
+            padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 1 / 12,
+                MediaQuery.of(context).size.width * 1 / 12,
+                MediaQuery.of(context).size.width * 1 / 12,
+                0),
+            child: Row(children: [
+              Switch(
+                  value: openInJisho,
+                  onChanged: (value) {
+                    setState(() {
+                      openInJisho = value;
+                    });
+                  }),
+              Text("open in Jisho"),
+              Spacer()
+            ])),
+        Container(
             width: MediaQuery.of(context).size.width * 5 / 6,
             height: MediaQuery.of(context).size.width * 5 / 6,
             margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
