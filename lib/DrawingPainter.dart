@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -12,29 +13,15 @@ class DrawingPainter extends CustomPainter {
     this.darkMode = darkMode;
   }
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+  List<String> runInference() {
+    List<String> predictions = List();
+    Random rnd = new Random();
 
-    this.paintKanjiDrawingAid(canvas, size);
-
-    Paint paint = Paint()
-      ..strokeWidth = 3.0
-      ..strokeCap = StrokeCap.round;
-
-    if (this.darkMode)
-      paint.color = Colors.white;
-    else
-      paint.color = Colors.black;
-
-    // iterate over all strokes
-    for (int s = 0; s < pointsList.length; s++) {
-      // iterate over all points
-      for (int p = 0; p < pointsList[s].length - 1; p++) {
-        // draw the stroke
-        canvas.drawLine(pointsList[s][p], pointsList[s][p + 1], paint);
-      }
+    for (int i = 0; i < 10; i++) {
+      predictions.add(rnd.nextInt(10).toString());
     }
+
+    return predictions;
   }
 
   void paintKanjiDrawingAid(Canvas canvas, Size size) {
@@ -66,6 +53,32 @@ class DrawingPainter extends CustomPainter {
       canvas.drawLine(Offset(dashLength * (i * 1.0), size.width / 2.0),
           Offset(dashLength * (i + 1.0), size.width / 2.0), paint);
     }
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Setup canvas and paint
+    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    Paint paint = Paint()
+      ..strokeWidth = 3.0
+      ..strokeCap = StrokeCap.round;
+    if (this.darkMode)
+      paint.color = Colors.white;
+    else
+      paint.color = Colors.black;
+
+    // paint the strokes
+    // iterate over all strokes
+    for (int s = 0; s < pointsList.length; s++) {
+      // iterate over all points
+      for (int p = 0; p < pointsList[s].length - 1; p++) {
+        // draw the stroke
+        canvas.drawLine(pointsList[s][p], pointsList[s][p + 1], paint);
+      }
+    }
+
+    // draw the rectangle and the dashed lines
+    this.paintKanjiDrawingAid(canvas, size);
   }
 
   @override
