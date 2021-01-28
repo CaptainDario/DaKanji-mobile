@@ -1,13 +1,20 @@
-import 'draw_screen.dart';
+import 'DrawScreen.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+import 'package:da_kanji_recognizer_mobile/Settingsscreen.dart';
+import 'AboutScreen.dart';
+
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  String title = "DaKanjiRecognizer";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App Title',
+      title: title,
       theme: ThemeData(
         brightness: Brightness.light,
       ),
@@ -16,7 +23,11 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: Draw(),
+      home: DrawScreen(),
+      routes: <String, WidgetBuilder>{
+        "/settings": (BuildContext context) => SettingsScreen(),
+        "/about": (BuildContext context) => AboutScreen()
+      },
     );
   }
 }
