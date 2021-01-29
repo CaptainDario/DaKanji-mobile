@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'package:da_kanji_recognizer_mobile/Settingsscreen.dart';
 import 'AboutScreen.dart';
+import 'Settings.dart';
+import 'globals.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // load the settings
+  await SETTINGS.load();
+
   runApp(MyApp());
 }
 
