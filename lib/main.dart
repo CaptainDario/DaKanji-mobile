@@ -1,9 +1,9 @@
-import 'DrawScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'package:da_kanji_recognizer_mobile/Settingsscreen.dart';
+import 'Settingsscreen.dart';
+import 'DrawScreen.dart';
 import 'AboutScreen.dart';
-import 'Settings.dart';
 import 'globals.dart';
 
 Future<void> main() async {
@@ -16,9 +16,12 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   String title = "DaKanjiRecognizer";
-
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       title: title,
       theme: ThemeData(
