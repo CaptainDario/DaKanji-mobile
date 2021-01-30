@@ -43,8 +43,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         body: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
+            ListTile(title: Text("Long press opens:")),
             ListTile(
-                title: Text("Long press opens on jisho.org"),
+                title: Text("on jisho.org"),
                 trailing: Switch(
                     value: SETTINGS.openWithJisho,
                     onChanged: (value) {
@@ -54,7 +55,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }),
                 onTap: () {}),
             ListTile(
-                title: Text("Long press opens on takoboto.jp"),
+                title: Text("on takoboto.jp"),
                 trailing: Switch(
                     value: SETTINGS.openWithTakoboto,
                     onChanged: (value) {
@@ -64,7 +65,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }),
                 onTap: () {}),
             ListTile(
-                title: Text("Long press opens on wadoku.de"),
+                title: Text("on wadoku.de"),
                 trailing: Switch(
                     value: SETTINGS.openWithWadoku,
                     onChanged: (value) {
@@ -74,7 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }),
                 onTap: () {}),
             ListTile(
-                title: Text("Long press opens a custom URL"),
+                title: Text("a custom URL"),
                 trailing: Switch(
                     value: SETTINGS.openWithCustomURL,
                     onChanged: (value) {
