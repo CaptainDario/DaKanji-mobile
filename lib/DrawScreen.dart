@@ -1,7 +1,7 @@
-import 'dart:io' show Platform;
 import 'dart:ui';
 
 import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
+import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
 
 import 'DrawingPainter.dart';
@@ -23,9 +23,7 @@ class _DrawScreenState extends State<DrawScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
-    canvas = new DrawingPainter(points, darkModeOn);
+    canvas = new DrawingPainter(points, SETTINGS.selectedTheme == "dark");
 
     return Scaffold(
         appBar: AppBar(

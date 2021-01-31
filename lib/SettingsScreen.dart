@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:flutter/material.dart';
 
 import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
@@ -40,9 +38,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
         appBar: AppBar(title: Text("Settings")),
         drawer: DaKanjiRecognizerDrawer(),
+        // ListView of all available settings
         body: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
+
+            // different options for dictionary on long press
             ListTile(title: Text("Long press opens:")),
             ListTile(
                 title: Text("on jisho.org"),
@@ -74,6 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       });
                     }),
                 onTap: () {}),
+            // let the user enter a custom url for flexibility
             ListTile(
                 title: Text("a custom URL"),
                 trailing: Switch(
@@ -99,6 +101,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   )))
                 ]),
+                onTap: () {}),
+            // setting for which theme to use
+            ListTile(
+                title: Text("theme (set with next app start)"),
+                trailing: DropdownButton<String>(
+                  value: SETTINGS.selectedTheme,
+                  items: SETTINGS.themes
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                        value: value, child: Text(value));
+                  }).toList(),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      SETTINGS.selectedTheme = newValue;
+                      SETTINGS.save();
+                    });
+                  },
+                ),
                 onTap: () {}),
           ],
         ));

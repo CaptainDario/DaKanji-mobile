@@ -18,20 +18,22 @@ class MyApp extends StatelessWidget {
   String title = "DaKanjiRecognizer";
   @override
   Widget build(BuildContext context) {
+    // fix orientation to portrait
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
     return MaterialApp(
       title: title,
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
-      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+
+      // themes
+      theme: ThemeData(brightness: Brightness.light,),
+      darkTheme: ThemeData(brightness: Brightness.dark,),
+      themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
+
+      //screens
       home: DrawScreen(),
       routes: <String, WidgetBuilder>{
         "/settings": (BuildContext context) => SettingsScreen(),

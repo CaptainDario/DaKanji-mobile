@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings {
@@ -6,6 +7,13 @@ class Settings {
   bool openWithTakoboto;
   bool openWithWadoku;
   String customURL;
+  String selectedTheme;
+  List<String> themes = ["light", "dark", "system"];
+  Map<String, ThemeMode> themesDict = {
+    "light" : ThemeMode.light,
+    "dark" : ThemeMode.dark,
+    "system" : ThemeMode.system
+  };
 
   Settings() {
     setTogglesToFalse();
@@ -30,6 +38,7 @@ class Settings {
     prefs.setBool('openWithTakoboto', openWithTakoboto);
     prefs.setBool('openWithWadoku', openWithWadoku);
     prefs.setString('customURL', customURL);
+    prefs.setString('selectedTheme', selectedTheme);
   }
 
   void load() async {
@@ -40,6 +49,7 @@ class Settings {
     openWithTakoboto = await loadOpenWithTakoboto();
     openWithWadoku = await loadOpenWithWadoku();
     customURL = await loadCustomURL();
+    selectedTheme = await loadSelectedTheme();
 
     // assure that atleast one switch is set to true
     if (!this.openWithCustomURL &&
@@ -81,6 +91,13 @@ class Settings {
   Future<String> loadCustomURL() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String loaded = prefs.getString('customURL') ?? "";
+
+    return loaded;
+  }
+
+  Future<String> loadSelectedTheme() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String loaded = prefs.getString('selectedTheme') ?? "";
 
     return loaded;
   }

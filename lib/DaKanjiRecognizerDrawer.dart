@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'SettingsScreen.dart';
 
 class DaKanjiRecognizerDrawer extends StatelessWidget {
   @override
