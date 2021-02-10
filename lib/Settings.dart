@@ -97,7 +97,7 @@ class Settings {
 
   Future<String> loadSelectedTheme() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loaded = prefs.getString('selectedTheme') ?? "";
+    String loaded = prefs.getString('selectedTheme') ?? "system";
 
     return loaded;
   }
