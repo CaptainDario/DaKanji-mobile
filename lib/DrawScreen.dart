@@ -1,9 +1,6 @@
-import 'dart:ui';
-
-import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
-import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
 
+import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
 import 'DrawingPainter.dart';
 import 'PredictionButton.dart';
 
@@ -23,7 +20,8 @@ class _DrawScreenState extends State<DrawScreen> {
 
   @override
   Widget build(BuildContext context) {
-    canvas = new DrawingPainter(points, SETTINGS.selectedTheme == "dark");
+    bool darkMode = (Theme.of(context).brightness == Brightness.dark);
+    canvas = new DrawingPainter(points, darkMode);
 
     return Scaffold(
         appBar: AppBar(
@@ -55,14 +53,13 @@ class _DrawScreenState extends State<DrawScreen> {
                     points[points.length - 1].add(point);
                   });
                 },
-                onPanEnd: (details) {
-                  setState(() {
-                    // remove single points and dont run inference
-                    if (points[points.length - 1].length == 1)
-                      points.removeLast();
-                    else
-                      predictions = canvas.runInference();
-                  });
+                onPanEnd: (details) async {
+                  // remove single points and dont run inference
+                  if (points[points.length - 1].length == 1)
+                    points.removeLast();
+                  else
+                    predictions = await canvas.runInference();
+                  setState(() {});
                 },
                 child: CustomPaint(
                   painter: canvas,
@@ -88,7 +85,7 @@ class _DrawScreenState extends State<DrawScreen> {
                     });
                   }),
             ]),
-            // first prediction row
+            // first prediction button row
             Row(children: [
               PredictionButton(predictions[0]),
               PredictionButton(predictions[1]),
@@ -96,7 +93,7 @@ class _DrawScreenState extends State<DrawScreen> {
               PredictionButton(predictions[3]),
               PredictionButton(predictions[4]),
             ]),
-            // second prediction row
+            // second prediction button row
             Row(children: [
               PredictionButton(predictions[5]),
               PredictionButton(predictions[6]),
