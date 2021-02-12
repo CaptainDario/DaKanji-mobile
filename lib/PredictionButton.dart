@@ -1,4 +1,7 @@
+import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PredictionButton extends StatelessWidget {
   String char;
@@ -19,9 +22,14 @@ class PredictionButton extends StatelessWidget {
             color: Colors.white.withAlpha(50),
             padding: EdgeInsets.all(0),
             // copy the character to clipboar on single press
-            onPressed: () => {print("Pressed " + this.char)},
+            onPressed: () {
+              Clipboard.setData(new ClipboardData(text: this.char));
+            },
             // open the prediction in a dictionary (set in settings)
-            onLongPress: () => {print("Long pressed " + this.char)},
+            onLongPress: () {
+              Clipboard.setData(new ClipboardData(text: this.char));
+              launch(SETTINGS.openWithSelectedDictionary(this.char));
+            },
             child: FittedBox(
               child: Text(
                 this.char,
