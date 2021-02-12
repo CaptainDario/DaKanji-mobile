@@ -23,6 +23,32 @@ class DrawingPainter extends CustomPainter {
     return predictions;
   }
 
+  /// Creates an image of the current canvas.
+  ///
+  /// Creates a new ui.Canvas and repaints the current image on it.
+  /// This canvas is than used to create an image.
+  /// 
+  /// @returns A list containing an image of the canvas.
+  Future<Uint8List> getImageFromCanvas() async {
+    // mark that the canvas is being recorded
+    recording = true;
+
+    // record the drawn character on a new canvas
+    ui.PictureRecorder drawnImageRecorder = ui.PictureRecorder();
+    Canvas getImageCanvas = new ui.Canvas(drawnImageRecorder);
+    paint(getImageCanvas, size);
+    ui.Picture pic = drawnImageRecorder.endRecording();
+    recording = false;
+
+    // convert the recording to an image
+    final ui.Image img =
+        await pic.toImage(size.width.floor(), size.height.floor());
+    ByteData byteData = await img.toByteData(format: ui.ImageByteFormat.png);
+    Uint8List pngBytes = byteData.buffer.asUint8List();
+
+    return pngBytes;
+  }
+
   void paintKanjiDrawingAid(Canvas canvas, Size size) {
     int dashAmount = 16;
     double dashLength = (size.width / (dashAmount + 1));
