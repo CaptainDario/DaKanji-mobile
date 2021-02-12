@@ -14,19 +14,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     switch (switchToBeTrue) {
       case 1:
-        SETTINGS.openWithJisho = true;
+        SETTINGS.openWithCustomURL = true;
         break;
 
       case 2:
-        SETTINGS.openWithTakoboto = true;
+        SETTINGS.openWithJisho = true;
         break;
 
       case 3:
-        SETTINGS.openWithWadoku = true;
+        SETTINGS.openWithTakoboto = true;
         break;
 
       case 4:
-        SETTINGS.openWithCustomURL = true;
+        SETTINGS.openWithWadoku = true;
+        break;
+
+      case 5:
+        SETTINGS.openWithWeblio = true;
         break;
     }
 
@@ -42,7 +46,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         body: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-
             // different options for dictionary on long press
             ListTile(title: Text("Long press opens:")),
             ListTile(
@@ -51,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: SETTINGS.openWithJisho,
                     onChanged: (value) {
                       setState(() {
-                        toggleSwitches(1);
+                        toggleSwitches(2);
                       });
                     }),
                 onTap: () {}),
@@ -61,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: SETTINGS.openWithTakoboto,
                     onChanged: (value) {
                       setState(() {
-                        toggleSwitches(2);
+                        toggleSwitches(3);
                       });
                     }),
                 onTap: () {}),
@@ -71,7 +74,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: SETTINGS.openWithWadoku,
                     onChanged: (value) {
                       setState(() {
-                        toggleSwitches(3);
+                        toggleSwitches(4);
+                      });
+                    }),
+                onTap: () {}),
+            ListTile(
+                title: Text("on weblio.de"),
+                trailing: Switch(
+                    value: SETTINGS.openWithWeblio,
+                    onChanged: (value) {
+                      setState(() {
+                        toggleSwitches(5);
                       });
                     }),
                 onTap: () {}),
@@ -82,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     value: SETTINGS.openWithCustomURL,
                     onChanged: (value) {
                       setState(() {
-                        toggleSwitches(4);
+                        toggleSwitches(1);
                       });
                     }),
                 onTap: () {}),
@@ -104,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onTap: () {}),
             // setting for which theme to use
             ListTile(
-                title: Text("theme (set with next app start)"),
+                title: Text("theme (used at next app start)"),
                 trailing: DropdownButton<String>(
                   value: SETTINGS.selectedTheme,
                   items: SETTINGS.themes
