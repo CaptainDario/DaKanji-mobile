@@ -39,7 +39,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
                           launch(
-                              "https://github.com/CaptainDario/DaKanjiRecognizer");
+                              "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop");
                         }),
                   TextSpan(
                       text:
@@ -57,14 +57,14 @@ class _AboutScreenState extends State<AboutScreen> {
                         }),
                   TextSpan(
                       text:
-                          "If you want to learn more about the CNN (AI) powering this app, "),
+                          "If you want to learn more about the machine learning powering this app, "),
                   TextSpan(
-                      text: "take a look at this jupyter notebook.\n\n",
+                      text: "take a look here.\n\n",
                       style: TextStyle(color: Colors.blue),
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
                           launch(
-                              "https://captaindario.github.io/DaKanjiRecognizer/DaKanjiRecognizer.html");
+                              "https://captaindario.github.io/DaKanjiRecognizer-ML/index.html");
                         }),
                   TextSpan(text: "If you like this app please consider\n"),
                   TextSpan(text: "\t • "),
@@ -87,7 +87,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
                           launch(
-                              "https://github.com/CaptainDario/DaKanjiRecognizer");
+                              "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile");
                         }),
                   TextSpan(text: "And also check out \n"),
                   TextSpan(text: "\t • "),
@@ -135,7 +135,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         }),
                   TextSpan(
                       text:
-                          "\n\nIf you have a problem using this app please open an issue "),
+                          "\n\nIf you have a problem using this app please report it "),
                   TextSpan(
                       text: "here.",
                       style: TextStyle(
@@ -148,7 +148,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         }),
                   TextSpan(
                       text:
-                          "\nYou have an awseome idea how to improve this app?"),
+                          "\nYou have an idea how to improve this app?"),
                   TextSpan(text: "That's awesome! Let's discuss it "),
                   TextSpan(
                       text: "here.",
