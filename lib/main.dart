@@ -29,8 +29,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       // themes
-      theme: ThemeData(brightness: Brightness.light,),
-      darkTheme: ThemeData(brightness: Brightness.dark,),
+      theme: ThemeData(
+        brightness: Brightness.light,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
 
       //screens
