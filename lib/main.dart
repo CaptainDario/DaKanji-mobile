@@ -6,16 +6,31 @@ import 'DrawScreen.dart';
 import 'AboutScreen.dart';
 import 'globals.dart';
 
+import 'package:tflite_flutter/tflite_flutter.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // load the settings
-  await SETTINGS.load();
 
-  runApp(MyApp());
+  await init();
+
+  runApp(DaKanjiRecognizerApp());
 }
 
-class MyApp extends StatelessWidget {
-  String title = "DaKanjiRecognizer";
+Future<void> init() async {
+  // load the settings
+  SETTINGS.load();
+
+  // load labels from text file and one hot encode them
+  String labels = await rootBundle.loadString(LABELS_ASSET);
+  LABEL_LIST = labels.split("");
+
+  // initialize interpreter(s)
+  CNN_KANJI_ONLY_INTERPRETER =
+      await Interpreter.fromAsset("model_CNN_kanji_only.tflite");
+
+}
+
+class DaKanjiRecognizerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // fix orientation to portrait
@@ -25,7 +40,7 @@ class MyApp extends StatelessWidget {
     ]);
 
     return MaterialApp(
-      title: title,
+      title: appTitle,
       debugShowCheckedModeBanner: false,
 
       // themes
