@@ -7,31 +7,41 @@ class Settings {
 
   /// The custom URL a user can define on the settings page.
   String customURL;
+
   /// The URL of the jisho website
   String jishoURL;
+
   /// The URL of the takoboto website
   String takobotoURL;
+
   /// The URL of the wadoku website
   String wadokuURL;
+
   /// The URL of the weblio website
   String weblioURL;
 
   /// Indicates if a long press will use the custom URL.
   bool openWithCustomURL;
+
   /// Indicates if a long press will use the jisho URL.
   bool openWithJisho;
+
   /// Indicates if a long press will use the takoboto URL.
   bool openWithTakoboto;
+
   /// Indicates if a long press will use the wadoku URL.
   bool openWithWadoku;
+
   /// Indicates if a long press will use the weblio URL.
   bool openWithWeblio;
 
   /// The theme which the application will use.
   /// System will match the settings of the system.
   String selectedTheme;
+
   /// A list with all available themes.
   List<String> themes = ["light", "dark", "system"];
+
   /// A Map from the string of a theme to the ThemeMode of the theme.
   Map<String, ThemeMode> themesDict = {
     "light": ThemeMode.light,
@@ -51,8 +61,8 @@ class Settings {
   }
 
   /// Get the URL to the predicted kanji in the selected dictionary.
-  /// 
-  /// @returns The URL which leads to the predicted kanji in the selected dict. 
+  ///
+  /// @returns The URL which leads to the predicted kanji in the selected dict.
   String openWithSelectedDictionary(String kanji) {
     String url;
 
@@ -74,7 +84,7 @@ class Settings {
     return url;
   }
 
-  /// Set all values of the toggles in the Settings menu to false. 
+  /// Set all values of the toggles in the Settings menu to false.
   void setTogglesToFalse() {
     openWithCustomURL = false;
     openWithJisho = false;
@@ -116,7 +126,8 @@ class Settings {
     if (!this.openWithCustomURL &&
         !this.openWithJisho &&
         !this.openWithTakoboto &&
-        !this.openWithWadoku) {
+        !this.openWithWadoku &&
+        !this.openWithWeblio) {
       this.openWithJisho = true;
     }
   }
