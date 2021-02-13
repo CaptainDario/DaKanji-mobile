@@ -45,7 +45,7 @@ class Settings {
     String kanjiPlaceholder = "%X%";
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder + "%23kanji";
-    takobotoURL = "https://http://takoboto.jp/?q=" + kanjiPlaceholder;
+    takobotoURL = "http://takoboto.jp/?q=" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
   }
@@ -66,7 +66,12 @@ class Settings {
       url = wadokuURL;
     else if (openWithWeblio) url = weblioURL;
 
-    return url = url.replaceFirst(new RegExp(kanjiPlaceholder), kanji);
+    if (!(url.startsWith("http://") || url.startsWith("https://")))
+      url = "https://" + url;
+
+    url = url.replaceFirst(new RegExp(kanjiPlaceholder), kanji);
+    url = Uri.encodeFull(url);
+    return url;
   }
 
   /// Set all values of the toggles in the Settings menu to false. 
