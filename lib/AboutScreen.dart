@@ -1,10 +1,10 @@
 import 'dart:ui';
-
 import 'package:url_launcher/url_launcher.dart';
-
-import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
+import 'globals.dart';
 
 class AboutScreen extends StatefulWidget {
   @override
@@ -34,7 +34,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       text: "It can recognize handwritten Kanji characters.\n"),
                   TextSpan(text: "A desktop version is available "),
                   TextSpan(
-                      text: "in this repository.\n\n",
+                      text: "here.\n\n",
                       style: TextStyle(color: Colors.blue),
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
@@ -171,6 +171,7 @@ class _AboutScreenState extends State<AboutScreen> {
                           launch(
                               "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/");
                         }),
+                  TextSpan(text: "\n\nThe used backend for inference is: " + USED_BACKEND),
                 ]),
           )),
     );

@@ -10,8 +10,6 @@ class DrawScreen extends StatefulWidget {
 }
 
 class _DrawScreenState extends State<DrawScreen> {
-  bool openInJisho = false;
-  bool darkModeOn = false;
   DrawingPainter canvas;
   //the points which were drawn on the canvas
   List<List<Offset>> points = new List();
@@ -30,12 +28,14 @@ class _DrawScreenState extends State<DrawScreen> {
         drawer: DaKanjiRecognizerDrawer(),
         body: Column(
           children: [
+            // the canvas to draw on
             Container(
               width: MediaQuery.of(context).size.width * 5 / 6,
               height: MediaQuery.of(context).size.width * 5 / 6,
               margin:
                   EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
               child: GestureDetector(
+                // drawing pointer moved
                 onPanUpdate: (details) {
                   setState(() {
                     RenderBox renderBox = context.findRenderObject();
@@ -44,6 +44,7 @@ class _DrawScreenState extends State<DrawScreen> {
                     points[points.length - 1].add(point);
                   });
                 },
+                // started drawing
                 onPanStart: (details) {
                   setState(() {
                     points.add(new List());
@@ -53,8 +54,9 @@ class _DrawScreenState extends State<DrawScreen> {
                     points[points.length - 1].add(point);
                   });
                 },
+                // finished drawing a stroke
                 onPanEnd: (details) async {
-                  // remove single points and dont run inference
+                  // remove single points and don't run inference for them
                   if (points[points.length - 1].length == 1)
                     points.removeLast();
                   else
@@ -67,25 +69,32 @@ class _DrawScreenState extends State<DrawScreen> {
               ),
             ),
             Spacer(),
-            // undo / clear buttons
+            // undo/clear button
             Row(children: [
+              // undo
               IconButton(
                   icon: Icon(Icons.undo),
-                  onPressed: () {
-                    setState(() {
-                      points.removeLast();
-                    });
+                  onPressed: () async {
+                    points.removeLast();
+                    //only run inference if canvas still has strokes
+                    if(points.length > 0)
+                      predictions = await canvas.runInference();
+                    else
+                      predictions = List.generate(10, (i) => " ");
+                    setState(() {});
                   }),
               Spacer(),
+              // clear
               IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
                     setState(() {
+                      predictions = List.generate(10, (i) => " ");
                       points.clear();
                     });
                   }),
             ]),
-            // first prediction button row
+            // first row of preiction buttons
             Row(children: [
               PredictionButton(predictions[0]),
               PredictionButton(predictions[1]),
@@ -93,7 +102,7 @@ class _DrawScreenState extends State<DrawScreen> {
               PredictionButton(predictions[3]),
               PredictionButton(predictions[4]),
             ]),
-            // second prediction button row
+            // second row of prediction buttons
             Row(children: [
               PredictionButton(predictions[5]),
               PredictionButton(predictions[6]),
