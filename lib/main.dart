@@ -26,12 +26,13 @@ Future<void> init() async {
   String labels = await rootBundle.loadString(LABELS_ASSET);
   LABEL_LIST = labels.split("");
 
-  initInterpreter();
-}
-
-void initInterpreter() async {
-  // get platform information
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  // initialize the TFLite interpreter
+  if (Platform.isAndroid) 
+    await initInterpreterAndroid();
+  else if (Platform.isIOS) 
+    await initInterpreterIOS();
+  else if (kIsWeb) 
+    await initInterpreterWeb();
 
   if (Platform.isAndroid) {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
