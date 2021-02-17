@@ -42,3 +42,4 @@ app.*.map.json
 
 # python
 python
+.vscode
