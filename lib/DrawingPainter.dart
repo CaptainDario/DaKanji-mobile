@@ -7,21 +7,44 @@ import 'package:image/image.dart' as image;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 class DrawingPainter extends CustomPainter {
+  /// a list of points which were drawn on the canvas
   List<List<Offset>> pointsList;
-  List<Offset> offsetPoints = List();
+
+  /// if the app is running in dark mode
   bool darkMode;
 
-  // the canvas size
+  /// the size of the canvas
   Size size;
 
-  // if the canvas is currently being recoded
+  /// if the canvas is currently being recorded
   bool recording = false;
 
+  /// input to the CNN
+  List<List<List<List<double>>>> _input;
+
+  /// output of the CNN
+  List<List<double>> _output;
+
+  /// Constructor to initialize an DrawingPainter instance.
+  ///
+  /// @param A list of points which should be drawn on the canvas
+  /// @param If the app is running in dark mode or not
   DrawingPainter(List<List<Offset>> pointsList, bool darkMode) {
     this.pointsList = pointsList;
     this.darkMode = darkMode;
+    this.recording = false;
+    this._input = List<List<double>>.generate(
+            64, (i) => List<double>.generate(64, (j) => 0.0))
+        .reshape<double>([1, 64, 64, 1]);
+    this._output =
+        List<List<double>>.generate(1, (i) => 
+          List<double>.generate(LABEL_LIST.length, (j) => 0.0));
+      
   }
 
+  /// Predicted the drawn character by running inference on the CNN
+  ///
+  /// @returns A list of the 10 most likely predictions
   Future<List<String>> runInference() async {
     List<String> predictions = List.generate(10, (i) => i.toString());
 
@@ -32,28 +55,25 @@ class DrawingPainter extends CustomPainter {
     Uint8List resizedBytes =
         resizedImage.getBytes(format: image.Format.luminance);
 
-    // create input and output for the CNN
-    List<List<double>> input_2d = List.generate(64, (i) => List(64));
+    // convert image for inference into shape [1, 64, 64, 1]
     for (int x = 0; x < 64; x++) {
       for (int y = 0; y < 64; y++) {
         double val = (resizedBytes[(x * 64) + y] / 255).toDouble();
-        input_2d[x][y] = val;
+        _input[0][x][y][0] = val;
       }
     }
-    var input = input_2d.reshape([1, 64, 64, 1]);
-    var output = List(LABEL_LIST.length).reshape([1, LABEL_LIST.length]);
 
     // run inference
-    CNN_KANJI_ONLY_INTERPRETER.run(input, output);
+    CNN_KANJI_ONLY_INTERPRETER.run(_input, _output);
 
     // get the 10 most likely predictions
     for (int c = 0; c < 10; c++) {
       int index = 0;
-      for (int i = 0; i < output[0].length; i++) {
-        if (output[0][i] > output[0][index]) index = i;
+      for (int i = 0; i < _output[0].length; i++) {
+        if (_output[0][i] > _output[0][index]) index = i;
       }
       predictions[c] = LABEL_LIST[index];
-      output[0][index] = 0.0;
+      _output[0][index] = 0.0;
     }
     return predictions;
   }
@@ -62,7 +82,7 @@ class DrawingPainter extends CustomPainter {
   ///
   /// Creates a new ui.Canvas and repaints the current image on it.
   /// This canvas is than used to create an image.
-  /// 
+  ///
   /// @returns A list containing an image of the canvas.
   Future<Uint8List> getImageFromCanvas() async {
     // mark that the canvas is being recorded
@@ -84,6 +104,10 @@ class DrawingPainter extends CustomPainter {
     return pngBytes;
   }
 
+  /// Draws on the given canvas a drawing aid (vertical/horizontal dasehd lines)
+  ///
+  /// @param the canvas on which should be painted
+  /// @param the size of the canvas
   void paintKanjiDrawingAid(Canvas canvas, Size size) {
     // setup the paint
     Paint paint = Paint()
@@ -118,6 +142,10 @@ class DrawingPainter extends CustomPainter {
     }
   }
 
+  /// Paints the points of the [pointsList] on the given canvas
+  ///
+  /// @param the canvas on which should be painted
+  /// @param the size of the canvas
   @override
   void paint(Canvas canvas, Size size) {
     // copy size
