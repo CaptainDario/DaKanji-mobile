@@ -16,6 +16,7 @@ Future<void> main() async {
   await init();
 
   runApp(DaKanjiRecognizerApp());
+
 }
 
 Future<void> init() async {
@@ -28,16 +29,16 @@ Future<void> init() async {
 
   // initialize the TFLite interpreter
   if (Platform.isAndroid) 
-    await initInterpreterAndroid();
+    initInterpreterAndroid();
   else if (Platform.isIOS) 
-    await initInterpreterIOS();
+    initInterpreterIOS();
   else if (kIsWeb) 
-    await initInterpreterWeb();
-   
+    initInterpreterWeb();
 }
 
 
 class DaKanjiRecognizerApp extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     // fix orientation to portrait
