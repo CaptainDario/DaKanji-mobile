@@ -2,6 +2,7 @@ library my_prj.globals;
 
 import 'package:flutter/cupertino.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'dart:io' show Platform;
 
 import 'Settings.dart';
 
@@ -40,3 +41,20 @@ Interpreter CNN_KANJI_ONLY_INTERPRETER;
 // the backend used for inference CPU/GPU
 // ignore: non_constant_identifier_names
 String USED_BACKEND = "";
+
+//about page
+const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
+const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile";
+const GITHUB_ML_REPO = "https://captaindario.github.io/DaKanjiRecognizer-ML";
+const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues/new";
+
+
+const RATE_ON_MOBILE_STORE = "rating it on the AppStore/PlayStore";
+
+const APPSTORE_PAGE = "";
+const PLAYSTORE_PAGE = "";
+
+const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab&hl=en&gl=US";
+const DAAPPLAB_APPSTORE_PAGE = "";
+
+const PRIVACY_POLICE = "";
