@@ -48,7 +48,7 @@ class DrawingPainter extends CustomPainter {
   Future<List<String>> runInference() async {
     List<String> predictions = List.generate(10, (i) => i.toString());
 
-    // take imgae from canvas and resize it
+    // take image from canvas and resize it
     image.Image base = image.decodeImage(await getImageFromCanvas());
     image.Image resizedImage = image.copyResize(base,
         height: 64, interpolation: image.Interpolation.nearest);
@@ -104,7 +104,7 @@ class DrawingPainter extends CustomPainter {
     return pngBytes;
   }
 
-  /// Draws on the given canvas a drawing aid (vertical/horizontal dasehd lines)
+  /// Draws on the given canvas a drawing aid (vertical/horizontal dashed lines)
   ///
   /// @param the canvas on which should be painted
   /// @param the size of the canvas
