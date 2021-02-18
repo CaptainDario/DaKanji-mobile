@@ -12,10 +12,7 @@ class Settings {
   /// The URL of the jisho website
   String jishoURL;
 
-  /// The URL of the takoboto website
-  String takobotoURL;
-
-  /// The URL of the wadoku website
+  /// The URL of the weblio website
   String wadokuURL;
 
   /// The URL of the weblio website
@@ -36,18 +33,26 @@ class Settings {
   /// Indicates if a long press will use the default translator.
   bool openWithDefaultTranslator;
 
-  /// The theme which the application will use.
-  /// System will match the settings of the system.
-  String selectedTheme;
+  /// A list with all available dictionary options.
+  List<String> dictionaries = 
+    ["a custom URL", "systemTranslator", "jisho.org", "wadoku.de", "weblio.jp"];
+
+  /// The string representation of the dictionary which will be used (long press)
+  String selectedDictionary;
 
   // if the showcase view should be shown for the drawing screen
   bool showShowcaseViewDrawing;
 
   // the application version used when those settings were saved
   String versionUsed;
+  
+  /// The theme which the application will use.
+  /// System will match the settings of the system.
+  String selectedTheme;
 
   /// A list with all available themes.
   List<String> themes = ["light", "dark", "system"];
+  
 
   /// A Map from the string of a theme to the ThemeMode of the theme.
   Map<String, ThemeMode> themesDict = {
@@ -64,6 +69,8 @@ class Settings {
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder + "%23kanji";
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
+
+    selectedDictionary = dictionaries[2];
   }
 
   /// Get the URL to the predicted kanji in the selected dictionary.
@@ -81,8 +88,6 @@ class Settings {
       url = wadokuURL;
     else if (openWithWeblio)
       url = weblioURL;
-    else if (openWithDefaultTranslator)
-      url = takobotoURL;
 
     // check that the URL starts with protocol, otherwise launch(fails)
     if (!(url.startsWith("http://") || url.startsWith("https://")))
@@ -103,6 +108,27 @@ class Settings {
     openWithDefaultTranslator = false;
   }
 
+  ///
+  void setDictionary(String selection){
+
+    setTogglesToFalse();
+    selectedDictionary = selection;
+
+    if(selection == dictionaries[0])
+      openWithCustomURL = true;
+    else if(selection == dictionaries[1])
+      openWithDefaultTranslator = true;
+    else if(selection == dictionaries[2])
+      openWithJisho = true;
+    else if(selection == dictionaries[3])
+      openWithWadoku = true;
+    else if(selection == dictionaries[4])
+      openWithWeblio = true;
+    else
+      print("dictionary undefined");
+
+  }
+
   /// Saves all settings to the SharedPreferences.
   void save() async {
     print("saving");
@@ -121,6 +147,7 @@ class Settings {
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', selectedTheme);
     prefs.setString('versionUsed', VERSION);
+    prefs.setString('selectedDictionary', selectedDictionary);
   }
 
   /// Load all saved settings from SharedPreferences.
@@ -137,6 +164,7 @@ class Settings {
     customURL = await loadString('customURL');
     selectedTheme = await loadString('selectedTheme');
     versionUsed = await loadString('versionUsed');
+    selectedDictionary = await loadString('selectedDictionary');
 
     // assure that at least one switch is set to true
     if (!this.openWithCustomURL &&
