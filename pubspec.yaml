@@ -27,6 +27,7 @@ dependencies:
   url_launcher: ^5.7.10
   device_info: ^1.0.0
   intent: ^1.4.0
+  showcaseview: ^0.1.6
 
   # ML
   tflite_flutter: ^0.5.0
