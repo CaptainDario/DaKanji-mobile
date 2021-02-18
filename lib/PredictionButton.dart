@@ -18,16 +18,13 @@ class PredictionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: AspectRatio(
+    return AspectRatio(
         aspectRatio: 1,
         child: Container(
-          margin: EdgeInsets.all(5),
-          padding: EdgeInsets.all(0),
           child: MaterialButton(
             color: Colors.white.withAlpha(50),
             padding: EdgeInsets.all(0),
-            // copy the character to clipboar on single press
+            // copy the character to clipboard on single press
             onPressed: () {
               if (this.char != " ")
                 Clipboard.setData(new ClipboardData(text: this.char));
@@ -35,8 +32,7 @@ class PredictionButton extends StatelessWidget {
             // open prediction in the dictionary set in setting on long press
             onLongPress: () async {
               if (this.char != " ") {
-                Clipboard.setData(new ClipboardData(text: this.char));
-
+                // the prediction should be translated with system dialogue
                 if(SETTINGS.openWithDefaultTranslator){ 
                   if(Platform.isAndroid){
                     android_intent.Intent()
@@ -62,7 +58,7 @@ class PredictionButton extends StatelessWidget {
             )
           )
         )
-      )
+      
     );
   }
 }
