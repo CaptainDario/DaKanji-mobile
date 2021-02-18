@@ -1,3 +1,4 @@
+import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,6 +40,12 @@ class Settings {
   /// System will match the settings of the system.
   String selectedTheme;
 
+  // if the showcase view should be shown for the drawing screen
+  bool showShowcaseViewDrawing;
+
+  // the application version used when those settings were saved
+  String versionUsed;
+
   /// A list with all available themes.
   List<String> themes = ["light", "dark", "system"];
 
@@ -77,7 +84,7 @@ class Settings {
     else if (openWithDefaultTranslator)
       url = takobotoURL;
 
-    // check that the url starts with protocol, otherwise launch(fails)
+    // check that the URL starts with protocol, otherwise launch(fails)
     if (!(url.startsWith("http://") || url.startsWith("https://")))
       url = "https://" + url;
 
@@ -87,7 +94,7 @@ class Settings {
     return url;
   }
 
-  /// Set all values of the toggles in the Settings menu to false.
+  /// Set all values of the dictionary toggles in the Settings menu to false.
   void setTogglesToFalse() {
     openWithCustomURL = false;
     openWithJisho = false;
@@ -109,21 +116,27 @@ class Settings {
     prefs.setBool('openWithDefaultTranslator', openWithDefaultTranslator);
     prefs.setBool('openWithWadoku', openWithWadoku);
     prefs.setBool('openWithWeblio', openWithWeblio);
+    prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
+    
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', selectedTheme);
+    prefs.setString('versionUsed', VERSION);
   }
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
     print("loading");
 
-    openWithCustomURL = await loadOpenWithCustomURL();
-    openWithJisho = await loadOpenWithJisho();
-    openWithDefaultTranslator = await loadOpenWithTakoboto();
-    openWithWadoku = await loadOpenWithWadoku();
-    openWithWeblio = await loadOpenWithWeblio();
-    customURL = await loadCustomURL();
-    selectedTheme = await loadSelectedTheme();
+    openWithCustomURL = await loadBool('openWithCustomURL');
+    openWithJisho = await loadBool('openWithJisho');
+    openWithDefaultTranslator = await loadBool('openWithDefaultTranslator');
+    openWithWadoku = await loadBool('openWithWadoku');
+    openWithWeblio = await loadBool('openWithWeblio');
+    showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
+
+    customURL = await loadString('customURL');
+    selectedTheme = await loadString('selectedTheme');
+    versionUsed = await loadString('versionUsed');
 
     // assure that at least one switch is set to true
     if (!this.openWithCustomURL &&
@@ -133,75 +146,31 @@ class Settings {
         !this.openWithWeblio) {
       this.openWithJisho = true;
     }
+
+    // if another version used than last time -> show showcase
+    if(versionUsed != VERSION){ 
+      showShowcaseViewDrawing = true;
+    }
   }
 
-  /// Loads the setting state for the "OpenWithCustomURL" setting
+  /// Loads a bool from shared preferences.
   ///
-  /// @returns true if the setting was enable, false otherwise
-  Future<bool> loadOpenWithCustomURL() async {
+  /// @returns The bool's loaded value of found, otherwise false
+  Future<bool> loadBool(String boolName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool('openWithCustomURL') ?? false;
+    bool loaded = prefs.getBool(boolName) ?? false;
 
     return loaded;
   }
 
-  /// Loads the setting state for the "OpenWithJisho" setting
+  /// Loads a string value from the shared preferences.
   ///
-  /// @returns true if the setting was enable, false otherwise
-  Future<bool> loadOpenWithJisho() async {
+  /// @returns The string value if found, "" otherwise
+  Future<String> loadString(String stringName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool('openWithJisho') ?? false;
-
-    return loaded;
-  }
-
-  /// Loads the setting state for the "OpenWithTakoboto" setting
-  ///
-  /// @returns true if the setting was enable, false otherwise
-  Future<bool> loadOpenWithTakoboto() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool('openWithDefaultTranslator') ?? false;
-
-    return loaded;
-  }
-
-  /// Loads the setting state for the "OpenWithWadoku" setting
-  ///
-  /// @returns true if the setting was enable, false otherwise
-  Future<bool> loadOpenWithWadoku() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool('openWithWadoku') ?? false;
-
-    return loaded;
-  }
-
-  /// Loads the setting state for the "OpenWithWeblio" setting
-  ///
-  /// @returns true if the setting was enable, false otherwise
-  Future<bool> loadOpenWithWeblio() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool("openWithWeblio") ?? false;
-
-    return loaded;
-  }
-
-  /// Loads the value for the custom URL.
-  ///
-  /// @returns The custom URL
-  Future<String> loadCustomURL() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loaded = prefs.getString('customURL') ?? "";
-
-    return loaded;
-  }
-
-  /// Loads the selected theme
-  ///
-  /// @returns the selected theme
-  Future<String> loadSelectedTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loaded = prefs.getString('selectedTheme') ?? "system";
+    String loaded = prefs.getString(stringName) ?? "";
 
     return loaded;
   }
 }
+
