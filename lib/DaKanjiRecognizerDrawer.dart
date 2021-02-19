@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'globals.dart';
+
 
 class DaKanjiRecognizerDrawer extends StatelessWidget {
   @override
@@ -24,6 +26,7 @@ class DaKanjiRecognizerDrawer extends StatelessWidget {
 
           // Drawer entry to go to the settings screen
           ListTile(
+            key: SHOWCASE_KEYS_DRAWING[6],
             leading: Icon(Icons.settings_applications),
             title: Text("Settings"),
             onTap: () {
