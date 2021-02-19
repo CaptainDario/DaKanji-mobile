@@ -1,8 +1,8 @@
 import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'DrawingPainter.dart';
 import 'PredictionButton.dart';
 
@@ -20,16 +20,19 @@ class _DrawScreenState extends State<DrawScreen> {
   // save the context for the Showcase view
   BuildContext myContext;
 
+  // show case
+  TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = List();
+
+
   @override
   void initState() {
     super.initState();
 
     // only show the showcase at an update/new install
-    if(SETTINGS.showShowcaseViewDrawing){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(Duration(milliseconds: 200),
-          () => ShowCaseWidget.of(myContext).startShowCase(SHOWCASE_KEYS_DRAWING));
-      });
+    if(true){//SETTINGS.showShowcaseViewDrawing){
+      initTargets();
+      showTutorial();
       SETTINGS.showShowcaseViewDrawing = false;
       SETTINGS.save();
     }
@@ -40,11 +43,8 @@ class _DrawScreenState extends State<DrawScreen> {
     bool darkMode = (Theme.of(context).brightness == Brightness.dark);
     canvas = new DrawingPainter(points, darkMode);
 
-    return ShowCaseWidget(
-      builder: Builder(
-        builder: (context) { 
-          myContext = context;
           return Scaffold(
+      key: DRAWER_KEY,
           appBar: AppBar(
             title: Text("Drawing"),
           ),
@@ -56,10 +56,8 @@ class _DrawScreenState extends State<DrawScreen> {
               width: MediaQuery.of(context).size.width * 5 / 6,
               height: MediaQuery.of(context).size.width * 5 / 6,
               margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
-              child: Showcase(
+          child: GestureDetector(
                 key: SHOWCASE_KEYS_DRAWING[0],
-                description: SHOWCASE_TEXTS_DRAWING[0],
-                  child: GestureDetector(
                     // drawing pointer moved
                     onPanUpdate: (details) {
                       setState(() {
@@ -93,15 +91,12 @@ class _DrawScreenState extends State<DrawScreen> {
                     ),
                   ),
                 ),
-              ),
               Spacer(),
               // undo/clear button
               Row(children: [
                 // undo
-                Showcase(
+            IconButton(
                   key: SHOWCASE_KEYS_DRAWING[1],
-                  description: SHOWCASE_TEXTS_DRAWING[1],
-                  child: IconButton(
                     icon: Icon(Icons.undo),
                     onPressed: () async {
                       //only run inference if canvas still has strokes
@@ -114,13 +109,10 @@ class _DrawScreenState extends State<DrawScreen> {
                       setState(() {});
                     }
                   ),
-                ),
                 Spacer(),
                 // clear
-                Showcase(
+            IconButton(
                   key: SHOWCASE_KEYS_DRAWING[2],
-                  description: SHOWCASE_TEXTS_DRAWING[2],
-                  child: IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
                       setState(() {
@@ -129,14 +121,10 @@ class _DrawScreenState extends State<DrawScreen> {
                       });
                     }
                   ), 
-                ),
               ]),
               // first row of prediction buttons
-              Showcase(
+          Container(
                 key: SHOWCASE_KEYS_DRAWING[3],
-                description: SHOWCASE_TEXTS_DRAWING[3],
-                child:
-                  Container(
                     width: MediaQuery.of(context).size.width,
                     height: 160, // set to 2*buttonHeight + 3*padding
                     child: GridView.count(
@@ -145,11 +133,12 @@ class _DrawScreenState extends State<DrawScreen> {
                       mainAxisSpacing: 10,
                       padding: EdgeInsets.all(5),
                       children: List.generate(10, (i) { 
-                        if(i < 3){
-                          return Showcase(
+                if(i < 2){
+                  return Container(
                             key: SHOWCASE_KEYS_DRAWING[4+i],
-                            description: SHOWCASE_TEXTS_DRAWING[4+i],
-                            child: PredictionButton(predictions[i])
+                    child: PredictionButton(
+                      predictions[i],
+                    )
                           );
                         }
                         else return PredictionButton(predictions[i]);
