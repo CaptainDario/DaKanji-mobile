@@ -19,7 +19,7 @@ class _DrawScreenState extends State<DrawScreen> {
   List<String> predictions = List.generate(10, (index) => " ");
   // save the context for the Showcase view
   BuildContext myContext;
-
+  
   // show case
   TutorialCoachMark tutorialCoachMark;
   List<TargetFocus> targets = List();
@@ -43,114 +43,113 @@ class _DrawScreenState extends State<DrawScreen> {
     bool darkMode = (Theme.of(context).brightness == Brightness.dark);
     canvas = new DrawingPainter(points, darkMode);
 
-          return Scaffold(
+    return Scaffold(
       key: DRAWER_KEY,
-          appBar: AppBar(
-            title: Text("Drawing"),
-          ),
-          drawer: DaKanjiRecognizerDrawer(),
-          body: Column(
-            children: [
-              // the canvas to draw on
-              Container(
-              width: MediaQuery.of(context).size.width * 5 / 6,
-              height: MediaQuery.of(context).size.width * 5 / 6,
-              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
-          child: GestureDetector(
-                key: SHOWCASE_KEYS_DRAWING[0],
-                    // drawing pointer moved
-                    onPanUpdate: (details) {
-                      setState(() {
-                        RenderBox renderBox = context.findRenderObject();
-                        Offset point =
-                            renderBox.globalToLocal(details.localPosition);
-                        points[points.length - 1].add(point);
-                      });
-                    },
-                    // started drawing
-                    onPanStart: (details) {
-                      setState(() {
-                        points.add(new List());
-                        RenderBox renderBox = context.findRenderObject();
-                        Offset point =
-                            renderBox.globalToLocal(details.localPosition);
-                        points[points.length - 1].add(point);
-                      });
-                    },
-                    // finished drawing a stroke
-                    onPanEnd: (details) async {
-                      // remove single points and don't run inference for them
-                      if (points[points.length - 1].length == 1)
-                        points.removeLast();
-                      else
-                        predictions = await canvas.runInference();
-                      setState(() {});
-                    },
-                    child: CustomPaint(
-                      painter: canvas,
-                    ),
-                  ),
-                ),
-              Spacer(),
-              // undo/clear button
-              Row(children: [
-                // undo
-            IconButton(
-                  key: SHOWCASE_KEYS_DRAWING[1],
-                    icon: Icon(Icons.undo),
-                    onPressed: () async {
-                      //only run inference if canvas still has strokes
-                      if(points.length > 0){
-                        points.removeLast();
-                        predictions = await canvas.runInference();
-                      }
-                      else
-                        predictions = List.generate(10, (i) => " ");
-                      setState(() {});
-                    }
-                  ),
-                Spacer(),
-                // clear
-            IconButton(
-                  key: SHOWCASE_KEYS_DRAWING[2],
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      setState(() {
-                        predictions = List.generate(10, (i) => " ");
-                        points.clear();
-                      });
-                    }
-                  ), 
-              ]),
-              // first row of prediction buttons
+      appBar: AppBar(
+        title: Text("Drawing"),
+      ),
+      drawer: DaKanjiRecognizerDrawer(),
+      body: Column(
+        children: [
+          // the canvas to draw on
           Container(
-                key: SHOWCASE_KEYS_DRAWING[3],
-                    width: MediaQuery.of(context).size.width,
-                    height: 160, // set to 2*buttonHeight + 3*padding
-                    child: GridView.count(
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      padding: EdgeInsets.all(5),
-                      children: List.generate(10, (i) { 
+          width: MediaQuery.of(context).size.width * 5 / 6,
+          height: MediaQuery.of(context).size.width * 5 / 6,
+          margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
+          child: GestureDetector(
+              key: SHOWCASE_KEYS_DRAWING[0],
+              // drawing pointer moved
+              onPanUpdate: (details) {
+                setState(() {
+                  RenderBox renderBox = context.findRenderObject();
+                  Offset point =
+                      renderBox.globalToLocal(details.localPosition);
+                  points[points.length - 1].add(point);
+                });
+              },
+              // started drawing
+              onPanStart: (details) {
+                setState(() {
+                  points.add(new List());
+                  RenderBox renderBox = context.findRenderObject();
+                  Offset point =
+                      renderBox.globalToLocal(details.localPosition);
+                  points[points.length - 1].add(point);
+                });
+              },
+              // finished drawing a stroke
+              onPanEnd: (details) async {
+                // remove single points and don't run inference for them
+                if (points[points.length - 1].length == 1)
+                  points.removeLast();
+                else
+                  predictions = await canvas.runInference();
+                setState(() {});
+              },
+              child: CustomPaint(
+                painter: canvas,
+              ),
+            ),
+          ),
+          Spacer(),
+          // undo/clear button
+          Row(children: [
+            // undo
+            IconButton(
+              key: SHOWCASE_KEYS_DRAWING[1],
+              icon: Icon(Icons.undo),
+              onPressed: () async {
+                //only run inference if canvas still has strokes
+                if(points.length > 0){
+                  points.removeLast();
+                  predictions = await canvas.runInference();
+                }
+                else
+                  predictions = List.generate(10, (i) => " ");
+                setState(() {});
+              }
+            ),
+            Spacer(),
+            // clear
+            IconButton(
+              key: SHOWCASE_KEYS_DRAWING[2],
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                setState(() {
+                  predictions = List.generate(10, (i) => " ");
+                  points.clear();
+                });
+              }
+            ), 
+          ]),
+          // first row of prediction buttons
+          Container(
+            key: SHOWCASE_KEYS_DRAWING[3],
+            width: MediaQuery.of(context).size.width,
+            height: 160, // set to 2*buttonHeight + 3*padding
+            child: GridView.count(
+              crossAxisCount: 5,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              padding: EdgeInsets.all(5),
+              children: List.generate(10, (i) { 
                 if(i < 2){
                   return Container(
-                            key: SHOWCASE_KEYS_DRAWING[4+i],
+                    key: SHOWCASE_KEYS_DRAWING[4+i],
                     child: PredictionButton(
                       predictions[i],
                     )
-                          );
-                        }
-                        else return PredictionButton(predictions[i]);
-                      },
-                      )
-                    )
-                  ),
-              ),
-              Spacer(),
-            ],
-          )
-        );
+                  );
+                }
+                else return PredictionButton(predictions[i]);
+              },
+              )
+            )
+          ),
+          Spacer(),
+        ],
+      )
+    );
   }
   
 
@@ -177,6 +176,29 @@ class _DrawScreenState extends State<DrawScreen> {
               ))
           ],
         ),
-    );
+      );
+    }
+  }
+  
+  void showTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      context,
+      targets: targets,
+      colorShadow: Colors.red,
+      textSkip: "SKIP",
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {},
+      onClickTarget: (target) {
+        // after clicking on the long press tutorial open drawer
+        if(target.identify == SHOWCASE_IDENTIFIERS_DRAWING[5])
+          DRAWER_KEY.currentState.openDrawer();
+        // after clicking on the settings tutorial close drawer
+        if(target.identify == SHOWCASE_IDENTIFIERS_DRAWING[6])
+          DRAWER_KEY.currentState.openEndDrawer();
+      },
+      onSkip: () {},
+      onClickOverlay: (target) {},
+    )..show();
   }
 }
