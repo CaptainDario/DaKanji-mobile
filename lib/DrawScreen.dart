@@ -151,7 +151,32 @@ class _DrawScreenState extends State<DrawScreen> {
             ],
           )
         );
-      }),
+  }
+  
+
+  void initTargets() {
+    for (int i = 0; i < SHOWCASE_KEYS_DRAWING.length; i++){
+      targets.add(
+        TargetFocus(
+          identify: SHOWCASE_IDENTIFIERS_DRAWING[i],
+          shape: ShapeLightFocus.RRect,
+          color: SHOWCASE_VIGNETTE_COLOR,
+          keyTarget: SHOWCASE_KEYS_DRAWING[i],
+          contents: [
+            TargetContent(
+              align: SHOWCASE_ALIGNS_DRAWING[i],
+              child: Container(
+                child: Text(
+                  SHOWCASE_TEXTS_DRAWING[i],
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20.0
+                  ),
+                ),
+              ))
+          ],
+        ),
     );
   }
 }
