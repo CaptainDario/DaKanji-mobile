@@ -122,22 +122,22 @@ class _DrawScreenState extends State<DrawScreen> {
               }
             ), 
           ]),
-          // first row of prediction buttons
+          // prediction buttons
           Container(
             key: SHOWCASE_KEYS_DRAWING[3],
-            width: MediaQuery.of(context).size.width,
-            height: 160, // set to 2*buttonHeight + 3*padding
+            width: MediaQuery.of(context).size.width - 10,
+            // 2*ButtonHeight + Padding (left/right) + 2*Spacing
+            height: 2.0*60 + 2*5 + 2*10,
             child: GridView.count(
               crossAxisCount: 5,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
-              padding: EdgeInsets.all(5),
               children: List.generate(10, (i) { 
                 if(i < 2){
                   return Container(
                     key: SHOWCASE_KEYS_DRAWING[4+i],
-                    child: PredictionButton(
-                      predictions[i],
+                      child: PredictionButton(
+                        predictions[i],
                     )
                   );
                 }

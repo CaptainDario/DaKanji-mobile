@@ -20,7 +20,9 @@ class PredictionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
         aspectRatio: 1,
-        child: Container(
+        child: SizedBox(
+          height: 60,
+          width: 60,
           child: MaterialButton(
             color: Colors.white.withAlpha(50),
             padding: EdgeInsets.all(0),
@@ -58,7 +60,6 @@ class PredictionButton extends StatelessWidget {
             )
           )
         )
-      
     );
   }
 }
