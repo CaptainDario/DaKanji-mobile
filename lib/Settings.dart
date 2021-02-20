@@ -106,7 +106,9 @@ class Settings {
     openWithDefaultTranslator = false;
   }
 
-  ///
+  /// Set the bool of the dictionary which currently being used from string
+  /// 
+  /// @params the string of the currently selected dictionary
   void setDictionary(String selection){
 
     setTogglesToFalse();
@@ -129,8 +131,6 @@ class Settings {
 
   /// Saves all settings to the SharedPreferences.
   void save() async {
-    print("saving");
-
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
 
@@ -154,8 +154,6 @@ class Settings {
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
-    print("loading");
-
     openWithCustomURL = await loadBool('openWithCustomURL');
     openWithJisho = await loadBool('openWithJisho');
     openWithDefaultTranslator = await loadBool('openWithDefaultTranslator');
@@ -181,8 +179,6 @@ class Settings {
     if(versionUsed != VERSION){ 
       showShowcaseViewDrawing = true;
     }
-
-    print(dictionaries);
   }
 
   /// Loads a bool from shared preferences.
