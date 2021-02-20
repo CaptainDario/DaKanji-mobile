@@ -7,7 +7,7 @@ import 'globals.dart';
 /// Initializes the TFLite interpreter on android.
 ///
 /// Uses NnAPI for devices with Android API >= 27
-/// Otherwises uses the GPUDelegate
+/// Otherwise uses the GPUDelegate
 /// If it is detected that the apps runs on an emulator CPU mode is used
 void initInterpreterAndroid() async {
   // get platform information
@@ -41,7 +41,7 @@ void initInterpreterAndroid() async {
         CNN_KANJI_ONLY_ASSET,
         options: interpreterOptions);
   }
-  // use cpu inference on emulators
+  // use CPU inference on emulators
   else
     initInterpreterFallback();
 }

@@ -17,6 +17,7 @@ const String VERSION = "0.3.0";
 final Settings SETTINGS = new Settings();
 
 // the global key for the drawer
+// ignore: non_constant_identifier_names
 final GlobalKey<ScaffoldState> DRAWER_KEY = GlobalKey();
 
 // showcase view keys
@@ -41,11 +42,13 @@ const List<String> SHOWCASE_TEXTS_DRAWING = [
   "A long press opens the prediction in a dictionary.",
   "In the settings the dictionary can be chosen."
 ];
+// ignore: non_constant_identifier_names
 final List<ContentAlign> SHOWCASE_ALIGNS_DRAWING = [
   ContentAlign.bottom, ContentAlign.bottom, ContentAlign.bottom,
   ContentAlign.top, ContentAlign.bottom, ContentAlign.bottom,
   ContentAlign.bottom
 ];
+// ignore: non_constant_identifier_names
 final Color SHOWCASE_VIGNETTE_COLOR = Color.fromARGB(255, 10, 10, 10);
 
 // Assets

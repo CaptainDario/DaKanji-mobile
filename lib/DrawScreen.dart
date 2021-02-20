@@ -14,7 +14,7 @@ class DrawScreen extends StatefulWidget {
 class _DrawScreenState extends State<DrawScreen> {
   DrawingPainter canvas;
   //the points which were drawn on the canvas
-  List<List<Offset>> points = new List();
+  List<List<Offset>> points = [];
   // initialize predictions with blank
   List<String> predictions = List.generate(10, (index) => " ");
   // save the context for the Showcase view
@@ -22,7 +22,7 @@ class _DrawScreenState extends State<DrawScreen> {
   
   // show case
   TutorialCoachMark tutorialCoachMark;
-  List<TargetFocus> targets = List();
+  List<TargetFocus> targets = [];
 
 
   @override
@@ -70,7 +70,7 @@ class _DrawScreenState extends State<DrawScreen> {
               // started drawing
               onPanStart: (details) {
                 setState(() {
-                  points.add(new List());
+                  points.add([]);
                   RenderBox renderBox = context.findRenderObject();
                   Offset point =
                       renderBox.globalToLocal(details.localPosition);
