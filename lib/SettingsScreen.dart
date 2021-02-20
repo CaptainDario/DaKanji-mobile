@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiRecognizerDrawer.dart';
 import 'globals.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -85,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-            title: Text("theme (used at next app start)"),
+            title: Text("theme (restarts app)"),
             trailing: DropdownButton<String>(
               value: SETTINGS.selectedTheme,
               items: SETTINGS.themes
@@ -99,18 +100,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   SETTINGS.selectedTheme = newValue;
                   SETTINGS.save();
+                  Phoenix.rebirth(context);
                 });
               },
             ),
             onTap: () {}
           ),
           ListTile(
-            title: Text("Show tutorials"),
+            title: Text("Show tutorial (restarts app"),
             trailing: IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () { 
                 SETTINGS.showShowcaseViewDrawing = true;
                 SETTINGS.save();
+                Phoenix.rebirth(context);
               }
             )
           ),
