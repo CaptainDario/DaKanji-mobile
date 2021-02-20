@@ -69,8 +69,6 @@ class Settings {
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder + "%23kanji";
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
-
-    selectedDictionary = dictionaries[2];
   }
 
   /// Get the URL to the predicted kanji in the selected dictionary.
@@ -136,7 +134,7 @@ class Settings {
     // obtain shared preferences
     final prefs = await SharedPreferences.getInstance();
 
-    // set value
+    // set value in shared preferences
     prefs.setBool('openWithCustomURL', openWithCustomURL);
     prefs.setBool('openWithJisho', openWithJisho);
     prefs.setBool('openWithDefaultTranslator', openWithDefaultTranslator);
@@ -148,6 +146,10 @@ class Settings {
     prefs.setString('selectedTheme', selectedTheme);
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
+
+    // make sure the loaded drop down values are correct
+    if(selectedDictionary == "") selectedDictionary = "jisho.org";
+    if(selectedTheme == "") selectedTheme = themes[0];
   }
 
   /// Load all saved settings from SharedPreferences.
@@ -161,10 +163,10 @@ class Settings {
     openWithWeblio = await loadBool('openWithWeblio');
     showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
 
-    customURL = await loadString('customURL');
-    selectedTheme = await loadString('selectedTheme');
-    versionUsed = await loadString('versionUsed');
-    selectedDictionary = await loadString('selectedDictionary');
+    customURL = await loadString('customURL') ?? "";
+    selectedTheme = await loadString('selectedTheme') ?? themes[2];
+    versionUsed = await loadString('versionUsed') ?? "";
+    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[2];
 
     // assure that at least one switch is set to true
     if (!this.openWithCustomURL &&
@@ -179,6 +181,8 @@ class Settings {
     if(versionUsed != VERSION){ 
       showShowcaseViewDrawing = true;
     }
+
+    print(dictionaries);
   }
 
   /// Loads a bool from shared preferences.
@@ -193,10 +197,10 @@ class Settings {
 
   /// Loads a string value from the shared preferences.
   ///
-  /// @returns The string value if found, "" otherwise
+  /// @returns The string value if found, null otherwise
   Future<String> loadString(String stringName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loaded = prefs.getString(stringName) ?? "";
+    String loaded = prefs.getString(stringName);
 
     return loaded;
   }

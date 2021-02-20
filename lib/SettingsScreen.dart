@@ -36,11 +36,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               items: SETTINGS.dictionaries 
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
-                    value: value, child: Text(value));
+                  value: value,
+                  child: Text(value)
+                );
               }).toList(),
               onChanged: (String newValue) {
                 setState(() {
                   print(newValue);
+                  SETTINGS.selectedDictionary = newValue;
                   SETTINGS.setDictionary(newValue);
                   SETTINGS.save();
                 });
@@ -82,22 +85,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           ListTile(
-              title: Text("theme (used at next app start)"),
-              trailing: DropdownButton<String>(
-                value: SETTINGS.selectedTheme,
-                items: SETTINGS.themes
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                      value: value, child: Text(value));
-                }).toList(),
-                onChanged: (String newValue) {
-                  setState(() {
-                    SETTINGS.selectedTheme = newValue;
-                    SETTINGS.save();
-                  });
-                },
-              ),
-              onTap: () {}
+            title: Text("theme (used at next app start)"),
+            trailing: DropdownButton<String>(
+              value: SETTINGS.selectedTheme,
+              items: SETTINGS.themes
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value)
+                );
+              }).toList(),
+              onChanged: (String newValue) {
+                setState(() {
+                  SETTINGS.selectedTheme = newValue;
+                  SETTINGS.save();
+                });
+              },
+            ),
+            onTap: () {}
           ),
           ListTile(
             title: Text("Show tutorials"),
