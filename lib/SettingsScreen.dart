@@ -107,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onTap: () {}
           ),
           ListTile(
-            title: Text("Show tutorial (restarts app"),
+            title: Text("Show tutorial (restarts app)"),
             trailing: IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () { 
