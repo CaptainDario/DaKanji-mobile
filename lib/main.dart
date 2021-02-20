@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 import 'Settingsscreen.dart';
 import 'DrawScreen.dart';
@@ -15,7 +16,11 @@ Future<void> main() async {
 
   await init();
 
-  runApp(DaKanjiRecognizerApp());
+  runApp(
+  Phoenix(
+    child: DaKanjiRecognizerApp(),
+  )
+  );
 
 }
 
