@@ -30,7 +30,7 @@ class _DrawScreenState extends State<DrawScreen> {
     super.initState();
 
     // only show the showcase at an update/new install
-    if(true){//SETTINGS.showShowcaseViewDrawing){
+    if(SETTINGS.showShowcaseViewDrawing){
       initTargets();
       showTutorial();
       SETTINGS.showShowcaseViewDrawing = false;
@@ -173,7 +173,8 @@ class _DrawScreenState extends State<DrawScreen> {
                     fontSize: 20.0
                   ),
                 ),
-              ))
+              )
+            )
           ],
         ),
       );
@@ -188,14 +189,13 @@ class _DrawScreenState extends State<DrawScreen> {
       textSkip: "SKIP",
       paddingFocus: 10,
       opacityShadow: 0.8,
-      onFinish: () {},
+      onFinish: () {
+        DRAWER_KEY.currentState.openEndDrawer();
+      },
       onClickTarget: (target) {
         // after clicking on the long press tutorial open drawer
         if(target.identify == SHOWCASE_IDENTIFIERS_DRAWING[5])
           DRAWER_KEY.currentState.openDrawer();
-        // after clicking on the settings tutorial close drawer
-        if(target.identify == SHOWCASE_IDENTIFIERS_DRAWING[6])
-          DRAWER_KEY.currentState.openEndDrawer();
       },
       onSkip: () {},
       onClickOverlay: (target) {},
