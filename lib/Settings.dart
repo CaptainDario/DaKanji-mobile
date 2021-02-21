@@ -66,7 +66,7 @@ class Settings {
 
     String kanjiPlaceholder = "%X%";
 
-    jishoURL = "https://jisho.org/search/" + kanjiPlaceholder + "%23kanji";
+    jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
   }
