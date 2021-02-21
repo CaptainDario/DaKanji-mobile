@@ -20,7 +20,7 @@ class _AboutScreenState extends State<AboutScreen> {
       appBar: AppBar(title: Text("About")),
       drawer: DaKanjiRecognizerDrawer(),
       body: Container(
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
         child: RichText(
           text: TextSpan(
             style: TextStyle(
