@@ -70,10 +70,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     )
                   )
+                ),
+                IconButton(
+                  icon: Icon(Icons.info_outline),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      child: new SimpleDialog(
+                        title: Text("Custom URL format"),
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "The app will replace a placeholder in the URL with the predicted character. " +
+                                  "This placeholder is: " + SETTINGS.kanjiPlaceholder + 
+                                  "\n" +
+                                  "\n" +
+                                  "Example:" +
+                                  "\n" +
+                                  "The predicted character is: '口'" + 
+                                  " and you want to open it on 'jisho.org'. " +
+                                  "First you have to get the URL of the website for searching. " + 
+                                  "In this case: 'https://jisho.org/search/口'. " + 
+                                  "Now only the character in the URL has to be replaced with the placeholder. " + 
+                                  "This leads to 'https://jisho.org/search/" + SETTINGS.kanjiPlaceholder + "'."
+                                  ),
+                              ]
+                            )
+                          )
+                        ],
+                      )
+                    );
+                  }
                 )
               ]
             ),
-              onTap: () {}),
+              onTap: () {}
+          ),
           Divider(),
           // setting for which theme to use
           ListTile(
