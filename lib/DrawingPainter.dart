@@ -34,11 +34,11 @@ class DrawingPainter extends CustomPainter {
     this.darkMode = darkMode;
     this.recording = false;
     this._input = List<List<double>>.generate(
-            64, (i) => List<double>.generate(64, (j) => 0.0))
-        .reshape<double>([1, 64, 64, 1]);
+      64, (i) => List.generate(64, (j) => 0.0)).
+      reshape<double>([1, 64, 64, 1]);
     this._output =
-        List<List<double>>.generate(1, (i) => 
-          List<double>.generate(LABEL_LIST.length, (j) => 0.0));
+      List<List<double>>.generate(1, (i) => 
+      List<double>.generate(LABEL_LIST.length, (j) => 0.0));
       
   }
 
@@ -51,7 +51,7 @@ class DrawingPainter extends CustomPainter {
     // take image from canvas and resize it
     image.Image base = image.decodeImage(await getImageFromCanvas());
     image.Image resizedImage = image.copyResize(base,
-        height: 64, interpolation: image.Interpolation.nearest);
+      height: 64, width: 64, interpolation: image.Interpolation.cubic);
     Uint8List resizedBytes =
         resizedImage.getBytes(format: image.Format.luminance);
 
@@ -153,7 +153,7 @@ class DrawingPainter extends CustomPainter {
     // Setup canvas and paint
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
     Paint paint = Paint()
-      ..strokeWidth = 6.0
+      ..strokeWidth = size.width / 50.0
       ..strokeCap = StrokeCap.round;
     if (this.darkMode || this.recording)
       paint.color = Colors.white;
