@@ -10,7 +10,7 @@ import 'Settings.dart';
 // the title of the app
 const String APP_TITLE = "DaKanjiRecognizer";
 // the version number of this app
-const String VERSION = "0.3.0";
+const String VERSION = "1.0.0";
 
 // the saved settings
 // ignore: non_constant_identifier_names
@@ -79,4 +79,4 @@ const PLAYSTORE_PAGE = "";
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab&hl=en&gl=US";
 const DAAPPLAB_APPSTORE_PAGE = "";
 
-const PRIVACY_POLICE = "";
+const PRIVACY_POLICE = "https://sites.google.com/view/dakanjirecognizerprivacypolicy";
