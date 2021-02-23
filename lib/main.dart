@@ -64,7 +64,6 @@ class DaKanjiRecognizerApp extends StatelessWidget {
 
     return MaterialApp(
       title: APP_TITLE,
-      debugShowCheckedModeBanner: false,
 
       // themes
       theme: ThemeData(
