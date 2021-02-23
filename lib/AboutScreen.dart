@@ -125,6 +125,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ..onTap = () => launch(PRIVACY_POLICE)
               ),
               TextSpan(text: "\n\nThe used backend for inference is: " + USED_BACKEND),
+              TextSpan(text: "\nYou are running DaKanjiRecognizer version: " + VERSION),
             ]
           ),
         )
