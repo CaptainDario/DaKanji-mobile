@@ -15,10 +15,13 @@ class _DrawScreenState extends State<DrawScreen> {
   DrawingPainter canvas;
   //the points which were drawn on the canvas
   List<List<Offset>> points = [];
+  // the size of the canvas widget
+  double canvasSize;
   // initialize predictions with blank
   List<String> predictions = List.generate(10, (index) => " ");
   // save the context for the Showcase view
   BuildContext myContext;
+
   
   // show case
   TutorialCoachMark tutorialCoachMark;
@@ -42,6 +45,10 @@ class _DrawScreenState extends State<DrawScreen> {
   Widget build(BuildContext context) {
     bool darkMode = (Theme.of(context).brightness == Brightness.dark);
     canvas = new DrawingPainter(points, darkMode);
+    // init size of canvas and assure that it is min. 20 smaller than screen width
+    canvasSize = MediaQuery.of(context).size.height * 3/6;
+    if(canvasSize > MediaQuery.of(context).size.width)
+      canvasSize = MediaQuery.of(context).size.width - 20;
 
     return Scaffold(
       key: DRAWER_KEY,
@@ -49,14 +56,17 @@ class _DrawScreenState extends State<DrawScreen> {
         title: Text("Drawing"),
       ),
       drawer: DaKanjiRecognizerDrawer(),
-      body: Column(
+      body: Center(
+        child: Column(
         children: [
           // the canvas to draw on
           Container(
-          width: MediaQuery.of(context).size.width * 5 / 6,
-          height: MediaQuery.of(context).size.width * 5 / 6,
-          margin: EdgeInsets.all(MediaQuery.of(context).size.width * 1 / 12),
-          child: GestureDetector(
+            width: canvasSize,
+            height: canvasSize,
+            margin: EdgeInsets.fromLTRB(0, 
+              (MediaQuery.of(context).size.width - canvasSize) / 2, 
+              0, 0),
+            child: GestureDetector(
               key: SHOWCASE_KEYS_DRAWING[0],
               // drawing pointer moved
               onPanUpdate: (details) {
@@ -93,6 +103,10 @@ class _DrawScreenState extends State<DrawScreen> {
           ),
           Spacer(),
           // undo/clear button
+          
+          Container(
+            width: canvasSize,
+            child:
           Row(children: [
             // undo
             IconButton(
@@ -122,12 +136,13 @@ class _DrawScreenState extends State<DrawScreen> {
               }
             ), 
           ]),
+          ),
           // prediction buttons
           Container(
             key: SHOWCASE_KEYS_DRAWING[3],
-            width: MediaQuery.of(context).size.width - 10,
-            // 2*ButtonHeight + Padding (left/right) + 2*Spacing
-            height: 2.0*60 + 2*5 + 2*10,
+            width: canvasSize,
+            // approximated button height (width/5) * 2  
+            height: (MediaQuery.of(context).size.width / 5.0) * 2.0, 
             child: GridView.count(
               crossAxisCount: 5,
               crossAxisSpacing: 10,
@@ -149,6 +164,7 @@ class _DrawScreenState extends State<DrawScreen> {
           Spacer(),
         ],
       )
+    )
     );
   }
   
