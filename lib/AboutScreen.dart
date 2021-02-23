@@ -83,7 +83,7 @@ class _AboutScreenState extends State<AboutScreen> {
               ),
               TextSpan(text: "Also check out "),
               TextSpan(
-                text: "my other apps (Play Store / AppStore)",
+                text: "my other apps.",
                 style: TextStyle(
                   color: Colors.blue,
                 ),
