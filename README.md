@@ -21,7 +21,8 @@ You can also [setup a development environment](#development) and build the app o
 In this section the features of the app are explained in more detail.
 ### Handwritten kanji recognition
 The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. This dictionary can be set in the settings.
-It is also possible to use a translation service of the used device.</br>
+It is also possible to use a translation app of the used device.
+A custom website can also be used with an input field in the settings menu.</br>
 Currently around 3000 characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
