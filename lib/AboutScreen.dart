@@ -117,7 +117,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ..onTap = () => launch(GITHUB_ISSUES)),
               TextSpan(text: "\nThe privacy police can be found "),
               TextSpan(
-                text: "here. LINK HERE LATER",
+                text: "here.",
                 style: TextStyle(
                   color: Colors.blue,
                 ),
