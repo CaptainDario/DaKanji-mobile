@@ -36,7 +36,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 text: "It can recognize handwritten Kanji characters.\n"),
               TextSpan(text: "A desktop version is available "),
               TextSpan(
-                text: "here.\n\n",
+                text: "here.\n",
                 style: TextStyle(color: Colors.blue),
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () => launch(GITHUB_DESKTOP_REPO)),
@@ -47,7 +47,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 text:
                     "If you want to learn more about the development of the app, "),
               TextSpan(
-                text: "visit its GitHub repository.\n\n",
+                text: "visit its GitHub repository.\n",
                 style: TextStyle(color: Colors.blue),
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () => launch(GITHUB_MOBILE_REPO)),
@@ -74,7 +74,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   }),
               TextSpan(text: "\n\t • "),
               TextSpan(
-                text: "starring it on GitHub \n\n",
+                text: "starring it on GitHub \n",
                 style: TextStyle(
                   color: Colors.blue,
                 ),
@@ -124,7 +124,7 @@ class _AboutScreenState extends State<AboutScreen> {
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () => launch(PRIVACY_POLICE)
               ),
-              TextSpan(text: "\n\nThe used backend for inference is: " + USED_BACKEND),
+              TextSpan(text: "\n\nThe used TFLite backend is: " + USED_BACKEND),
               TextSpan(text: "\nYou are running DaKanjiRecognizer version: " + VERSION),
             ]
           ),

@@ -74,7 +74,7 @@ const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/
 const RATE_ON_MOBILE_STORE = "rating it on the AppStore/PlayStore";
 
 const APPSTORE_PAGE = "";
-const PLAYSTORE_PAGE = "";
+const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab&hl=en&gl=US";
 const DAAPPLAB_APPSTORE_PAGE = "";

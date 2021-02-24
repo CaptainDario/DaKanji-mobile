@@ -40,6 +40,10 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# PlayStore
+key.properties
+
 # python
 python
 .vscode
+android/app/key.jks
