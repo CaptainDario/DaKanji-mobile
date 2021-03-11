@@ -40,7 +40,7 @@ const List<String> SHOWCASE_TEXTS_DRAWING = [
   "The predicted characters will be shown here.",
   "A short press copies the prediction.",
   "A long press opens the prediction in a dictionary.",
-  "In the settings the dictionary can be chosen."
+  "In the settings the translation service can be chosen."
 ];
 // ignore: non_constant_identifier_names
 final List<ContentAlign> SHOWCASE_ALIGNS_DRAWING = [
@@ -73,10 +73,17 @@ const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/
 
 const RATE_ON_MOBILE_STORE = "rating it on the AppStore/PlayStore";
 
+const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
+const PLAYSTORE_BASE_INTENT =  "market://details?id=";
+
 const APPSTORE_PAGE = "";
 const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab&hl=en&gl=US";
 const DAAPPLAB_APPSTORE_PAGE = "";
+
+const TAKOBOTO_ID = "jp.takoboto";
+
+const GOOGLE_TRANSLATE_ID = "com.google.android.apps.translate";
 
 const PRIVACY_POLICE = "https://sites.google.com/view/dakanjirecognizerprivacypolicy";
