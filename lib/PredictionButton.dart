@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
 
 import 'package:url_launcher/url_launcher.dart';
-import 'package:intent/intent.dart' as android_intent;
-import 'package:intent/extra.dart' as android_extra;
-import 'package:intent/action.dart' as android_action;
+import 'package:android_intent/android_intent.dart';
 
 import 'package:da_kanji_recognizer_mobile/globals.dart';
 
@@ -30,14 +28,53 @@ class PredictionButton extends StatelessWidget {
         },
         // open prediction in the dictionary set in setting on long press
         onLongPress: () async {
+          // only open a page when there is a prediction
           if (this.char != " ") {
             // the prediction should be translated with system dialogue
             if(SETTINGS.openWithDefaultTranslator){ 
               if(Platform.isAndroid){
-                android_intent.Intent()
-                  ..setAction(android_action.Action.ACTION_TRANSLATE)
-                  ..putExtra(android_extra.Extra.EXTRA_TEXT, this.char)
-                  ..startActivity().catchError((e) => print(e));
+                AndroidIntent intent = AndroidIntent(
+                  action: 'android.intent.action.TRANSLATE',
+                  arguments: <String, dynamic>{
+                    "android.intent.extra.TEXT" : this.char
+                  }
+                );
+                if(await intent.canResolveActivity())
+                  await intent.launch();
+                else{
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){ 
+                      return SimpleDialog(
+                        title: Center(child: Text("No translator installed")),
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                MaterialButton(
+                                  color: Colors.white.withAlpha(50),
+                                  onPressed: () async {
+                                    // try to open google translate in the playstore
+                                    if (await canLaunch(PLAYSTORE_BASE_INTENT + GOOGLE_TRANSLATE_ID)){
+                                      await launch(PLAYSTORE_BASE_INTENT + GOOGLE_TRANSLATE_ID);
+                                    }
+                                    else{
+                                      await launch(PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID,
+                                        forceWebView: true,
+                                        enableJavaScript: true);
+                                    }
+                                  },
+                                  child: Text("Download Google Translate")
+                                ) 
+                              ]
+                            )
+                          )
+                        ],
+                      );
+                    }
+                  );
+                }
               }
               else if(Platform.isIOS && false){
                 print("iOS is not implemented for choosing translator");
