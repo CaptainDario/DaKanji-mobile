@@ -114,12 +114,14 @@ class _DrawScreenState extends State<DrawScreen> {
               icon: Icon(Icons.undo),
               onPressed: () async {
                 //only run inference if canvas still has strokes
-                if(points.length > 0){
+                if(points.length > 1){
                   points.removeLast();
                   predictions = await canvas.runInference();
                 }
-                else
+                else{
+                  points.removeLast();
                   predictions = List.generate(10, (i) => " ");
+                }
                 setState(() {});
               }
             ),
@@ -144,6 +146,7 @@ class _DrawScreenState extends State<DrawScreen> {
             // approximated button height (width/5) * 2  
             height: (MediaQuery.of(context).size.width / 5.0) * 2.0, 
             child: GridView.count(
+              physics: new NeverScrollableScrollPhysics(),
               crossAxisCount: 5,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
