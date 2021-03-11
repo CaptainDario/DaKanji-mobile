@@ -80,8 +80,59 @@ class PredictionButton extends StatelessWidget {
                 print("iOS is not implemented for choosing translator");
               }
             }
+            // offline dictionary takoboto (android)
+            else if(SETTINGS.openWithTakoboto){
+              if(Platform.isAndroid){
+                AndroidIntent intent = AndroidIntent(
+                    package: 'jp.takoboto',
+                    action: 'jp.takoboto.SEARCH',
+                    arguments: <String, dynamic>{
+                      "android.intent.extra.PROCESS_TEXT": this.char,
+                    }
+                );
+                if(await intent.canResolveActivity())
+                  await intent.launch();
+                else{
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context){ 
+                      return SimpleDialog(
+                        title: Center(child: Text("Takoboto not installed")),
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                MaterialButton(
+                                  color: Colors.white.withAlpha(50),
+                                  onPressed: () async {
+                                    // try to open takoboto in the playstore
+                                    if (await canLaunch(PLAYSTORE_BASE_INTENT + TAKOBOTO_ID)){
+                                      await launch(PLAYSTORE_BASE_INTENT + TAKOBOTO_ID);
+                                    }
+                                    else {
+                                      await launch(PLAYSTORE_BASE_URL + TAKOBOTO_ID,
+                                        forceWebView: true,
+                                        enableJavaScript: true);
+                                    }
+                                  },
+                                  child: Text("Download takoboto")
+                                ) 
+                              ]
+                            )
+                          )
+                        ],
+                      );
+                    }
+                  );
+                }
+              }
+            }
             else{
-              launch(SETTINGS.openWithSelectedDictionary(this.char));
+              launch(
+                SETTINGS.openWithSelectedDictionary(this.char),
+                forceWebView: true, enableJavaScript: true
+              );
             }
           }
         },
