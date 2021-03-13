@@ -7,10 +7,12 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'Settings.dart';
 
+
 // the title of the app
 const String APP_TITLE = "DaKanjiRecognizer";
 // the version number of this app
-const String VERSION = "1.0.0";
+// ignore: non_constant_identifier_names
+String VERSION;
 
 // the saved settings
 // ignore: non_constant_identifier_names
@@ -67,7 +69,7 @@ String USED_BACKEND = "";
 //about page
 const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
 const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile";
-const GITHUB_ML_REPO = "https://captaindario.github.io/DaKanjiRecognizer-ML";
+const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-ML";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues/new";
 
 

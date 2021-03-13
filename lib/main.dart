@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:package_info/package_info.dart';
 
 import 'Settingsscreen.dart';
 import 'DrawScreen.dart';
@@ -26,6 +27,9 @@ Future<void> main() async {
 }
 
 Future<void> init() async {
+  // get the app's version 
+  VERSION = (await PackageInfo.fromPlatform()).version;
+  
   // load the settings
   SETTINGS.load();
 
