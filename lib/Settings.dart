@@ -161,9 +161,6 @@ class Settings {
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
 
-    // make sure the loaded drop down values are correct
-    if(selectedDictionary == "") selectedDictionary = dictionaries[0];
-    if(selectedTheme == "") selectedTheme = themes[0];
   }
 
   /// Load all saved settings from SharedPreferences.
@@ -179,7 +176,7 @@ class Settings {
     customURL = await loadString('customURL') ?? "";
     selectedTheme = await loadString('selectedTheme') ?? themes[2];
     versionUsed = await loadString('versionUsed') ?? "";
-    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[2];
+    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
     // assure that at least one switch is set to true
     if (!this.openWithCustomURL &&
