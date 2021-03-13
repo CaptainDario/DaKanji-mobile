@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:io' show Platform;
 import 'dart:ui';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
@@ -31,9 +30,10 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
             children: [
               TextSpan(
-                text: "This is an open source Kanji Recognizer app. "),
+                text: "This app tries to help people which study or use the Japanese language. " + 
+                "There are many features planned but right now, "),
               TextSpan(
-                text: "It can recognize handwritten Kanji characters.\n"),
+                text: "it can recognize handwritten Kanji characters.\n"),
               TextSpan(text: "A desktop version is available "),
               TextSpan(
                 text: "here.\n",
@@ -45,9 +45,9 @@ class _AboutScreenState extends State<AboutScreen> {
                     "The UI was developed using dart and the Flutter framework. "),
               TextSpan(
                 text:
-                    "If you want to learn more about the development of the app, "),
+                    "The app is partially source available. If you want to learn more about the development of the app, "),
               TextSpan(
-                text: "visit its GitHub repository.\n",
+                text: "visit its GitHub repository.",
                 style: TextStyle(color: Colors.blue),
                 recognizer: new TapGestureRecognizer()
                   ..onTap = () => launch(GITHUB_MOBILE_REPO)),

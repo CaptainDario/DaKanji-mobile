@@ -4,31 +4,30 @@
 ## What is this
 This is the mobile version of DaKanjiRecognizer.
 The desktop version is available [here](https://github.com/CaptainDario/DaKanjiRecognizer-Desktop). </br>
-This app tries to help students of the Japanese language.
+This app tries to help students and people which use the Japanese language.
 It can recognize Japanese 'kanji' characters which the user draws by hand.
 Those predictions can than be automatically opened in dictionaries.
 For more details about the features take a look at the [usage section](#usage).
 </br>
-<img src="./media/preview.gif" style="display:block;margin-left:auto;margin-right:auto;" width="35%"/>
+<img src="./media/preview.gif" style="display:block;margin-left:auto;margin-right:auto;" width="20%"/>
 </br>
 
 ## Getting started
 **Currently only android is supported** </br>
-The easiest way it to download the app for android from the PlayStore.
+The easiest way is to download the app for android from the PlayStore.
 You can also [setup a development environment](#development) and build the app on your own.
 
 ## Usage
 In this section the features of the app are explained in more detail.
 ### Handwritten kanji recognition
-The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. This dictionary can be set in the settings.
+The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. The used dictionary can be set in the settings.
 It is also possible to use a translation app of the used device.
 A custom website can also be used with an input field in the settings menu.</br>
 Currently around 3000 characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Next steps and ideas
-In the long term this project should replace the desktop version. This will happen when flutter becomes production ready on desktop.
-The planned features can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/projects).
+In the long term this project should replace the desktop version. This will happen when flutter becomes production ready on desktop and all plugins have support.
 If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues).
 
 ## Development
@@ -39,4 +38,18 @@ For developing new features this repository has to be downloaded and all necessa
 
 ```{bash}
 flutter pub get
+```
+
+Additionally the tflite models need to be copied from the [Machine Learning](https://github.com/CaptainDario/DaKanjiRecognizer-ML) repo.
+Go to [the release page](https://github.com/CaptainDario/DaKanjiRecognizer-ML/releases) and download the models.
+
+### building the app
+To build the app just invoke
+```
+flutter build appbundle
+```
+
+To obfuscate, save the symbol files and build the app.
+```{bash}
+flutter build appbundle --obfuscate --split-debug-info=obfuscate_debug_info
 ```
