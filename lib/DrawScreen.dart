@@ -36,8 +36,6 @@ class _DrawScreenState extends State<DrawScreen> {
     if(SETTINGS.showShowcaseViewDrawing){
       initTargets();
       showTutorial();
-      SETTINGS.showShowcaseViewDrawing = false;
-      SETTINGS.save();
     }
   }
 
@@ -209,14 +207,23 @@ class _DrawScreenState extends State<DrawScreen> {
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {
+        // close the drawer
         DRAWER_KEY.currentState.openEndDrawer();
+
+        // don't show the tutorial again
+        SETTINGS.showShowcaseViewDrawing = false;
+        SETTINGS.save();
       },
       onClickTarget: (target) {
         // after clicking on the long press tutorial open drawer
         if(target.identify == SHOWCASE_IDENTIFIERS_DRAWING[5])
           DRAWER_KEY.currentState.openDrawer();
       },
-      onSkip: () {},
+      onSkip: () {
+        // don't show the tutorial again
+        SETTINGS.showShowcaseViewDrawing = false;
+        SETTINGS.save();
+      },
       onClickOverlay: (target) {},
     )..show();
   }
