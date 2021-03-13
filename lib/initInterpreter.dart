@@ -32,7 +32,7 @@ Future<Interpreter> initInterpreterAndroid() async {
       final gpuDelegateV2 = GpuDelegateV2(
           options: GpuDelegateOptionsV2(
               false,
-              TfLiteGpuInferenceUsage.fastSingleAnswer,
+              TfLiteGpuInferenceUsage.preferenceSustainSpeed,
               TfLiteGpuInferencePriority.minLatency,
               TfLiteGpuInferencePriority.auto,
               TfLiteGpuInferencePriority.auto));
@@ -45,8 +45,9 @@ Future<Interpreter> initInterpreterAndroid() async {
         options: interpreterOptions);
   }
   // use CPU inference on emulators
-  else
+  else{
     interpreter = await initInterpreterFallback();
+  }
 
   return interpreter;
 }
