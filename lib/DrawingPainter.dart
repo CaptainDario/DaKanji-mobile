@@ -58,7 +58,11 @@ class DrawingPainter extends CustomPainter {
     // convert image for inference into shape [1, 64, 64, 1]
     for (int x = 0; x < 64; x++) {
       for (int y = 0; y < 64; y++) {
-        double val = (resizedBytes[(x * 64) + y] / 255).toDouble();
+        double val = resizedBytes[(x * 64) + y].toDouble();
+        if(val > 50){
+          val = 255;
+        }
+        val = (val / 255).toDouble();
         _input[0][x][y][0] = val;
       }
     }
@@ -155,6 +159,7 @@ class DrawingPainter extends CustomPainter {
     Paint paint = Paint()
       ..strokeWidth = size.width / 50.0
       ..strokeCap = StrokeCap.round;
+
     if (this.darkMode || this.recording)
       paint.color = Colors.white;
     else
