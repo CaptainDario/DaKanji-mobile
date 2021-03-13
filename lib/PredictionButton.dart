@@ -54,16 +54,8 @@ class PredictionButton extends StatelessWidget {
                               children: [
                                 MaterialButton(
                                   color: Colors.white.withAlpha(50),
-                                  onPressed: () async {
-                                    // try to open google translate in the playstore
-                                    if (await canLaunch(PLAYSTORE_BASE_INTENT + GOOGLE_TRANSLATE_ID)){
-                                      await launch(PLAYSTORE_BASE_INTENT + GOOGLE_TRANSLATE_ID);
-                                    }
-                                    else{
-                                      await launch(PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID,
-                                        forceWebView: true,
-                                        enableJavaScript: true);
-                                    }
+                                  onPressed: () {
+                                    launch(PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID);
                                   },
                                   child: Text("Download Google Translate")
                                 ) 
@@ -106,15 +98,7 @@ class PredictionButton extends StatelessWidget {
                                 MaterialButton(
                                   color: Colors.white.withAlpha(50),
                                   onPressed: () async {
-                                    // try to open takoboto in the playstore
-                                    if (await canLaunch(PLAYSTORE_BASE_INTENT + TAKOBOTO_ID)){
-                                      await launch(PLAYSTORE_BASE_INTENT + TAKOBOTO_ID);
-                                    }
-                                    else {
-                                      await launch(PLAYSTORE_BASE_URL + TAKOBOTO_ID,
-                                        forceWebView: true,
-                                        enableJavaScript: true);
-                                    }
+                                    launch(PLAYSTORE_BASE_URL + TAKOBOTO_ID);
                                   },
                                   child: Text("Download takoboto")
                                 ) 
