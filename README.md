@@ -27,11 +27,10 @@ Currently around 3000 characters are supported.
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Next steps and ideas
-In the long term this project should replace the desktop version. This will happen when flutter becomes production ready on desktop and all plugins have support.
 If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues).
 
 ## Development
-This app was developed using the dart and the flutter framework.
+This app was developed using dart, the flutter framework and Tensorflow.
 Tensorflow was used for the machine learning part.
 This project can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-ML). </br>
 For developing new features this repository has to be downloaded and all necessary packages have to be installed with:
