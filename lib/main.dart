@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:package_info/package_info.dart';
 
 import 'Settingsscreen.dart';
 import 'DrawScreen.dart';
@@ -17,14 +19,17 @@ Future<void> main() async {
   await init();
 
   runApp(
-  Phoenix(
-    child: DaKanjiRecognizerApp(),
-  )
+    Phoenix(
+      child: DaKanjiRecognizerApp(),
+    )
   );
 
 }
 
 Future<void> init() async {
+  // get the app's version 
+  VERSION = (await PackageInfo.fromPlatform()).version;
+  
   // load the settings
   SETTINGS.load();
 
@@ -34,11 +39,20 @@ Future<void> init() async {
 
   // initialize the TFLite interpreter
   if (Platform.isAndroid) 
-    initInterpreterAndroid();
+    CNN_KANJI_ONLY_INTERPRETER = await initInterpreterAndroid();
   else if (Platform.isIOS) 
-    initInterpreterIOS();
+    CNN_KANJI_ONLY_INTERPRETER = await initInterpreterIOS();
   else if (kIsWeb) 
-    initInterpreterWeb();
+    CNN_KANJI_ONLY_INTERPRETER = await initInterpreterWeb();
+
+  // run inference once at init -> no delay for first inference
+  List<List<List<List<double>>>> _input = List<List<double>>.generate(
+    64, (i) => List<double>.generate(64, (j) => 0.0)).
+    reshape<double>([1, 64, 64, 1]);
+  List<List<double>> _output =
+      List<List<double>>.generate(1, (i) => 
+        List<double>.generate(LABEL_LIST.length, (j) => 0.0));
+  CNN_KANJI_ONLY_INTERPRETER.run(_input, _output);
 }
 
 
@@ -54,7 +68,7 @@ class DaKanjiRecognizerApp extends StatelessWidget {
 
     return MaterialApp(
       title: APP_TITLE,
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
 
       // themes
       theme: ThemeData(

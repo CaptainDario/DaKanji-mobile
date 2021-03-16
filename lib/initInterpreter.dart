@@ -9,7 +9,10 @@ import 'globals.dart';
 /// Uses NnAPI for devices with Android API >= 27
 /// Otherwise uses the GPUDelegate
 /// If it is detected that the apps runs on an emulator CPU mode is used
-void initInterpreterAndroid() async {
+Future<Interpreter> initInterpreterAndroid() async {
+
+  Interpreter interpreter;
+
   // get platform information
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -29,7 +32,7 @@ void initInterpreterAndroid() async {
       final gpuDelegateV2 = GpuDelegateV2(
           options: GpuDelegateOptionsV2(
               false,
-              TfLiteGpuInferenceUsage.fastSingleAnswer,
+              TfLiteGpuInferenceUsage.preferenceSustainSpeed,
               TfLiteGpuInferencePriority.minLatency,
               TfLiteGpuInferencePriority.auto,
               TfLiteGpuInferencePriority.auto));
@@ -37,20 +40,26 @@ void initInterpreterAndroid() async {
     }
 
     // initialize interpreter(s)
-    CNN_KANJI_ONLY_INTERPRETER = await Interpreter.fromAsset(
+    interpreter = await Interpreter.fromAsset(
         CNN_KANJI_ONLY_ASSET,
         options: interpreterOptions);
   }
   // use CPU inference on emulators
-  else
-    initInterpreterFallback();
+  else{
+    interpreter = await initInterpreterFallback();
+  }
+
+  return interpreter;
 }
 
 /// Initializes the TFLite interpreter on iOS.
 ///
 /// Uses the metal delegate if running on an actual device.
 /// Uses otherwise CPU mode.
-void initInterpreterIOS() async {
+Future<Interpreter> initInterpreterIOS() async {
+
+  Interpreter interpreter;
+
   // get platform information
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
@@ -68,19 +77,25 @@ void initInterpreterIOS() async {
     CNN_KANJI_ONLY_INTERPRETER = interpreterIOS;
   } 
   // use CPU inference on emulators
-  else {
-    initInterpreterFallback();
-  }
+  else 
+    interpreter = await initInterpreterFallback();
+  
+  return interpreter;
+
 }
 
-void initInterpreterWeb() async {
+Future<Interpreter> initInterpreterWeb() async {
+
+  Interpreter interpreter;
+
   print("web inference is not set up");
+
+  return interpreter;
 }
 
 /// Initializes the interpreter with CPU mode set.
-void initInterpreterFallback() async {
-  Interpreter fallback = await Interpreter.fromAsset(CNN_KANJI_ONLY_ASSET);
-
+Future<Interpreter> initInterpreterFallback() async {
   USED_BACKEND = "CPU";
-  CNN_KANJI_ONLY_INTERPRETER = fallback;
+  
+  return await Interpreter.fromAsset(CNN_KANJI_ONLY_ASSET);
 }

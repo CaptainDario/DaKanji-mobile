@@ -7,10 +7,12 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'Settings.dart';
 
+
 // the title of the app
 const String APP_TITLE = "DaKanjiRecognizer";
 // the version number of this app
-const String VERSION = "0.3.0";
+// ignore: non_constant_identifier_names
+String VERSION;
 
 // the saved settings
 // ignore: non_constant_identifier_names
@@ -40,7 +42,7 @@ const List<String> SHOWCASE_TEXTS_DRAWING = [
   "The predicted characters will be shown here.",
   "A short press copies the prediction.",
   "A long press opens the prediction in a dictionary.",
-  "In the settings the dictionary can be chosen."
+  "In the settings the translation service can be chosen."
 ];
 // ignore: non_constant_identifier_names
 final List<ContentAlign> SHOWCASE_ALIGNS_DRAWING = [
@@ -67,16 +69,23 @@ String USED_BACKEND = "";
 //about page
 const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
 const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile";
-const GITHUB_ML_REPO = "https://captaindario.github.io/DaKanjiRecognizer-ML";
+const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-ML";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues/new";
 
 
 const RATE_ON_MOBILE_STORE = "rating it on the AppStore/PlayStore";
 
+const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
+const PLAYSTORE_BASE_INTENT =  "market://details?id=";
+
 const APPSTORE_PAGE = "";
-const PLAYSTORE_PAGE = "";
+const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab&hl=en&gl=US";
 const DAAPPLAB_APPSTORE_PAGE = "";
 
-const PRIVACY_POLICE = "";
+const TAKOBOTO_ID = "jp.takoboto";
+
+const GOOGLE_TRANSLATE_ID = "com.google.android.apps.translate";
+
+const PRIVACY_POLICE = "https://sites.google.com/view/dakanjirecognizerprivacypolicy";

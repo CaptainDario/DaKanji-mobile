@@ -24,6 +24,9 @@ class Settings {
   /// Indicates if a long press will use the jisho URL.
   bool openWithJisho;
 
+  /// Indicates if a long press will use the takoboto app.
+  bool openWithTakoboto;
+
   /// Indicates if a long press will use the wadoku URL.
   bool openWithWadoku;
 
@@ -35,7 +38,14 @@ class Settings {
 
   /// A list with all available dictionary options.
   List<String> dictionaries = 
-    ["a custom URL", "systemTranslator", "jisho.org", "wadoku.de", "weblio.jp"];
+    [
+      "jisho (web)", 
+      "wadoku (web)",
+      "weblio (web)",
+      "a custom URL",
+      "systemTranslator",
+      "takoboto (app)"
+    ];
 
   /// The string representation of the dictionary which will be used (long press)
   String selectedDictionary;
@@ -66,7 +76,7 @@ class Settings {
 
     String kanjiPlaceholder = "%X%";
 
-    jishoURL = "https://jisho.org/search/" + kanjiPlaceholder + "%23kanji";
+    jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
   }
@@ -87,7 +97,7 @@ class Settings {
     else if (openWithWeblio)
       url = weblioURL;
 
-    // check that the URL starts with protocol, otherwise launch(fails)
+    // check that the URL starts with protocol, otherwise launch() fails
     if (!(url.startsWith("http://") || url.startsWith("https://")))
       url = "https://" + url;
 
@@ -101,6 +111,7 @@ class Settings {
   void setTogglesToFalse() {
     openWithCustomURL = false;
     openWithJisho = false;
+    openWithTakoboto = false;
     openWithWadoku = false;
     openWithWeblio = false;
     openWithDefaultTranslator = false;
@@ -115,15 +126,17 @@ class Settings {
     selectedDictionary = selection;
 
     if(selection == dictionaries[0])
-      openWithCustomURL = true;
-    else if(selection == dictionaries[1])
-      openWithDefaultTranslator = true;
-    else if(selection == dictionaries[2])
       openWithJisho = true;
-    else if(selection == dictionaries[3])
+    else if(selection == dictionaries[1])
       openWithWadoku = true;
-    else if(selection == dictionaries[4])
+    else if(selection == dictionaries[2])
       openWithWeblio = true;
+    else if(selection == dictionaries[3])
+      openWithCustomURL = true;
+    else if(selection == dictionaries[4])
+      openWithDefaultTranslator = true;
+    else if(selection == dictionaries[5])
+      openWithTakoboto = true;
     else
       print("dictionary undefined");
 
@@ -138,6 +151,7 @@ class Settings {
     prefs.setBool('openWithCustomURL', openWithCustomURL);
     prefs.setBool('openWithJisho', openWithJisho);
     prefs.setBool('openWithDefaultTranslator', openWithDefaultTranslator);
+    prefs.setBool('openWithTakoboto', openWithTakoboto);
     prefs.setBool('openWithWadoku', openWithWadoku);
     prefs.setBool('openWithWeblio', openWithWeblio);
     prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
@@ -147,9 +161,6 @@ class Settings {
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
 
-    // make sure the loaded drop down values are correct
-    if(selectedDictionary == "") selectedDictionary = "jisho.org";
-    if(selectedTheme == "") selectedTheme = themes[0];
   }
 
   /// Load all saved settings from SharedPreferences.
@@ -157,6 +168,7 @@ class Settings {
     openWithCustomURL = await loadBool('openWithCustomURL');
     openWithJisho = await loadBool('openWithJisho');
     openWithDefaultTranslator = await loadBool('openWithDefaultTranslator');
+    openWithTakoboto = await loadBool('openWithTakoboto');
     openWithWadoku = await loadBool('openWithWadoku');
     openWithWeblio = await loadBool('openWithWeblio');
     showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
@@ -164,7 +176,7 @@ class Settings {
     customURL = await loadString('customURL') ?? "";
     selectedTheme = await loadString('selectedTheme') ?? themes[2];
     versionUsed = await loadString('versionUsed') ?? "";
-    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[2];
+    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
     // assure that at least one switch is set to true
     if (!this.openWithCustomURL &&
