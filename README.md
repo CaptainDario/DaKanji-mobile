@@ -27,6 +27,7 @@ Currently around 3000 characters are supported.
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Next steps and ideas
+The features which are planned for the next releases can be found [here](https://www.notion.so/DaKanjiRecognizer-mobile-a18e7286e1cb48759359e318fb70c30a).
 If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues).
 
 ## Development
