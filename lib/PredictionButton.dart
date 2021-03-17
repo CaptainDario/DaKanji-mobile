@@ -113,10 +113,7 @@ class PredictionButton extends StatelessWidget {
               }
             }
             else{
-              launch(
-                SETTINGS.openWithSelectedDictionary(this.char),
-                forceWebView: true, enableJavaScript: true
-              );
+              launch(SETTINGS.openWithSelectedDictionary(this.char));
             }
           }
         },

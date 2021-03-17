@@ -81,7 +81,7 @@ const PLAYSTORE_BASE_INTENT =  "market://details?id=";
 const APPSTORE_PAGE = "";
 const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
-const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab&hl=en&gl=US";
+const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab";
 const DAAPPLAB_APPSTORE_PAGE = "";
 
 const TAKOBOTO_ID = "jp.takoboto";
