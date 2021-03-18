@@ -1,12 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 class KanjiBuffer with ChangeNotifier{
-  static final KanjiBuffer _instance = KanjiBuffer._internal();
-
-  factory KanjiBuffer() => _instance;
   String _value;
 
-  KanjiBuffer._internal() {
+  KanjiBuffer() {
     _value = "";
   }
 
