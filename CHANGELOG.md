@@ -2,6 +2,12 @@
 # DaKanjiRecognizer - mobile : changelog
 
 
+## v 1.0.4
+- Fixed a localized link to the play store
+
+## v 1.0.3
+- Fixed opening web dictionaries not working
+
 ## v 1.0.2
 - minor fixes to make app release ready
 
