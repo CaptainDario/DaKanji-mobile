@@ -23,9 +23,17 @@ class PredictionButton extends StatelessWidget {
         padding: EdgeInsets.all(0),
         // copy the character to clipboard on single press
         onPressed: () {
-          if (this.char != " ")
-            Clipboard.setData(new ClipboardData(text: this.char));
+          print("copied");
+          if (widget.char != " "){
+            Clipboard.setData(new ClipboardData(text: widget.char));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("copied " + widget.char + " to clipboard"),
+              )
+            );
+          }
         },
+        
         // open prediction in the dictionary set in setting on long press
         onLongPress: () async {
           // only open a page when there is a prediction
