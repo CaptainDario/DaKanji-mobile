@@ -30,11 +30,11 @@ class _PredictionButtonState extends State<PredictionButton>{
         padding: EdgeInsets.all(0),
         // copy the character to clipboard on single press
         onPressed: () {
-          print("copied");
           if (widget.char != " "){
             Clipboard.setData(new ClipboardData(text: widget.char));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                duration: Duration(seconds: 1),
                 content: Text("copied " + widget.char + " to clipboard"),
               )
             );
