@@ -7,17 +7,24 @@ import 'package:android_intent/android_intent.dart';
 
 import 'package:da_kanji_recognizer_mobile/globals.dart';
 
-class PredictionButton extends StatelessWidget {
-  String char;
+class PredictionButton extends StatefulWidget {
+  final String char;
 
-  PredictionButton(String char) {
-    this.char = char;
-  }
+  PredictionButton({this.char});
 
   @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
+  _PredictionButtonState createState() => _PredictionButtonState();
+
+}
+
+
+class _PredictionButtonState extends State<PredictionButton>{
+
+  @override
+  Widget build(BuildContext context){
+  return AspectRatio(
+    aspectRatio: 1,
+    child: GestureDetector(
       child: MaterialButton(
         color: Colors.white.withAlpha(50),
         padding: EdgeInsets.all(0),
@@ -37,14 +44,14 @@ class PredictionButton extends StatelessWidget {
         // open prediction in the dictionary set in setting on long press
         onLongPress: () async {
           // only open a page when there is a prediction
-          if (this.char != " ") {
+          if (widget.char != " ") {
             // the prediction should be translated with system dialogue
             if(SETTINGS.openWithDefaultTranslator){ 
               if(Platform.isAndroid){
                 AndroidIntent intent = AndroidIntent(
                   action: 'android.intent.action.TRANSLATE',
                   arguments: <String, dynamic>{
-                    "android.intent.extra.TEXT" : this.char
+                    "android.intent.extra.TEXT" : widget.char
                   }
                 );
                 if(await intent.canResolveActivity())
@@ -87,7 +94,7 @@ class PredictionButton extends StatelessWidget {
                     package: 'jp.takoboto',
                     action: 'jp.takoboto.SEARCH',
                     arguments: <String, dynamic>{
-                      "android.intent.extra.PROCESS_TEXT": this.char,
+                      "android.intent.extra.PROCESS_TEXT": widget.char,
                     }
                 );
                 if(await intent.canResolveActivity())
@@ -121,18 +128,19 @@ class PredictionButton extends StatelessWidget {
               }
             }
             else{
-              launch(SETTINGS.openWithSelectedDictionary(this.char));
+              launch(SETTINGS.openWithSelectedDictionary(widget.char));
             }
           }
         },
         child: FittedBox(
           child: Text(
-            this.char,
+            widget.char,
             textAlign: TextAlign.center,
             style: new TextStyle(fontSize: 1000.0),
           )
         )
       )
-    );
+    )
+  );
   }
 }
