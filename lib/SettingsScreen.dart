@@ -23,7 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // different options for dictionary on long press
           ListTile(
             title: Text(
-              "Drawing single character", 
+              "Drawing", 
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18
