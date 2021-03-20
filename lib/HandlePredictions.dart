@@ -22,7 +22,7 @@ class HandlePrediction{
   /// @params context to use to show the snackbar 
   /// @params the string which should be copied to the clipboard
   void handlePress(BuildContext context, String char){
-    if (char != " "){
+    if (char != " " && char != ""){
       Clipboard.setData(new ClipboardData(text: char));
       // display a snackbar for 1s 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -37,7 +37,7 @@ class HandlePrediction{
   void handleLongPress(BuildContext context, String char) async {
 
     // only open a page when there is a prediction
-    if (char != " ") {
+    if (char != " " && char != "") {
       // the prediction should be translated with system dialogue
       if(SETTINGS.openWithDefaultTranslator){ 
         if(Platform.isAndroid){
@@ -93,36 +93,69 @@ class HandlePrediction{
           if(await intent.canResolveActivity())
             await intent.launch();
           else{
-            showDialog(
-              context: context,
-              builder: (BuildContext context){ 
-                return SimpleDialog(
-                  title: Center(child: Text("Takoboto not installed")),
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          MaterialButton(
-                            color: Colors.white.withAlpha(50),
-                            onPressed: () async {
-                              launch(PLAYSTORE_BASE_URL + TAKOBOTO_ID);
-                            },
-                            child: Text("Download takoboto")
-                          ) 
-                        ]
-                      )
-                    )
-                  ],
-                );
-              }
+            showDownloadDialogue(context,
+              "Takoboto not installed", 
+              "Download Takoboto", 
+              PLAYSTORE_BASE_URL + TAKOBOTO_ID
             );
           }
+        }
+      }
+      // offline dictionary akebi (android)
+      else if(SETTINGS.openWithAkebi){
+        if(Platform.isAndroid){
+          AndroidIntent intent = AndroidIntent(
+              package: 'com.craxic.akebifree',
+              componentName: 
+                'com.craxic.akebifree.activities.search.SearchActivity',
+              type: "text/plain",
+              action: 'android.intent.action.SEND',
+              arguments: <String, dynamic>{
+                "android.intent.extra.TEXT": char,
+              }
+          );
+          if(await intent.canResolveActivity())
+            await intent.launch();
+          else
+            showDownloadDialogue(context,
+              "Akebi not installed", 
+              "Download Akebi", 
+              PLAYSTORE_BASE_URL + AKEBI_ID
+            );
         }
       }
       else{
         launch(SETTINGS.openWithSelectedDictionary(char));
       }
     }
+  }
+
+  void showDownloadDialogue(
+    BuildContext context, String title, String text, String url){
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context){ 
+        return SimpleDialog(
+          title: Center(child: Text(title)),
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  MaterialButton(
+                    color: Colors.white.withAlpha(50),
+                    onPressed: () async {
+                      launch(url);
+                    },
+                    child: Text(text)
+                  ) 
+                ]
+              )
+            )
+          ],
+        );
+      }
+    );
   }
 }
