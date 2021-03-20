@@ -6,6 +6,9 @@ class Settings {
   /// The placeholder in the URL's which will be replaced by the predicted kanji
   String kanjiPlaceholder = "%X%";
 
+  /// Indicates if a long press will use the takoboto app.
+  bool openWithAkebi;
+  
   /// The custom URL a user can define on the settings page.
   String customURL;
 
@@ -44,7 +47,8 @@ class Settings {
       "weblio (web)",
       "a custom URL",
       "systemTranslator",
-      "takoboto (app)"
+      "takoboto (app)",
+      "akebi (app)"
     ];
 
   /// The string representation of the dictionary which will be used (long press)
@@ -109,6 +113,7 @@ class Settings {
 
   /// Set all values of the dictionary toggles in the Settings menu to false.
   void setTogglesToFalse() {
+    openWithAkebi = false;
     openWithCustomURL = false;
     openWithJisho = false;
     openWithTakoboto = false;
@@ -137,6 +142,8 @@ class Settings {
       openWithDefaultTranslator = true;
     else if(selection == dictionaries[5])
       openWithTakoboto = true;
+    else if(selection == dictionaries[6])
+      openWithAkebi = true;
     else
       print("dictionary undefined");
 
@@ -148,6 +155,7 @@ class Settings {
     final prefs = await SharedPreferences.getInstance();
 
     // set value in shared preferences
+    prefs.setBool('openWithAkebi', openWithAkebi);
     prefs.setBool('openWithCustomURL', openWithCustomURL);
     prefs.setBool('openWithJisho', openWithJisho);
     prefs.setBool('openWithDefaultTranslator', openWithDefaultTranslator);
@@ -165,6 +173,7 @@ class Settings {
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
+    openWithAkebi = await loadBool('openWithAkebi');
     openWithCustomURL = await loadBool('openWithCustomURL');
     openWithJisho = await loadBool('openWithJisho');
     openWithDefaultTranslator = await loadBool('openWithDefaultTranslator');
@@ -179,15 +188,16 @@ class Settings {
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
     // assure that at least one switch is set to true
-    if (!this.openWithCustomURL &&
-        !this.openWithJisho &&
-        !this.openWithDefaultTranslator &&
-        !this.openWithWadoku &&
-        !this.openWithWeblio) {
+    if (!this.openWithAkebi &&
+      !this.openWithCustomURL &&
+      !this.openWithJisho &&
+      !this.openWithDefaultTranslator &&
+      !this.openWithWadoku &&
+      !this.openWithWeblio) {
       this.openWithJisho = true;
     }
 
-    // if another version used than last time -> show showcase
+    // if different version used than last time -> show tutorial 
     if(versionUsed != VERSION){ 
       showShowcaseViewDrawing = true;
     }
