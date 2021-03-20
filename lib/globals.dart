@@ -85,6 +85,7 @@ const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id
 const DAAPPLAB_APPSTORE_PAGE = "";
 
 const TAKOBOTO_ID = "jp.takoboto";
+const AKEBI_ID = "com.craxic.akebifree";
 
 const GOOGLE_TRANSLATE_ID = "com.google.android.apps.translate";
 
