@@ -5,6 +5,7 @@
 ## v 1.1.0
 New Features:
 - multi character search
+- open prediction in akebi
 
 Changes:
 - Prediction button is now a stateful widget
