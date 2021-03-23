@@ -58,7 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Container(
                   child: Expanded(
                     child: TextField(
-                      enabled: SETTINGS.openWithCustomURL,
+                      enabled:
+                        SETTINGS.selectedDictionary == SETTINGS.dictionaries[3],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: SETTINGS.customURL,

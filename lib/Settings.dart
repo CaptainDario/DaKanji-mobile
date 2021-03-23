@@ -6,9 +6,6 @@ class Settings {
   /// The placeholder in the URL's which will be replaced by the predicted kanji
   String kanjiPlaceholder = "%X%";
 
-  /// Indicates if a long press will use the takoboto app.
-  bool openWithAkebi;
-  
   /// The custom URL a user can define on the settings page.
   String customURL;
 
@@ -20,24 +17,6 @@ class Settings {
 
   /// The URL of the weblio website
   String weblioURL;
-
-  /// Indicates if a long press will use the custom URL.
-  bool openWithCustomURL;
-
-  /// Indicates if a long press will use the jisho URL.
-  bool openWithJisho;
-
-  /// Indicates if a long press will use the takoboto app.
-  bool openWithTakoboto;
-
-  /// Indicates if a long press will use the wadoku URL.
-  bool openWithWadoku;
-
-  /// Indicates if a long press will use the weblio URL.
-  bool openWithWeblio;
-  
-  /// Indicates if a long press will use the default translator.
-  bool openWithDefaultTranslator;
 
   /// A list with all available dictionary options.
   List<String> dictionaries = 
