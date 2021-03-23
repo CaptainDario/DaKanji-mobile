@@ -111,6 +111,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
               onTap: () {}
           ),
+          // invert if short press or long press opens dict / copies to clip
+          ListTile(
+            title: Text("Invert long/short press"),
+            trailing: Checkbox(
+              value: SETTINGS.invertShortLongPress, 
+              onChanged: (bool newValue){
+                setState(() {
+                  SETTINGS.invertShortLongPress = newValue;
+                  SETTINGS.save();
+                });
+              }
+            ),
+          ),
           Divider(),
           // setting for which theme to use
           ListTile(

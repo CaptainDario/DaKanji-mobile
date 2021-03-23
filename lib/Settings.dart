@@ -47,13 +47,15 @@ class Settings {
   /// A list with all available themes.
   List<String> themes = ["light", "dark", "system"];
   
-
   /// A Map from the string of a theme to the ThemeMode of the theme.
   Map<String, ThemeMode> themesDict = {
     "light": ThemeMode.light,
     "dark": ThemeMode.dark,
     "system": ThemeMode.system
   };
+
+  /// Should the behavior of long and short press be inverted
+  bool invertShortLongPress = false;
 
   Settings() {
     String kanjiPlaceholder = "%X%";
@@ -62,6 +64,7 @@ class Settings {
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
   }
+
 
   /// Get the URL to the predicted kanji in the selected dictionary.
   ///
@@ -96,6 +99,7 @@ class Settings {
     final prefs = await SharedPreferences.getInstance();
 
     // set value in shared preferences
+    prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
     
     prefs.setString('customURL', customURL);
@@ -107,11 +111,12 @@ class Settings {
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
+    invertShortLongPress = await loadBool('invertShortLongPress');
     showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
 
-    customURL = await loadString('customURL') ?? "";
+    customURL = await loadString('customURL') ?? '';
     selectedTheme = await loadString('selectedTheme') ?? themes[2];
-    versionUsed = await loadString('versionUsed') ?? "";
+    versionUsed = await loadString('versionUsed') ?? '';
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
 
