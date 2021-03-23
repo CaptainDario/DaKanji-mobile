@@ -45,7 +45,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   print(newValue);
                   SETTINGS.selectedDictionary = newValue;
-                  SETTINGS.setDictionary(newValue);
                   SETTINGS.save();
                 });
               },

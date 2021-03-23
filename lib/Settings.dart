@@ -47,8 +47,9 @@ class Settings {
       "weblio (web)",
       "a custom URL",
       "systemTranslator",
+      "aedict (app)",
+      "akebi (app)",
       "takoboto (app)",
-      "akebi (app)"
     ];
 
   /// The string representation of the dictionary which will be used (long press)
@@ -76,8 +77,6 @@ class Settings {
   };
 
   Settings() {
-    setTogglesToFalse();
-
     String kanjiPlaceholder = "%X%";
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
@@ -92,14 +91,14 @@ class Settings {
     String url;
 
     // determine which URL should be used for finding the character
-    if (openWithCustomURL)
-      url = customURL;
-    else if (openWithJisho)
+    if(selectedDictionary == dictionaries[0])
       url = jishoURL;
-    else if (openWithWadoku)
+    else if(selectedDictionary == dictionaries[1])
       url = wadokuURL;
-    else if (openWithWeblio)
+    else if(selectedDictionary == dictionaries[2])
       url = weblioURL;
+    else if(selectedDictionary == dictionaries[3])
+      url = customURL;
 
     // check that the URL starts with protocol, otherwise launch() fails
     if (!(url.startsWith("http://") || url.startsWith("https://")))
@@ -111,43 +110,6 @@ class Settings {
     return url;
   }
 
-  /// Set all values of the dictionary toggles in the Settings menu to false.
-  void setTogglesToFalse() {
-    openWithAkebi = false;
-    openWithCustomURL = false;
-    openWithJisho = false;
-    openWithTakoboto = false;
-    openWithWadoku = false;
-    openWithWeblio = false;
-    openWithDefaultTranslator = false;
-  }
-
-  /// Set the bool of the dictionary which currently being used from string
-  /// 
-  /// @params the string of the currently selected dictionary
-  void setDictionary(String selection){
-
-    setTogglesToFalse();
-    selectedDictionary = selection;
-
-    if(selection == dictionaries[0])
-      openWithJisho = true;
-    else if(selection == dictionaries[1])
-      openWithWadoku = true;
-    else if(selection == dictionaries[2])
-      openWithWeblio = true;
-    else if(selection == dictionaries[3])
-      openWithCustomURL = true;
-    else if(selection == dictionaries[4])
-      openWithDefaultTranslator = true;
-    else if(selection == dictionaries[5])
-      openWithTakoboto = true;
-    else if(selection == dictionaries[6])
-      openWithAkebi = true;
-    else
-      print("dictionary undefined");
-
-  }
 
   /// Saves all settings to the SharedPreferences.
   void save() async {
@@ -155,13 +117,6 @@ class Settings {
     final prefs = await SharedPreferences.getInstance();
 
     // set value in shared preferences
-    prefs.setBool('openWithAkebi', openWithAkebi);
-    prefs.setBool('openWithCustomURL', openWithCustomURL);
-    prefs.setBool('openWithJisho', openWithJisho);
-    prefs.setBool('openWithDefaultTranslator', openWithDefaultTranslator);
-    prefs.setBool('openWithTakoboto', openWithTakoboto);
-    prefs.setBool('openWithWadoku', openWithWadoku);
-    prefs.setBool('openWithWeblio', openWithWeblio);
     prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
     
     prefs.setString('customURL', customURL);
@@ -173,13 +128,6 @@ class Settings {
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
-    openWithAkebi = await loadBool('openWithAkebi');
-    openWithCustomURL = await loadBool('openWithCustomURL');
-    openWithJisho = await loadBool('openWithJisho');
-    openWithDefaultTranslator = await loadBool('openWithDefaultTranslator');
-    openWithTakoboto = await loadBool('openWithTakoboto');
-    openWithWadoku = await loadBool('openWithWadoku');
-    openWithWeblio = await loadBool('openWithWeblio');
     showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
 
     customURL = await loadString('customURL') ?? "";
@@ -187,15 +135,6 @@ class Settings {
     versionUsed = await loadString('versionUsed') ?? "";
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
-    // assure that at least one switch is set to true
-    if (!this.openWithAkebi &&
-      !this.openWithCustomURL &&
-      !this.openWithJisho &&
-      !this.openWithDefaultTranslator &&
-      !this.openWithWadoku &&
-      !this.openWithWeblio) {
-      this.openWithJisho = true;
-    }
 
     // if different version used than last time -> show tutorial 
     if(versionUsed != VERSION){ 
