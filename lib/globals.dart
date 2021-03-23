@@ -86,6 +86,7 @@ const DAAPPLAB_APPSTORE_PAGE = "";
 
 const TAKOBOTO_ID = "jp.takoboto";
 const AKEBI_ID = "com.craxic.akebifree";
+const AEDICT_ID = "sk.baka.aedict3";
 
 const GOOGLE_TRANSLATE_ID = "com.google.android.apps.translate";
 

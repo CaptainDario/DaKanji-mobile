@@ -39,7 +39,7 @@ class HandlePrediction{
     // only open a page when there is a prediction
     if (char != " " && char != "") {
       // the prediction should be translated with system dialogue
-      if(SETTINGS.openWithDefaultTranslator){ 
+      if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[4]){ 
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
             action: 'android.intent.action.TRANSLATE',
@@ -80,32 +80,33 @@ class HandlePrediction{
           print("iOS is not implemented for choosing translator");
         }
       }
-      // offline dictionary takoboto (android)
-      else if(SETTINGS.openWithTakoboto){
+      // offline dictionary aedict3 (android)
+      else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[5]){
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
-              package: 'jp.takoboto',
-              action: 'jp.takoboto.SEARCH',
+              package: AEDICT_ID,
+              type: "text/plain",
+              action: 'android.intent.action.SEND',
+              category: 'android.intent.category.DEFAULT',
               arguments: <String, dynamic>{
-                "android.intent.extra.PROCESS_TEXT": char,
+                "android.intent.extra.TEXT": char,
               }
           );
           if(await intent.canResolveActivity())
             await intent.launch();
-          else{
+          else
             showDownloadDialogue(context,
-              "Takoboto not installed", 
-              "Download Takoboto", 
-              PLAYSTORE_BASE_URL + TAKOBOTO_ID
+              "Aedict not installed", 
+              "Download Aedict", 
+              PLAYSTORE_BASE_URL + AEDICT_ID 
             );
-          }
         }
       }
       // offline dictionary akebi (android)
-      else if(SETTINGS.openWithAkebi){
+      else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[6]){
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
-              package: 'com.craxic.akebifree',
+              package: AKEBI_ID,
               componentName: 
                 'com.craxic.akebifree.activities.search.SearchActivity',
               type: "text/plain",
@@ -122,6 +123,27 @@ class HandlePrediction{
               "Download Akebi", 
               PLAYSTORE_BASE_URL + AKEBI_ID
             );
+        }
+      }
+      // offline dictionary takoboto (android)
+      else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[7]){
+        if(Platform.isAndroid){
+          AndroidIntent intent = AndroidIntent(
+              package: TAKOBOTO_ID,
+              action: 'jp.takoboto.SEARCH',
+              arguments: <String, dynamic>{
+                "android.intent.extra.PROCESS_TEXT": char,
+              }
+          );
+          if(await intent.canResolveActivity())
+            await intent.launch();
+          else{
+            showDownloadDialogue(context,
+              "Takoboto not installed", 
+              "Download Takoboto", 
+              PLAYSTORE_BASE_URL + TAKOBOTO_ID
+            );
+          }
         }
       }
       else{
