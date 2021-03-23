@@ -125,11 +125,13 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             color: Colors.blue,
             // copy to clipboard and show snackbar
             onPressed: (){
-              HandlePrediction().handlePress(context, widget.kanjiBuffer.kanjiBuffer); 
+              HandlePrediction()
+                .handlePress(false, context, widget.kanjiBuffer.kanjiBuffer); 
             },
             // open with dictionary on long press
             onLongPress: (){
-              HandlePrediction().handleLongPress(context, widget.kanjiBuffer.kanjiBuffer); 
+              HandlePrediction()
+                .handlePress(true, context, widget.kanjiBuffer.kanjiBuffer); 
             },
             child: Text(
               widget.kanjiBuffer.kanjiBuffer,

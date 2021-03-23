@@ -16,12 +16,30 @@ class HandlePrediction{
 
   HandlePrediction._internal();
 
+  void handlePress(bool longPress, BuildContext context, String char){
+
+    // presses should be inverted
+    if(SETTINGS.invertShortLongPress){
+      if(!longPress)
+        handleLongPress(context, char);
+      else
+        handleShortPress(context, char);
+    }
+    // presses should NOT be inverted
+    if(!SETTINGS.invertShortLongPress){
+      if(!longPress)
+        handleShortPress(context, char);
+      else
+        handleLongPress(context, char);
+    }
+  }
+
 
   /// Copy char to the system clipboard and show a snackbar using context
   /// 
   /// @params context to use to show the snackbar 
   /// @params the string which should be copied to the clipboard
-  void handlePress(BuildContext context, String char){
+  void handleShortPress(BuildContext context, String char){
     if (char != " " && char != ""){
       Clipboard.setData(new ClipboardData(text: char));
       // display a snackbar for 1s 

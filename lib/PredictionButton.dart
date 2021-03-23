@@ -26,14 +26,14 @@ class _PredictionButtonState extends State<PredictionButton>{
         child: MaterialButton(
           color: Colors.white.withAlpha(50),
           padding: EdgeInsets.all(0),
-          // copy the character to clipboard on single press
+          // handle a short press
           onPressed: () {
-            HandlePrediction().handlePress(context, widget.char);
+            HandlePrediction().handlePress(false, context, widget.char);
           },
           
-          // open prediction in the dictionary set in setting on long press
+          // handle a long press 
           onLongPress: () async {
-            HandlePrediction().handleLongPress(context, widget.char);
+            HandlePrediction().handlePress(true, context, widget.char);
           },
           child: FittedBox(
             child: Text(
