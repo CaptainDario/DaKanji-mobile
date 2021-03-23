@@ -166,8 +166,6 @@ class _DrawScreenState extends State<DrawScreen> {
               child: GridView.count(
                 physics: new NeverScrollableScrollPhysics(),
                 crossAxisCount: 5,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
                 children: List.generate(10, (i) {
                   var ret;
                   // instantiate the buttons which are used for showcase
