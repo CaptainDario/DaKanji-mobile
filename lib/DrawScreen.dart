@@ -184,6 +184,8 @@ class _DrawScreenState extends State<DrawScreen> {
                     child: ret,
                     onDoubleTap: (){
                       setState(() {
+                        if(SETTINGS.emptyCanvasAfterDoubleTap)
+                          points.clear();
                         kanjiBuffer.kanjiBuffer += predictions[i];
                       });
                     },

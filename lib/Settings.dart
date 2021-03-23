@@ -57,6 +57,10 @@ class Settings {
   /// Should the behavior of long and short press be inverted
   bool invertShortLongPress = false;
 
+  ///
+  bool emptyCanvasAfterDoubleTap = true;
+
+
   Settings() {
     String kanjiPlaceholder = "%X%";
 
@@ -100,6 +104,7 @@ class Settings {
 
     // set value in shared preferences
     prefs.setBool('invertShortLongPress', invertShortLongPress);
+    prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
     prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
     
     prefs.setString('customURL', customURL);
@@ -112,6 +117,7 @@ class Settings {
   /// Load all saved settings from SharedPreferences.
   void load() async {
     invertShortLongPress = await loadBool('invertShortLongPress');
+    emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
     showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
 
     customURL = await loadString('customURL') ?? '';

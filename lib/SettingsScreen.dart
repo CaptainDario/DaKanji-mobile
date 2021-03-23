@@ -124,6 +124,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             ),
           ),
+          // 
+          ListTile(
+            title: Text("Empty canvas after double tap"),
+            trailing: Checkbox(
+              value: SETTINGS.emptyCanvasAfterDoubleTap, 
+              onChanged: (bool newValue){
+                setState(() {
+                  SETTINGS.emptyCanvasAfterDoubleTap = newValue;
+                  SETTINGS.save();
+                });
+              }
+            ),
+          ),
           Divider(),
           // setting for which theme to use
           ListTile(
