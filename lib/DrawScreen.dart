@@ -76,7 +76,7 @@ class _DrawScreenState extends State<DrawScreen> {
                 (MediaQuery.of(context).size.width - canvasSize) / 2, 
                 0, 0),
               child: GestureDetector(
-                key: SHOWCASE_KEYS_DRAWING[0],
+                key: SHOWCASE_DRAWING[0].key,
                 // drawing pointer moved
                 onPanUpdate: (details) {
                   setState(() {
@@ -118,7 +118,7 @@ class _DrawScreenState extends State<DrawScreen> {
                 children: [
                   // undo
                   IconButton(
-                    key: SHOWCASE_KEYS_DRAWING[1],
+                    key: SHOWCASE_DRAWING[1].key,
                     icon: Icon(Icons.undo),
                     onPressed: () async {
                       //only run inference if canvas still has strokes
@@ -136,6 +136,7 @@ class _DrawScreenState extends State<DrawScreen> {
                   // multi character search input
                   Expanded(
                       child: Center(
+                        key: SHOWCASE_DRAWING[6].key,
                         child: KanjiBufferWidget(
                           canvasSize: canvasSize,
                           kanjiBuffer: kanjiBuffer,
@@ -145,7 +146,7 @@ class _DrawScreenState extends State<DrawScreen> {
                   ),
                   // clear
                   IconButton(
-                    key: SHOWCASE_KEYS_DRAWING[2],
+                    key: SHOWCASE_DRAWING[2].key,
                     icon: Icon(Icons.clear),
                     onPressed: () {
                       setState(() {
@@ -159,7 +160,7 @@ class _DrawScreenState extends State<DrawScreen> {
             ),
             // prediction buttons
             Container(
-              key: SHOWCASE_KEYS_DRAWING[3],
+              key: SHOWCASE_DRAWING[3].key,
               width: canvasSize,
               // approximated button height (width/5) * numRows + padding  
               height: (canvasSize / 5.0) * 2.0 + 10, 
@@ -168,10 +169,10 @@ class _DrawScreenState extends State<DrawScreen> {
                 crossAxisCount: 5,
                 children: List.generate(10, (i) {
                   var ret;
-                  // instantiate the buttons which are used for showcase
-                  if(i < 2){
+                  // instantiate short/long press showcase button
+                  if(i == 0){
                     ret = Container(
-                      key: SHOWCASE_KEYS_DRAWING[4+i],
+                      key: SHOWCASE_DRAWING[4].key,
                       child: PredictionButton(
                         char: predictions[i],
                       )
@@ -203,31 +204,57 @@ class _DrawScreenState extends State<DrawScreen> {
   
 
   void initTargets() {
-    for (int i = 0; i < SHOWCASE_KEYS_DRAWING.length; i++){
-      targets.add(
-        TargetFocus(
-          identify: SHOWCASE_IDENTIFIERS_DRAWING[i],
-          shape: ShapeLightFocus.RRect,
-          color: SHOWCASE_VIGNETTE_COLOR,
-          keyTarget: SHOWCASE_KEYS_DRAWING[i],
-          contents: [
-            TargetContent(
-              align: SHOWCASE_ALIGNS_DRAWING[i],
-              child: Container(
-                child: Text(
-                  SHOWCASE_TEXTS_DRAWING[i],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20.0
-                  ),
-                ),
-              )
-            )
-          ],
-        ),
-      );
-    }
+
+    // canvas
+    targets.add(createTutorialTargetFocus(0));
+    // undo button
+    targets.add(createTutorialTargetFocus(1));
+    // clear button 
+    targets.add(createTutorialTargetFocus(2));
+    // predictions
+    targets.add(createTutorialTargetFocus(3));
+    // short press prediction button
+    targets.add(createTutorialTargetFocus(4));
+    // long press prediction button
+    targets.add(createTutorialTargetFocus(5, keyIndex: 4));
+    // multi char
+    targets.add(createTutorialTargetFocus(6));
+    //double tap prediction button 
+    targets.add(createTutorialTargetFocus(7, keyIndex: 4));
+    // short press multi char
+    targets.add(createTutorialTargetFocus(8, keyIndex: 6));
+    // long press multi char
+    targets.add(createTutorialTargetFocus(9, keyIndex: 6));
+    // double tap multi char
+    targets.add(createTutorialTargetFocus(10, keyIndex: 6));
+    // double tap
+    targets.add(createTutorialTargetFocus(11, keyIndex: 6));
+    // show settings
+    targets.add(createTutorialTargetFocus(12));
+  }
+
+  TargetFocus createTutorialTargetFocus(int index, {int keyIndex}){
+    return TargetFocus(
+      identify: SHOWCASE_DRAWING[index].title,
+      shape: ShapeLightFocus.RRect,
+      color: SHOWCASE_VIGNETTE_COLOR,
+      keyTarget: SHOWCASE_DRAWING[keyIndex ?? index].key,
+      contents: [
+        TargetContent(
+          align: SHOWCASE_DRAWING[index].align,
+          child: Container(
+            child: Text(
+              SHOWCASE_DRAWING[index].text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 20.0
+              ),
+            ),
+          )
+        )
+      ],
+    );
   }
   
   void showTutorial() {
@@ -247,8 +274,8 @@ class _DrawScreenState extends State<DrawScreen> {
         SETTINGS.save();
       },
       onClickTarget: (target) {
-        // after clicking on the long press tutorial open drawer
-        if(target.identify == SHOWCASE_IDENTIFIERS_DRAWING[5])
+        // open drawer after clicking on the swipe left showcase
+        if(target.identify == SHOWCASE_DRAWING[11].title)
           DRAWER_KEY.currentState.openDrawer();
       },
       onSkip: () {
