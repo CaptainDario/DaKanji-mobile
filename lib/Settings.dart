@@ -126,9 +126,12 @@ class Settings {
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
 
-    // if different version used than last time -> show tutorial 
-    if(versionUsed != VERSION){ 
-      showShowcaseViewDrawing = true;
+    // if different version used than last time
+    if(versionUsed != VERSION){
+
+      if(drawingScreenNewFeatures.contains(VERSION)){
+        showShowcaseViewDrawing = true;
+      }
     }
   }
 
