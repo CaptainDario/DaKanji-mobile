@@ -112,30 +112,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: () {}
           ),
           // invert if short press or long press opens dict / copies to clip
-          ListTile(
+          CheckboxListTile(
             title: Text("Invert long/short press"),
-            trailing: Checkbox(
-              value: SETTINGS.invertShortLongPress, 
-              onChanged: (bool newValue){
-                setState(() {
-                  SETTINGS.invertShortLongPress = newValue;
-                  SETTINGS.save();
-                });
-              }
-            ),
+            value: SETTINGS.invertShortLongPress, 
+            onChanged: (bool newValue){
+              setState(() {
+                SETTINGS.invertShortLongPress = newValue;
+                SETTINGS.save();
+              });
+            }
           ),
           // 
-          ListTile(
+          CheckboxListTile(
             title: Text("Empty canvas after double tap"),
-            trailing: Checkbox(
-              value: SETTINGS.emptyCanvasAfterDoubleTap, 
-              onChanged: (bool newValue){
-                setState(() {
-                  SETTINGS.emptyCanvasAfterDoubleTap = newValue;
-                  SETTINGS.save();
-                });
-              }
-            ),
+            value: SETTINGS.emptyCanvasAfterDoubleTap, 
+            onChanged: (bool newValue){
+              setState(() {
+                SETTINGS.emptyCanvasAfterDoubleTap = newValue;
+                SETTINGS.save();
+              });
+            }
           ),
           Divider(),
           // setting for which theme to use
