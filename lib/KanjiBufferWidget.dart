@@ -122,7 +122,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
           }(),
           padding: EdgeInsets.all(5),
           child: MaterialButton(
-            color: Colors.blue,
+            color: Colors.white.withAlpha(50),
             // copy to clipboard and show snackbar
             onPressed: (){
               HandlePrediction()
