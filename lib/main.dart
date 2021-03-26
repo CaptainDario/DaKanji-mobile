@@ -72,7 +72,6 @@ Future<List<String>> initChangelog () async {
   String wholeChangelog = changelog_list.join("\n");
   // newest changes
   final matches = new RegExp(r"(##.*?##)", dotAll: true);
-  //final matches = new RegExp(r"(##.*?Changes:)", dotAll: true);
   String newestChangelog = matches.firstMatch(changelog).group(0).toString();
   newestChangelog = newestChangelog.substring(0, newestChangelog.length - 2);
 
