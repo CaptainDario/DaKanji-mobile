@@ -56,6 +56,33 @@ Future<void> init() async {
 }
 
 
+Future<String> initAbout () async {
+
+  String about = await rootBundle.loadString("assets/about.md");
+
+  about = about.replaceAll("GITHUB_DESKTOP_REPO", GITHUB_DESKTOP_REPO);
+  about = about.replaceAll("GITHUB_MOBILE_REPO", GITHUB_MOBILE_REPO);
+  about = about.replaceAll("GITHUB_ML_REPO", GITHUB_ML_REPO);
+  about = about.replaceAll("GITHUB_ISSUES", GITHUB_ISSUES);
+  about = about.replaceAll("PRIVACY_POLICE", PRIVACY_POLICE);
+
+  if(Platform.isAndroid){
+    about = about.replaceAll("RATE_ON_MOBILE_STORE", PLAYSTORE_PAGE);
+    about = about.replaceAll("DAAPPLAB_STORE_PAGE", DAAPPLAB_PLAYSTORE_PAGE);
+  }
+  else if(Platform.isIOS){
+    about = about.replaceAll("RATE_ON_MOBILE_STORE", APPSTORE_PAGE);
+    about = about.replaceAll("DAAPPLAB_STORE_PAGE", DAAPPLAB_APPSTORE_PAGE);
+  }
+  
+  about = about.replaceAll("USED_BACKEND", USED_BACKEND);
+  about = about.replaceAll("VERSION", VERSION);
+
+  return about;
+
+}
+
+
 class DaKanjiRecognizerApp extends StatelessWidget {
   
   @override

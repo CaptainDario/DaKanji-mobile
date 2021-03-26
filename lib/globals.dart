@@ -10,7 +10,9 @@ import 'ShowcaseTuple.dart';
 
 
 // the title of the app
-const String APP_TITLE = "DaKanjiRecognizer";
+// about page
+String ABOUT = "";
+
 // the version number of this app
 // ignore: non_constant_identifier_names
 String VERSION;
