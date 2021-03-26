@@ -1,3 +1,4 @@
+import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
 
 import 'HandlePredictions.dart';
@@ -23,9 +24,13 @@ class _PredictionButtonState extends State<PredictionButton>{
     child: AspectRatio(
       aspectRatio: 1,
       child: GestureDetector(
-        child: MaterialButton(
-          color: Colors.white.withAlpha(50),
-          padding: EdgeInsets.all(0),
+        child: ElevatedButton(
+          style:
+            ButtonStyle(
+              backgroundColor: 
+                MaterialStateProperty.all(Color.fromARGB(100, 150, 150, 150))
+            ),
+           
           // handle a short press
           onPressed: () {
             HandlePrediction().handlePress(false, context, widget.char);
@@ -39,7 +44,11 @@ class _PredictionButtonState extends State<PredictionButton>{
             child: Text(
               widget.char,
               textAlign: TextAlign.center,
-              style: new TextStyle(fontSize: 1000.0),
+              style: TextStyle(
+                fontSize: 1000.0,
+                color: SETTINGS.selectedTheme == "dark" ?
+                  Colors.white : Colors.black
+              ),
             )
           )
         )

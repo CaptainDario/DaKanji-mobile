@@ -38,7 +38,7 @@ class _DrawScreenState extends State<DrawScreen> {
     super.initState();
 
     // only show the showcase at an update/new install
-    if(SETTINGS.showShowcaseViewDrawing){
+    if(SHOW_SHOWCASE_DRAWING){
       initTargets();
       showTutorial();
     }
@@ -59,7 +59,6 @@ class _DrawScreenState extends State<DrawScreen> {
       canvasSize = MediaQuery.of(context).size.width - 20;
 
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
       key: DRAWER_KEY,
       appBar: AppBar(
         title: Text("Drawing"),
@@ -270,7 +269,7 @@ class _DrawScreenState extends State<DrawScreen> {
         DRAWER_KEY.currentState.openEndDrawer();
 
         // don't show the tutorial again
-        SETTINGS.showShowcaseViewDrawing = false;
+        SHOW_SHOWCASE_DRAWING = false;
         SETTINGS.save();
       },
       onClickTarget: (target) {
@@ -280,7 +279,7 @@ class _DrawScreenState extends State<DrawScreen> {
       },
       onSkip: () {
         // don't show the tutorial again
-        SETTINGS.showShowcaseViewDrawing = false;
+        SHOW_SHOWCASE_DRAWING = false;
         SETTINGS.save();
       },
       onClickOverlay: (target) {},

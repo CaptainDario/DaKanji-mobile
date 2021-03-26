@@ -5,6 +5,8 @@ import 'package:da_kanji_recognizer_mobile/KanjiBuffer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
+import 'globals.dart';
+
 
 
 /// A draggable card that moves back to [Alignment.center] when it's
@@ -121,8 +123,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             return (buttonSize * 3) + (3 * margin);
           }(),
           padding: EdgeInsets.all(5),
-          child: MaterialButton(
-            color: Colors.white.withAlpha(50),
+          child: OutlinedButton(
             // copy to clipboard and show snackbar
             onPressed: (){
               HandlePrediction()
@@ -137,6 +138,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
               widget.kanjiBuffer.kanjiBuffer,
               textScaleFactor: 1.5,
               softWrap: false,
+              style: TextStyle(
+                color: SETTINGS.selectedTheme == "dark" ?
+                  Colors.white : Colors.black),
             )
           ),
         )

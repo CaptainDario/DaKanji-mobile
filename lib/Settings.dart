@@ -34,9 +34,6 @@ class Settings {
   /// The string representation of the dictionary which will be used (long press)
   String selectedDictionary;
 
-  // if the showcase view should be shown for the drawing screen
-  bool showShowcaseViewDrawing;
-
   // the application version used when those settings were saved
   String versionUsed;
   
@@ -105,7 +102,6 @@ class Settings {
     // set value in shared preferences
     prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
-    prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
     
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', selectedTheme);
@@ -118,19 +114,22 @@ class Settings {
   void load() async {
     invertShortLongPress = await loadBool('invertShortLongPress');
     emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
-    showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
 
     customURL = await loadString('customURL') ?? '';
     selectedTheme = await loadString('selectedTheme') ?? themes[2];
     versionUsed = await loadString('versionUsed') ?? '';
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
-
-    // if different version used than last time
+    // a different version than last time is being used
+    //VERSION = "1.1.0";
     if(versionUsed != VERSION){
 
-      if(drawingScreenNewFeatures.contains(VERSION)){
-        showShowcaseViewDrawing = true;
+      // show the changelog
+      SHOW_CHANGELOG = true;
+
+      // this version has new features for drawing screen => show tutorial
+      if(DRAWING_SCREEN_NEW_FEATURES.contains(VERSION)){
+        SHOW_SHOWCASE_DRAWING = true;
       }
     }
   }

@@ -170,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             trailing: IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () { 
-                SETTINGS.showShowcaseViewDrawing = true;
+                SHOW_SHOWCASE_DRAWING = true;
                 SETTINGS.save();
                 Phoenix.rebirth(context);
               }
