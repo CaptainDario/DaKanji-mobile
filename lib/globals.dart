@@ -10,6 +10,9 @@ import 'ShowcaseTuple.dart';
 
 
 // the title of the app
+
+// the whole changelog of the app
+String WHOLE_CHANGELOG = "";
 // about page
 String ABOUT = "";
 
