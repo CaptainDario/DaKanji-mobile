@@ -20,30 +20,29 @@ class _AboutScreenState extends State<AboutScreen> {
       body: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
             child: MarkdownBody(
               data: ABOUT,
               onTapLink: (text, url, title) {
                 print((text + " " + url + " " + title));
                 launch(url);
               },
-            )
+            ),
           ),
           Row(
             children:[
-              Expanded(
-                flex: 1,
-                child: MaterialButton(
-                  onPressed: (){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => ChangelogScreen()),
-                    );
-                  },
+              Container(
+                padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
+                child: GestureDetector(
                   child: Text(
-                    "Show me the changelog",
+                    "Show me the changelog.",
                     textAlign: TextAlign.left,
+                    style: TextStyle(color: Colors.blue),
                   ),
+                  onTap: () => Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => ChangelogScreen()),
+                  )
                 )
               )
             ]
