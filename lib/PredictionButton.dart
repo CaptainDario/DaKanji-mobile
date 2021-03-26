@@ -27,7 +27,8 @@ class _PredictionButtonState extends State<PredictionButton>{
         child: ElevatedButton(
           style:
             ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color.fromARGB(100, 150, 150, 150))
+              backgroundColor: 
+                MaterialStateProperty.all(Color.fromARGB(100, 150, 150, 150))
             ),
            
           // handle a short press

@@ -38,9 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: MediaQuery.of(context).size.width * 3/4,
                         height: MediaQuery.of(context).size.height * 2/4,
                       ),
-                      OutlinedButton(
-                          //Colors.white.withAlpha(50),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: 
+                            MaterialStateProperty.all(
+                              Color.fromARGB(100, 150, 150, 150)
+                            )
+                        ),
                         onPressed: () async {
+                          SETTINGS.save();
                           Navigator.pushNamedAndRemoveUntil(
                             context, "/home", (Route<dynamic> route) => false);
                         },
@@ -53,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         ).then((value) {
+          SETTINGS.save();
           Navigator.pushNamedAndRemoveUntil(
             context, "/home", (Route<dynamic> route) => false);
         });
