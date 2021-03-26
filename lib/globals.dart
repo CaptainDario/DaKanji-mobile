@@ -72,6 +72,7 @@ final List<ShowcaseTuple> SHOWCASE_DRAWING = [
 ];
 // ignore: non_constant_identifier_names
 final Color SHOWCASE_VIGNETTE_COLOR = Color.fromARGB(255, 10, 10, 10);
+bool SHOW_SHOWCASE_DRAWING = false;
 
 // Assets
 const String LABELS_ASSET = 'assets/labels_CNN_kanji_only.txt';

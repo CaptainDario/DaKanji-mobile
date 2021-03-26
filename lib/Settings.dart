@@ -129,6 +129,9 @@ class Settings {
     // if different version used than last time
     if(versionUsed != VERSION){
 
+      // show the changelog
+      SHOW_CHANGELOG = true;
+
       if(drawingScreenNewFeatures.contains(VERSION)){
         showShowcaseViewDrawing = true;
       }

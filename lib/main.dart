@@ -110,7 +110,7 @@ class DaKanjiRecognizerApp extends StatelessWidget {
       home: DrawScreen(),
       routes: <String, WidgetBuilder>{
         "/settings": (BuildContext context) => SettingsScreen(),
-        "/about": (BuildContext context) => AboutScreen()
+        "/about": (BuildContext context) => AboutScreen(),
       },
     );
   }
