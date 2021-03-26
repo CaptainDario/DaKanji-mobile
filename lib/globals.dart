@@ -10,9 +10,15 @@ import 'ShowcaseTuple.dart';
 
 
 // the title of the app
+const String APP_TITLE = "Da Kanji";
 
 // the whole changelog of the app
 String WHOLE_CHANGELOG = "";
+// changelog of the newest version
+String NEW_CHANGELOG = "";
+// should the changelog be shown
+bool SHOW_CHANGELOG = false;
+
 // about page
 String ABOUT = "";
 
@@ -20,7 +26,7 @@ String ABOUT = "";
 // ignore: non_constant_identifier_names
 String VERSION;
 // all versions which implemented new features for the drawing screen
-List<String> drawingScreenNewFeatures = ["1.0.0", "1.1.0"];
+List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
 
 // the saved settings
 // ignore: non_constant_identifier_names
@@ -78,7 +84,6 @@ final Color SHOWCASE_VIGNETTE_COLOR = Color.fromARGB(255, 10, 10, 10);
 bool SHOW_SHOWCASE_DRAWING = false;
 
 // Assets
-const String LABELS_ASSET = 'assets/labels_CNN_kanji_only.txt';
 const String CNN_KANJI_ONLY_ASSET = 'model_CNN_kanji_only.tflite';
 
 // inference
@@ -96,8 +101,6 @@ const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Mo
 const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-ML";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues/new";
 
-
-const RATE_ON_MOBILE_STORE = "rating it on the AppStore/PlayStore";
 
 const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
