@@ -1,10 +1,10 @@
 library my_prj.globals;
 
-import 'package:da_kanji_recognizer_mobile/Themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
+import 'Styling.dart';
 import 'Settings.dart';
 import 'ShowcaseTuple.dart';
 
@@ -31,7 +31,7 @@ List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
 // the saved settings
 // ignore: non_constant_identifier_names
 final Settings SETTINGS = new Settings();
-final Themes CURRENT_THEME = Themes();
+final Styling CURRENT_STYLING = Styling();
 
 // the global key for the drawer
 // ignore: non_constant_identifier_names

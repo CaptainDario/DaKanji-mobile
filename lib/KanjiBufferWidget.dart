@@ -1,15 +1,15 @@
 import 'dart:math';
 
-import 'package:da_kanji_recognizer_mobile/HandlePredictions.dart';
 import 'package:da_kanji_recognizer_mobile/KanjiBuffer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
+import 'HandlePredictions.dart';
 import 'globals.dart';
 
 
 
-/// A draggable card that moves back to [Alignment.center] when it's
+/// A draggable `OutlinedButton` that moves back to `Alignment.center` when it's
 /// released.
 class KanjiBufferWidget extends StatefulWidget {
   final KanjiBuffer kanjiBuffer;
@@ -138,9 +138,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
               widget.kanjiBuffer.kanjiBuffer,
               textScaleFactor: 1.5,
               softWrap: false,
-              style: TextStyle(
-                color: SETTINGS.selectedTheme == "dark" ?
-                  Colors.white : Colors.black),
+              style: TextStyle(color: CURRENT_STYLING.kanjiBufferTextColor),
             )
           ),
         )

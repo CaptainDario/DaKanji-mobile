@@ -28,7 +28,7 @@ class _PredictionButtonState extends State<PredictionButton>{
           style:
             ButtonStyle(
               backgroundColor: 
-                MaterialStateProperty.all(Color.fromARGB(100, 150, 150, 150))
+                MaterialStateProperty.all(CURRENT_STYLING.predictionButtonColor)
             ),
            
           // handle a short press
@@ -46,8 +46,7 @@ class _PredictionButtonState extends State<PredictionButton>{
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 1000.0,
-                color: SETTINGS.selectedTheme == "dark" ?
-                  Colors.white : Colors.black
+                color: CURRENT_STYLING.predictionButtonTextColor
               ),
             )
           )
