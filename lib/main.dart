@@ -67,9 +67,9 @@ Future<List<String>> initChangelog () async {
 
   String changelog = await rootBundle.loadString("assets/CHANGELOG.md");
   // whole changelog
-  List<String> changelog_list = changelog.split("\n");
-  changelog_list.removeRange(0, 3);
-  String wholeChangelog = changelog_list.join("\n");
+  List<String> changelogList = changelog.split("\n");
+  changelogList.removeRange(0, 3);
+  String wholeChangelog = changelogList.join("\n");
   // newest changes
   final matches = new RegExp(r"(##.*?##)", dotAll: true);
   String newestChangelog = matches.firstMatch(changelog).group(0).toString();
