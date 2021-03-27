@@ -1,8 +1,8 @@
+import 'package:da_kanji_recognizer_mobile/DrawScreenShowcase.dart';
 import 'package:da_kanji_recognizer_mobile/KanjiBuffer.dart';
 import 'package:da_kanji_recognizer_mobile/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
 import 'DrawingPainter.dart';
@@ -10,6 +10,9 @@ import 'PredictionButton.dart';
 import 'KanjiBufferWidget.dart';
 
 class DrawScreen extends StatefulWidget {
+
+  final showcase = DrawScreenShowcase();
+
   @override
   _DrawScreenState createState() => _DrawScreenState();
 }
@@ -26,12 +29,7 @@ class _DrawScreenState extends State<DrawScreen> {
   BuildContext myContext;
   // buffer for building a word
   KanjiBuffer kanjiBuffer = KanjiBuffer();
-
   
-  // show case
-  TutorialCoachMark tutorialCoachMark;
-  List<TargetFocus> targets = [];
-
 
   @override
   void initState() {
@@ -39,8 +37,8 @@ class _DrawScreenState extends State<DrawScreen> {
 
     // only show the showcase at an update/new install
     if(SHOW_SHOWCASE_DRAWING){
-      initTargets();
-      showTutorial();
+      widget.showcase.init(context);
+      widget.showcase.show();
     }
 
     // always rebuild the ui when the kanji buffer changed
@@ -202,87 +200,5 @@ class _DrawScreenState extends State<DrawScreen> {
   }
   
 
-  void initTargets() {
 
-    // canvas
-    targets.add(createTutorialTargetFocus(0));
-    // undo button
-    targets.add(createTutorialTargetFocus(1));
-    // clear button 
-    targets.add(createTutorialTargetFocus(2));
-    // predictions
-    targets.add(createTutorialTargetFocus(3));
-    // short press prediction button
-    targets.add(createTutorialTargetFocus(4));
-    // long press prediction button
-    targets.add(createTutorialTargetFocus(5, keyIndex: 4));
-    // multi char
-    targets.add(createTutorialTargetFocus(6));
-    //double tap prediction button 
-    targets.add(createTutorialTargetFocus(7, keyIndex: 4));
-    // short press multi char
-    targets.add(createTutorialTargetFocus(8, keyIndex: 6));
-    // long press multi char
-    targets.add(createTutorialTargetFocus(9, keyIndex: 6));
-    // double tap multi char
-    targets.add(createTutorialTargetFocus(10, keyIndex: 6));
-    // double tap
-    targets.add(createTutorialTargetFocus(11, keyIndex: 6));
-    // show settings
-    targets.add(createTutorialTargetFocus(12));
-  }
-
-  TargetFocus createTutorialTargetFocus(int index, {int keyIndex}){
-    return TargetFocus(
-      identify: SHOWCASE_DRAWING[index].title,
-      shape: ShapeLightFocus.RRect,
-      color: SHOWCASE_VIGNETTE_COLOR,
-      keyTarget: SHOWCASE_DRAWING[keyIndex ?? index].key,
-      contents: [
-        TargetContent(
-          align: SHOWCASE_DRAWING[index].align,
-          child: Container(
-            child: Text(
-              SHOWCASE_DRAWING[index].text,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 20.0
-              ),
-            ),
-          )
-        )
-      ],
-    );
-  }
-  
-  void showTutorial() {
-    tutorialCoachMark = TutorialCoachMark(
-      context,
-      targets: targets,
-      colorShadow: Colors.red,
-      textSkip: "SKIP",
-      paddingFocus: 10,
-      opacityShadow: 0.8,
-      onFinish: () {
-        // close the drawer
-        DRAWER_KEY.currentState.openEndDrawer();
-
-        // don't show the tutorial again
-        SHOW_SHOWCASE_DRAWING = false;
-        SETTINGS.save();
-      },
-      onClickTarget: (target) {
-        // open drawer after clicking on the swipe left showcase
-        if(target.identify == SHOWCASE_DRAWING[11].title)
-          DRAWER_KEY.currentState.openDrawer();
-      },
-      onSkip: () {
-        // don't show the tutorial again
-        SHOW_SHOWCASE_DRAWING = false;
-        SETTINGS.save();
-      },
-      onClickOverlay: (target) {},
-    )..show();
-  }
 }
