@@ -4,6 +4,7 @@ import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 
 import 'globals.dart';
 
@@ -83,23 +84,29 @@ class HandlePrediction{
       // offline dictionary aedict3 (android)
       else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[5]){
         if(Platform.isAndroid){
-          AndroidIntent intent = AndroidIntent(
-              package: AEDICT_ID,
-              type: "text/plain",
-              action: 'android.intent.action.SEND',
-              category: 'android.intent.category.DEFAULT',
-              arguments: <String, dynamic>{
-                "android.intent.extra.TEXT": char,
-              }
-          );
-          if(await intent.canResolveActivity())
-            await intent.launch();
-          else
+          try{
+            // make sure the package is installed
+            await AppAvailability.checkAvailability(AEDICT_ID);
+            
+            AndroidIntent intent = AndroidIntent(
+                package: AEDICT_ID,
+                type: "text/plain",
+                action: 'android.intent.action.SEND',
+                category: 'android.intent.category.DEFAULT',
+                arguments: <String, dynamic>{
+                  "android.intent.extra.TEXT": char,
+                }
+            );
+            if(await intent.canResolveActivity())
+              await intent.launch();
+          }
+          catch (e){
             showDownloadDialogue(context,
               "Aedict not installed", 
-              "Download Aedict", 
+              "Download", 
               PLAYSTORE_BASE_URL + AEDICT_ID 
             );
+          }
         }
       }
       // offline dictionary akebi (android)
@@ -120,7 +127,7 @@ class HandlePrediction{
           else
             showDownloadDialogue(context,
               "Akebi not installed", 
-              "Download Akebi", 
+              "Download", 
               PLAYSTORE_BASE_URL + AKEBI_ID
             );
         }
@@ -140,7 +147,7 @@ class HandlePrediction{
           else{
             showDownloadDialogue(context,
               "Takoboto not installed", 
-              "Download Takoboto", 
+              "Download", 
               PLAYSTORE_BASE_URL + TAKOBOTO_ID
             );
           }
@@ -161,20 +168,40 @@ class HandlePrediction{
         return SimpleDialog(
           title: Center(child: Text(title)),
           children: [
+            Center(child:
             Container(
               padding: EdgeInsets.all(10),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MaterialButton(
-                    color: Colors.white.withAlpha(50),
+                  ElevatedButton(
+                    style:
+                      ButtonStyle(
+                        backgroundColor: 
+                          MaterialStateProperty
+                            .all(CURRENT_STYLING.installDialogueButtonColor)
+                      ),
                     onPressed: () async {
                       launch(url);
                     },
                     child: Text(text)
-                  ) 
+                  ),
+                  SizedBox(width: 10,),
+                  ElevatedButton(
+                    style:
+                      ButtonStyle(
+                        backgroundColor: 
+                          MaterialStateProperty
+                            .all(CURRENT_STYLING.installDialogueButtonColor)
+                      ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Close")
+                  ),
                 ]
               )
-            )
+            ))
           ],
         );
       }
