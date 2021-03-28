@@ -35,6 +35,7 @@ dependencies:
     path: ../tflite_flutter_plugin
   image: ^2.1.19
   flutter_markdown: ^0.5.0
+  flutter_appavailability: ^0.0.21
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
