@@ -68,33 +68,15 @@ class HandlePrediction{
           if(await intent.canResolveActivity())
             await intent.launch();
           else{
-            showDialog(
-              context: context,
-              builder: (BuildContext context){ 
-                return SimpleDialog(
-                  title: Center(child: Text("No translator installed")),
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          MaterialButton(
-                            color: Colors.white.withAlpha(50),
-                            onPressed: () {
-                              launch(PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID);
-                            },
-                            child: Text("Download Google Translate")
-                          ) 
-                        ]
-                      )
-                    )
-                  ],
-                );
-              }
+            showDownloadDialogue(
+              context,
+              "No translator installed", 
+              "Download",
+              PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID
             );
           }
         }
-        else if(Platform.isIOS && false){
+        else if(Platform.isIOS){
           print("iOS is not implemented for choosing translator");
         }
       }
