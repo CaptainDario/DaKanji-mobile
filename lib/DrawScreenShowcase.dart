@@ -6,10 +6,12 @@ import 'Showcase.dart';
 import 'ShowcaseTuple.dart';
 import 'globals.dart';
 
+
+/// The showcase of the features of the draw screen.
 class DrawScreenShowcase extends Showcase {
 
 
-  /// 
+  /// Initialize the elements which should be shown in the showcase
   DrawScreenShowcase () {
 
     SHOWCASE_DRAWING = [
@@ -56,7 +58,8 @@ class DrawScreenShowcase extends Showcase {
 
   }
 
-  ///
+  /// Initialize the elements of the showcase.
+  /// Should return a list of all targets.
   @protected
   List<TargetFocus> initTargets() {
 
@@ -91,13 +94,16 @@ class DrawScreenShowcase extends Showcase {
     return targets;
   }
 
-  ///
+  /// Creates one `TargetFocus` element based on the element at place [index]
+  /// in [SHOWCASE_DRAWING] and returns it.
+  /// [keyIndex] can be used to use a different index 
+  /// for the `GlobalKey` of the widget to show 
   @protected
   TargetFocus createShowcaseTargetFocus(int index, {int keyIndex}){
     return TargetFocus(
       identify: SHOWCASE_DRAWING[index].title,
       shape: ShapeLightFocus.RRect,
-      color: SHOWCASE_VIGNETTE_COLOR,
+      color: vignetteColor,
       keyTarget: SHOWCASE_DRAWING[keyIndex ?? index].key,
       contents: [
         TargetContent(
@@ -118,9 +124,7 @@ class DrawScreenShowcase extends Showcase {
   }
   
   /// Initializes a `TutorialCoachMark` instance with the showcase for the 
-  /// DrawScreen 
-  /// 
-  /// @args the context used for the page in which this showcase is shown
+  /// DrawScreen for the given [context].
   @protected
   TutorialCoachMark initShowcase(BuildContext context) {
     return TutorialCoachMark(

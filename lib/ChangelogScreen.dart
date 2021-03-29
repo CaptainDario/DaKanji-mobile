@@ -1,23 +1,14 @@
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 
-class ChangelogScreen extends StatefulWidget {
-  @override
-  _ChangelogScreenState createState() => _ChangelogScreenState();
-}
-
-class _ChangelogScreenState extends State<ChangelogScreen> {
-
-  bool showChangelog = true;
-
-  @override
-  void initState() { 
-    super.initState();
-  }
-
+/// The "changelog"-screen.
+/// 
+/// Shows the complete CHANGELOG.md 
+class ChangelogScreen extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
 

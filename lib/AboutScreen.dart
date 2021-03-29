@@ -1,17 +1,17 @@
-import 'package:da_kanji_recognizer_mobile/ChangelogScreen.dart';
+import 'ChangelogScreen.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiRecognizerDrawer.dart';
 import 'globals.dart';
 
-class AboutScreen extends StatefulWidget {
-  @override
-  _AboutScreenState createState() => _AboutScreenState();
-}
 
-class _AboutScreenState extends State<AboutScreen> {
+/// The "about"-screen
+/// 
+/// Shows the *about.md* and a link to the "changelog"-screen 
+class AboutScreen extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +19,7 @@ class _AboutScreenState extends State<AboutScreen> {
       drawer: DaKanjiRecognizerDrawer(),
       body: Column(
         children: [
+          // show the about.md
           Container(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
             child: MarkdownBody(
@@ -29,6 +30,7 @@ class _AboutScreenState extends State<AboutScreen> {
               },
             ),
           ),
+          // text with link to open the "changelog"-screen
           Row(
             children:[
               Container(

@@ -6,9 +6,9 @@ import 'globals.dart';
 
 /// Initializes the TFLite interpreter on android.
 ///
-/// Uses NnAPI for devices with Android API >= 27
-/// Otherwise uses the GPUDelegate
-/// If it is detected that the apps runs on an emulator CPU mode is used
+/// Uses NnAPI for devices with Android API >= 27. Otherwise uses the 
+/// GPUDelegate. If it is detected that the apps runs on an emulator CPU mode 
+/// is used
 Future<Interpreter> initInterpreterAndroid() async {
 
   Interpreter interpreter;
@@ -55,7 +55,7 @@ Future<Interpreter> initInterpreterAndroid() async {
 /// Initializes the TFLite interpreter on iOS.
 ///
 /// Uses the metal delegate if running on an actual device.
-/// Uses otherwise CPU mode.
+/// Otherwise uses CPU mode.
 Future<Interpreter> initInterpreterIOS() async {
 
   Interpreter interpreter;

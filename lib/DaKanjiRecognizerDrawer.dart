@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'globals.dart';
 
 
+/// Da Kanji's drawer.
+/// 
+/// It connects the main screens of the app with each other.
+/// Currently: *Drawing*, *Settings*, *About*
 class DaKanjiRecognizerDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

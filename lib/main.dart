@@ -3,7 +3,6 @@ import 'DrawScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:package_info/package_info.dart';
@@ -16,8 +15,9 @@ import 'initInterpreter.dart';
 
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
+  // initialize the app
+  WidgetsFlutterBinding.ensureInitialized();
   await init();
 
   runApp(
@@ -28,6 +28,13 @@ Future<void> main() async {
 
 }
 
+
+/// Initializes the app.
+/// 
+/// This function initializes:
+/// * reads used version, CHANGELOG about from file
+/// * loads the settings
+/// * initializes tensorflow lite and reads the labels from file 
 Future<void> init() async {
   // get the app's version 
   VERSION = (await PackageInfo.fromPlatform()).version;
@@ -40,9 +47,9 @@ Future<void> init() async {
     CNN_KANJI_ONLY_INTERPRETER = await initInterpreterAndroid();
   else if (Platform.isIOS) 
     CNN_KANJI_ONLY_INTERPRETER = await initInterpreterIOS();
-  else if (kIsWeb) 
-    CNN_KANJI_ONLY_INTERPRETER = await initInterpreterWeb();
-  
+  else
+    throw PlatformException(code: "Platform not supported.");
+
   // load labels, CHANGELOG and about from file
   String labels = 
     await rootBundle.loadString("assets/labels_CNN_kanji_only.txt");
@@ -63,6 +70,10 @@ Future<void> init() async {
   CNN_KANJI_ONLY_INTERPRETER.run(_input, _output);
 }
 
+/// Reads `CHANGELOG.md` from file and returns a converted version.
+/// 
+/// First reads the changelog from file and than returns a list with the changes 
+/// in the current version and the whole changelog.
 Future<List<String>> initChangelog () async {
 
   String changelog = await rootBundle.loadString("CHANGELOG.md");
@@ -78,6 +89,7 @@ Future<List<String>> initChangelog () async {
   return [newestChangelog, wholeChangelog];
 }
 
+/// Reads `about.md` from file and returns a converted version.
 Future<String> initAbout () async {
 
   String about = await rootBundle.loadString("assets/about.md");
@@ -105,6 +117,7 @@ Future<String> initAbout () async {
 }
 
 
+/// The starting widget of the app
 class DaKanjiRecognizerApp extends StatelessWidget {
   
   @override
@@ -129,7 +142,8 @@ class DaKanjiRecognizerApp extends StatelessWidget {
       themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
 
       //screens
-      home: HomeScreen(),
+      initialRoute: "/home",
+      //home: HomeScreen(),
       routes: <String, WidgetBuilder>{
         "/home": (BuildContext context) => HomeScreen(),
         "/drawing": (BuildContext context) => DrawScreen(),

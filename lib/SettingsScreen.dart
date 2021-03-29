@@ -4,10 +4,15 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'DaKanjiRecognizerDrawer.dart';
 import 'globals.dart';
 
+
+/// The "settings"-screen.
+/// 
+/// Here all settings of the app can be managed.
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
+
 
 class _SettingsScreenState extends State<SettingsScreen> {
 

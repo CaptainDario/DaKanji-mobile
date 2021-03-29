@@ -1,16 +1,22 @@
-import 'package:da_kanji_recognizer_mobile/DrawScreenShowcase.dart';
-import 'package:da_kanji_recognizer_mobile/KanjiBuffer.dart';
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'DrawScreenShowcase.dart';
+import 'KanjiBuffer.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:da_kanji_recognizer_mobile/DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiRecognizerDrawer.dart';
 import 'DrawingPainter.dart';
 import 'PredictionButton.dart';
 import 'KanjiBufferWidget.dart';
 
+
+/// The "about"-screen.
+/// 
+/// Lets the user draw a kanji and than shows the most likely predictions.
+/// Those can than be copied / opened in dictionaries by buttons.
 class DrawScreen extends StatefulWidget {
 
+  // init the tutorial of the draw screen
   final showcase = DrawScreenShowcase();
 
   @override
@@ -18,6 +24,7 @@ class DrawScreen extends StatefulWidget {
 }
 
 class _DrawScreenState extends State<DrawScreen> {
+  // the DrawingPainter instance which defines the canvas to drawn on.
   DrawingPainter canvas;
   //the points which were drawn on the canvas
   List<List<Offset>> points = [];
@@ -27,7 +34,7 @@ class _DrawScreenState extends State<DrawScreen> {
   List<String> predictions = List.generate(10, (index) => " ");
   // save the context for the Showcase view
   BuildContext myContext;
-  // buffer for building a word
+  // widget in which character can be saved to look up words/sentences. 
   KanjiBuffer kanjiBuffer = KanjiBuffer();
   
 
@@ -108,7 +115,7 @@ class _DrawScreenState extends State<DrawScreen> {
               ),
             ),
             Spacer(),
-            // undo/clear button
+            // undo/clear button and kanjiBuffer,
             Container(
               width: canvasSize,
               child: Row(

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:da_kanji_recognizer_mobile/KanjiBuffer.dart';
+import 'KanjiBuffer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
@@ -93,6 +93,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             max(min(details.delta.dx / (size.height / 2), 0), -0.005),
             0
           );
+          // delete the last char if drag over the threshold
           if(_dragAlignment.x < -0.03 && !deletedWithSwipe &&
             widget.kanjiBuffer.kanjiBuffer.length > 0){
             widget.kanjiBuffer.removeLastChar();

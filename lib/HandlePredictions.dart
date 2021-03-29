@@ -36,11 +36,7 @@ class HandlePrediction{
   }
 
 
-  /// Copy char to the system clipboard and show a snackbar using context
-  /// 
-  /// @params context to use to show the snackbar 
-  /// @params the string which should be copied to the clipboard
-  void handleShortPress(BuildContext context, String char){
+  /// Copies [char] to the system clipboard and show a snackbar using [context].
     if (char != " " && char != ""){
       Clipboard.setData(new ClipboardData(text: char));
       // display a snackbar for 1s 
@@ -53,7 +49,10 @@ class HandlePrediction{
     }
   }
 
-  void handleLongPress(BuildContext context, String char) async {
+  /// Open [char] in the dictionary selected in the settings.
+  /// 
+  /// If the selected dictionary is not installed show a dialogue to ask the 
+  /// user if he/she wants to download it.
 
     // only open a page when there is a prediction
     if (char != " " && char != "") {

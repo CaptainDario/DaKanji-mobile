@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 /// An abstract class which 
@@ -8,10 +7,12 @@ abstract class Showcase {
 
   /// The targets (widgets) which should be shown in this showcase
   List<TargetFocus> targets;
-  /// 
+  /// The `tutorialCoachMark` instance defining this showcase
   TutorialCoachMark tutorialCoachMark;
   /// was the function `init` called.
   bool __initalized = false;
+  /// The color of the vignette highlighting showcased elements.
+  Color vignetteColor = Colors.black;
 
 
   void init (BuildContext context){
