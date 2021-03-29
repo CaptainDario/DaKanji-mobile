@@ -68,19 +68,16 @@ class _HomeScreenState extends State<HomeScreen> {
             context, "/home", (Route<dynamic> route) => false);
         });
       }
+      // otherwise open the default screen
+      else{
+        Navigator.
+          pushNamedAndRemoveUntil(context, "/drawing", (route) => false);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // show changelog pop up when a new version is being used
-    if(SHOW_CHANGELOG){
       return Scaffold();
-    }
-    // otherwise show the drawing screen
-    else{
-      return DrawScreen();
-    }
   }
 }

@@ -23,8 +23,10 @@ class DaKanjiRecognizerDrawer extends StatelessWidget {
             leading: Icon(Icons.brush_outlined),
             title: Text("Drawing"),
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, "/", (Route<dynamic> route) => false);
+              print(ModalRoute.of(context).settings.name);
+              if(ModalRoute.of(context).settings.name != "/drawing")
+                Navigator.pushNamedAndRemoveUntil(
+                  context, "/drawing", (Route<dynamic> route) => false);
             },
           ),
 
