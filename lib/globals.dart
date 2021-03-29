@@ -13,24 +13,30 @@ import 'ShowcaseTuple.dart';
 const String APP_TITLE = "Da Kanji";
 
 // the whole changelog of the app
+// ignore: non_constant_identifier_names
 String WHOLE_CHANGELOG = "";
 // changelog of the newest version
+// ignore: non_constant_identifier_names
 String NEW_CHANGELOG = "";
 // should the changelog be shown
+// ignore: non_constant_identifier_names
 bool SHOW_CHANGELOG = false;
 
 // about page
+// ignore: non_constant_identifier_names
 String ABOUT = "";
 
 // the version number of this app
 // ignore: non_constant_identifier_names
 String VERSION;
 // all versions which implemented new features for the drawing screen
+// ignore: non_constant_identifier_names
 List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
 
 // the saved settings
 // ignore: non_constant_identifier_names
 final Settings SETTINGS = new Settings();
+// ignore: non_constant_identifier_names
 final Styling CURRENT_STYLING = Styling();
 
 // the global key for the drawer
@@ -40,8 +46,8 @@ final GlobalKey<ScaffoldState> DRAWER_KEY = GlobalKey();
 // showcase view keys
 // ignore: non_constant_identifier_names
 List<ShowcaseTuple> SHOWCASE_DRAWING = [];
+// should the showcase of the draw screen be shown
 // ignore: non_constant_identifier_names
-final Color SHOWCASE_VIGNETTE_COLOR = Color.fromARGB(255, 10, 10, 10);
 bool SHOW_SHOWCASE_DRAWING = false;
 
 // Assets
