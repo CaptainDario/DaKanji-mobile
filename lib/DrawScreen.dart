@@ -42,11 +42,14 @@ class _DrawScreenState extends State<DrawScreen> {
   void initState() {
     super.initState();
 
-    // only show the showcase at an update/new install
-    if(SHOW_SHOWCASE_DRAWING){
-      widget.showcase.init(context);
-      widget.showcase.show();
-    }
+    // when the screen was built
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // only show the showcase at an update/new install
+      if(SHOW_SHOWCASE_DRAWING){
+        widget.showcase.init(context);
+        widget.showcase.show();
+      }
+    });
 
     // always rebuild the ui when the kanji buffer changed
     kanjiBuffer.addListener(() {
