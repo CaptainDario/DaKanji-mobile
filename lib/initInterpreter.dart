@@ -84,14 +84,6 @@ Future<Interpreter> initInterpreterIOS() async {
 
 }
 
-Future<Interpreter> initInterpreterWeb() async {
-
-  Interpreter interpreter;
-
-  print("web inference is not set up");
-
-  return interpreter;
-}
 
 /// Initializes the interpreter with CPU mode set.
 Future<Interpreter> initInterpreterFallback() async {
