@@ -22,21 +22,22 @@ class HandlePrediction{
     // presses should be inverted
     if(SETTINGS.invertShortLongPress){
       if(!longPress)
-        handleLongPress(context, char);
+        openDictionary(context, char);
       else
-        handleShortPress(context, char);
+        copy(context, char);
     }
     // presses should NOT be inverted
     if(!SETTINGS.invertShortLongPress){
       if(!longPress)
-        handleShortPress(context, char);
+        copy(context, char);
       else
-        handleLongPress(context, char);
+        openDictionary(context, char);
     }
   }
 
 
   /// Copies [char] to the system clipboard and show a snackbar using [context].
+  void copy(BuildContext context, String char){
     if (char != " " && char != ""){
       Clipboard.setData(new ClipboardData(text: char));
       // display a snackbar for 1s 
@@ -53,6 +54,7 @@ class HandlePrediction{
   /// 
   /// If the selected dictionary is not installed show a dialogue to ask the 
   /// user if he/she wants to download it.
+  void openDictionary(BuildContext context, String char) async {
 
     // only open a page when there is a prediction
     if (char != " " && char != "") {
@@ -158,6 +160,8 @@ class HandlePrediction{
     }
   }
 
+  /// Show a dialogue using [context] with a [title], some [text] and a button
+  /// to open the [url].
   void showDownloadDialogue(
     BuildContext context, String title, String text, String url){
 
