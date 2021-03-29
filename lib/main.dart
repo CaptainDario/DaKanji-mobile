@@ -1,5 +1,5 @@
-import 'package:da_kanji_recognizer_mobile/ChangelogScreen.dart';
-import 'package:da_kanji_recognizer_mobile/DrawScreen.dart';
+import 'ChangelogScreen.dart';
+import 'DrawScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io' show Platform;
@@ -65,7 +65,7 @@ Future<void> init() async {
 
 Future<List<String>> initChangelog () async {
 
-  String changelog = await rootBundle.loadString("assets/CHANGELOG.md");
+  String changelog = await rootBundle.loadString("CHANGELOG.md");
   // whole changelog
   List<String> changelogList = changelog.split("\n");
   changelogList.removeRange(0, 3);

@@ -16,7 +16,6 @@ Changes:
 - Refactoring
 
 Fixes:
-- stuck at loading screen on some devices with API <= 22
 - "character copied" message on some devices not showing up 
 - UI layout on certain aspect ratios
 - show tutorial **only** if there are new features
