@@ -1,11 +1,14 @@
-import 'package:da_kanji_recognizer_mobile/DrawScreen.dart';
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 
 
+/// The "home"-screen
+/// 
+/// If a new version was installed shows a popup with the CHANGELOG of this 
+/// version. Otherwise navigates to the "draw"-screen.
 class HomeScreen extends StatefulWidget {
 
   @override
@@ -18,8 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() { 
     super.initState();
 
-    // after the page was build open the what's new pop up
+    // after the page was build 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // if a new version was installed open the what's new pop up 
       if(SHOW_CHANGELOG){
         SHOW_CHANGELOG = false;
     
@@ -64,19 +68,16 @@ class _HomeScreenState extends State<HomeScreen> {
             context, "/home", (Route<dynamic> route) => false);
         });
       }
+      // otherwise open the default screen
+      else{
+        Navigator.
+          pushNamedAndRemoveUntil(context, "/drawing", (route) => false);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // show changelog pop up when a new version is being used
-    if(SHOW_CHANGELOG){
       return Scaffold();
-    }
-    // otherwise show the drawing screen
-    else{
-      return DrawScreen();
-    }
   }
 }

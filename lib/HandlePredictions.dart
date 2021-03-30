@@ -4,6 +4,7 @@ import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 
 import 'globals.dart';
 
@@ -21,25 +22,22 @@ class HandlePrediction{
     // presses should be inverted
     if(SETTINGS.invertShortLongPress){
       if(!longPress)
-        handleLongPress(context, char);
+        openDictionary(context, char);
       else
-        handleShortPress(context, char);
+        copy(context, char);
     }
     // presses should NOT be inverted
     if(!SETTINGS.invertShortLongPress){
       if(!longPress)
-        handleShortPress(context, char);
+        copy(context, char);
       else
-        handleLongPress(context, char);
+        openDictionary(context, char);
     }
   }
 
 
-  /// Copy char to the system clipboard and show a snackbar using context
-  /// 
-  /// @params context to use to show the snackbar 
-  /// @params the string which should be copied to the clipboard
-  void handleShortPress(BuildContext context, String char){
+  /// Copies [char] to the system clipboard and show a snackbar using [context].
+  void copy(BuildContext context, String char){
     if (char != " " && char != ""){
       Clipboard.setData(new ClipboardData(text: char));
       // display a snackbar for 1s 
@@ -52,7 +50,11 @@ class HandlePrediction{
     }
   }
 
-  void handleLongPress(BuildContext context, String char) async {
+  /// Open [char] in the dictionary selected in the settings.
+  /// 
+  /// If the selected dictionary is not installed show a dialogue to ask the 
+  /// user if he/she wants to download it.
+  void openDictionary(BuildContext context, String char) async {
 
     // only open a page when there is a prediction
     if (char != " " && char != "") {
@@ -68,56 +70,44 @@ class HandlePrediction{
           if(await intent.canResolveActivity())
             await intent.launch();
           else{
-            showDialog(
-              context: context,
-              builder: (BuildContext context){ 
-                return SimpleDialog(
-                  title: Center(child: Text("No translator installed")),
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          MaterialButton(
-                            color: Colors.white.withAlpha(50),
-                            onPressed: () {
-                              launch(PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID);
-                            },
-                            child: Text("Download Google Translate")
-                          ) 
-                        ]
-                      )
-                    )
-                  ],
-                );
-              }
+            showDownloadDialogue(
+              context,
+              "No translator installed", 
+              "Download",
+              PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID
             );
           }
         }
-        else if(Platform.isIOS && false){
+        else if(Platform.isIOS){
           print("iOS is not implemented for choosing translator");
         }
       }
       // offline dictionary aedict3 (android)
       else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[5]){
         if(Platform.isAndroid){
-          AndroidIntent intent = AndroidIntent(
-              package: AEDICT_ID,
-              type: "text/plain",
-              action: 'android.intent.action.SEND',
-              category: 'android.intent.category.DEFAULT',
-              arguments: <String, dynamic>{
-                "android.intent.extra.TEXT": char,
-              }
-          );
-          if(await intent.canResolveActivity())
-            await intent.launch();
-          else
+          try{
+            // make sure the package is installed
+            await AppAvailability.checkAvailability(AEDICT_ID);
+            
+            AndroidIntent intent = AndroidIntent(
+                package: AEDICT_ID,
+                type: "text/plain",
+                action: 'android.intent.action.SEND',
+                category: 'android.intent.category.DEFAULT',
+                arguments: <String, dynamic>{
+                  "android.intent.extra.TEXT": char,
+                }
+            );
+            if(await intent.canResolveActivity())
+              await intent.launch();
+          }
+          catch (e){
             showDownloadDialogue(context,
               "Aedict not installed", 
-              "Download Aedict", 
+              "Download", 
               PLAYSTORE_BASE_URL + AEDICT_ID 
             );
+          }
         }
       }
       // offline dictionary akebi (android)
@@ -138,7 +128,7 @@ class HandlePrediction{
           else
             showDownloadDialogue(context,
               "Akebi not installed", 
-              "Download Akebi", 
+              "Download", 
               PLAYSTORE_BASE_URL + AKEBI_ID
             );
         }
@@ -158,7 +148,7 @@ class HandlePrediction{
           else{
             showDownloadDialogue(context,
               "Takoboto not installed", 
-              "Download Takoboto", 
+              "Download", 
               PLAYSTORE_BASE_URL + TAKOBOTO_ID
             );
           }
@@ -170,6 +160,8 @@ class HandlePrediction{
     }
   }
 
+  /// Show a dialogue using [context] with a [title], some [text] and a button
+  /// to open the [url].
   void showDownloadDialogue(
     BuildContext context, String title, String text, String url){
 
@@ -179,20 +171,40 @@ class HandlePrediction{
         return SimpleDialog(
           title: Center(child: Text(title)),
           children: [
+            Center(child:
             Container(
               padding: EdgeInsets.all(10),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MaterialButton(
-                    color: Colors.white.withAlpha(50),
+                  ElevatedButton(
+                    style:
+                      ButtonStyle(
+                        backgroundColor: 
+                          MaterialStateProperty
+                            .all(CURRENT_STYLING.installDialogueButtonColor)
+                      ),
                     onPressed: () async {
                       launch(url);
                     },
                     child: Text(text)
-                  ) 
+                  ),
+                  SizedBox(width: 10,),
+                  ElevatedButton(
+                    style:
+                      ButtonStyle(
+                        backgroundColor: 
+                          MaterialStateProperty
+                            .all(CURRENT_STYLING.installDialogueButtonColor)
+                      ),
+                    onPressed: () async {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Close")
+                  ),
                 ]
               )
-            )
+            ))
           ],
         );
       }

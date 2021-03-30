@@ -1,4 +1,4 @@
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

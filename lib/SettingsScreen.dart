@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiDrawer.dart';
 import 'globals.dart';
 
+
+/// The "settings"-screen.
+/// 
+/// Here all settings of the app can be managed.
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
+
 
 class _SettingsScreenState extends State<SettingsScreen> {
 
@@ -15,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
-      drawer: DaKanjiRecognizerDrawer(),
+      drawer: DaKanjiDrawer(),
       // ListView of all available settings
       body: ListView(
         padding: EdgeInsets.zero,
@@ -159,6 +164,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   SETTINGS.selectedTheme = newValue;
                   SETTINGS.save();
+                  CURRENT_STYLING.setTheme();
                   Phoenix.rebirth(context);
                 });
               },

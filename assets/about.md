@@ -17,4 +17,4 @@ The privacy police can be found [here](PRIVACY_POLICE)
 
 The used TFLite backend is: USED_BACKEND
 
-You are running DaKanjiRecognizer version: VERSION
+You are running DaKanji version: VERSION

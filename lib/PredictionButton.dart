@@ -1,21 +1,19 @@
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 
 import 'HandlePredictions.dart';
 
 
-class PredictionButton extends StatefulWidget {
+/// A button which shows the given [char].
+/// 
+/// It can copy [char] to the clipboard or open it in a dictionary.
+class PredictionButton extends StatelessWidget {
+  
   final String char;
+
 
   PredictionButton({this.char});
 
-  @override
-  _PredictionButtonState createState() => _PredictionButtonState();
-
-}
-
-
-class _PredictionButtonState extends State<PredictionButton>{
 
   @override
   Widget build(BuildContext context){
@@ -28,26 +26,25 @@ class _PredictionButtonState extends State<PredictionButton>{
           style:
             ButtonStyle(
               backgroundColor: 
-                MaterialStateProperty.all(Color.fromARGB(100, 150, 150, 150))
+                MaterialStateProperty.all(CURRENT_STYLING.predictionButtonColor)
             ),
            
           // handle a short press
           onPressed: () {
-            HandlePrediction().handlePress(false, context, widget.char);
+            HandlePrediction().handlePress(false, context, char);
           },
           
           // handle a long press 
           onLongPress: () async {
-            HandlePrediction().handlePress(true, context, widget.char);
+            HandlePrediction().handlePress(true, context, char);
           },
           child: FittedBox(
             child: Text(
-              widget.char,
+              char,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 1000.0,
-                color: SETTINGS.selectedTheme == "dark" ?
-                  Colors.white : Colors.black
+                color: CURRENT_STYLING.predictionButtonTextColor
               ),
             )
           )

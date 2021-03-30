@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'globals.dart';
 
 
-class DaKanjiRecognizerDrawer extends StatelessWidget {
+/// Da Kanji's drawer.
+/// 
+/// It connects the main screens of the app with each other.
+/// Currently: *Drawing*, *Settings*, *About*
+class DaKanjiDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -12,15 +16,17 @@ class DaKanjiRecognizerDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(child: Text("DaKanjiRecognizer")),
+          DrawerHeader(child: Text("DaKanji")),
           
           // Drawer entry to go to the Kanji drawing screen
           ListTile(
             leading: Icon(Icons.brush_outlined),
             title: Text("Drawing"),
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, "/", (Route<dynamic> route) => false);
+              print(ModalRoute.of(context).settings.name);
+              if(ModalRoute.of(context).settings.name != "/drawing")
+                Navigator.pushNamedAndRemoveUntil(
+                  context, "/drawing", (Route<dynamic> route) => false);
             },
           ),
 
