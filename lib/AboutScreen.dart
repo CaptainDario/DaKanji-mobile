@@ -3,7 +3,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-import 'DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiDrawer.dart';
 import 'globals.dart';
 
 
@@ -16,7 +16,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("About")),
-      drawer: DaKanjiRecognizerDrawer(),
+      drawer: DaKanjiDrawer(),
       body: Column(
         children: [
           // show the about.md

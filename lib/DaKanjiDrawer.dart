@@ -7,7 +7,7 @@ import 'globals.dart';
 /// 
 /// It connects the main screens of the app with each other.
 /// Currently: *Drawing*, *Settings*, *About*
-class DaKanjiRecognizerDrawer extends StatelessWidget {
+class DaKanjiDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
@@ -16,7 +16,7 @@ class DaKanjiRecognizerDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(child: Text("DaKanjiRecognizer")),
+          DrawerHeader(child: Text("DaKanji")),
           
           // Drawer entry to go to the Kanji drawing screen
           ListTile(

@@ -12,8 +12,10 @@ New Features:
 - What's new message
 
 Changes:
-- renamed to Da Kanji
+- beautiful new icon
+- renamed to DaKanji
 - Refactoring
+- Provide apk on GitHub
 
 Fixes:
 - "character copied" message on some devices not showing up 

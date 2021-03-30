@@ -10,7 +10,7 @@ import 'ShowcaseTuple.dart';
 
 
 // the title of the app
-const String APP_TITLE = "Da Kanji";
+const String APP_TITLE = "DaKanji";
 
 // the whole changelog of the app
 // ignore: non_constant_identifier_names
@@ -63,17 +63,17 @@ Interpreter CNN_KANJI_ONLY_INTERPRETER;
 String USED_BACKEND = "";
 
 //about page
-const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
-const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile";
-const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-ML";
-const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues/new";
+const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanji-Desktop";
+const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/Da_Kanji-Mobile";
+const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanji-ML";
+const GITHUB_ISSUES = "https://github.com/CaptainDario/Da_Kanji-Mobile/issues/new";
 
 
 const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
 
 const APPSTORE_PAGE = "";
-const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
+const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanji";
 
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab";
 const DAAPPLAB_APPSTORE_PAGE = "";

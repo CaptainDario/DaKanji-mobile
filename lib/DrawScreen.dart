@@ -4,7 +4,7 @@ import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiDrawer.dart';
 import 'DrawingPainter.dart';
 import 'PredictionButton.dart';
 import 'KanjiBufferWidget.dart';
@@ -71,7 +71,7 @@ class _DrawScreenState extends State<DrawScreen> {
       appBar: AppBar(
         title: Text("Drawing"),
       ),
-      drawer: DaKanjiRecognizerDrawer(),
+      drawer: DaKanjiDrawer(),
       body: Center(
         child: Column( 
           children: [

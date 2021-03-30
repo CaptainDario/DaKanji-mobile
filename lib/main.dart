@@ -22,7 +22,7 @@ Future<void> main() async {
 
   runApp(
     Phoenix(
-      child: DaKanjiRecognizerApp(),
+      child: DaKanjiApp(),
     )
   );
 
@@ -118,7 +118,7 @@ Future<String> initAbout () async {
 
 
 /// The starting widget of the app
-class DaKanjiRecognizerApp extends StatelessWidget {
+class DaKanjiApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
