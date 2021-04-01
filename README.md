@@ -24,10 +24,10 @@ The user can draw a character in the UI and the app will predict which character
 It is also possible to use a translation app of the used device.
 A custom website can also be used with an input field in the settings menu.</br>
 Currently around 3000 characters are supported. 
-All supported characters can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
+All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Next steps and ideas
-If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues).
+If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 
 ## Development
 This app was developed using dart, the flutter framework and Tensorflow.
@@ -52,3 +52,6 @@ To obfuscate, save the symbol files and build the app.
 ```{bash}
 flutter build appbundle --obfuscate --split-debug-info=obfuscate_debug_info
 ```
+
+## Credits
+* icon: Buddha, with kudos to 2ch/fl/ and HatNyan
