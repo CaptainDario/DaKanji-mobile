@@ -63,10 +63,10 @@ Interpreter CNN_KANJI_ONLY_INTERPRETER;
 String USED_BACKEND = "";
 
 //about page
-const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanji-Desktop";
-const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/Da_Kanji-Mobile";
+const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
+const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanji-Mobile";
 const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanji-ML";
-const GITHUB_ISSUES = "https://github.com/CaptainDario/Da_Kanji-Mobile/issues/new";
+const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanji-Mobile/issues/new";
 
 
 const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
