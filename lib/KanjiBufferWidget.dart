@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
 import 'HandlePredictions.dart';
-import 'globals.dart';
 
 
 
@@ -139,7 +138,6 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
               widget.kanjiBuffer.kanjiBuffer,
               textScaleFactor: 1.5,
               softWrap: false,
-              style: TextStyle(color: CURRENT_STYLING.kanjiBufferTextColor),
             )
           ),
         )

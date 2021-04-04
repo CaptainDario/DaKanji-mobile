@@ -164,7 +164,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   SETTINGS.selectedTheme = newValue;
                   SETTINGS.save();
-                  CURRENT_STYLING.setTheme();
                   Phoenix.rebirth(context);
                 });
               },
