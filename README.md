@@ -53,5 +53,13 @@ To obfuscate, save the symbol files and build the app.
 flutter build appbundle --obfuscate --split-debug-info=obfuscate_debug_info
 ```
 
+#### Updating the icons
+For updating the icons the [flutter_launcher_icons package](https://pub.dev/packages/flutter_launcher_icons/versions/0.8.1) was used.
+To update all icons, replace `media/icon.png` and run:
+```
+flutter pub run flutter_launcher_icons:main
+```
+
 ## Credits
+* design and UI: [Ellina](https://github.com/nurellina), thanks a ton! Without your help the app would not look and feel half as good as it is now.
 * icon: Buddha, with kudos to 2ch/fl/ and HatNyan
