@@ -133,7 +133,7 @@ class DaKanjiApp extends StatelessWidget {
 
     return MaterialApp(
       title: APP_TITLE,
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
 
       // themes
       theme: lightTheme,
