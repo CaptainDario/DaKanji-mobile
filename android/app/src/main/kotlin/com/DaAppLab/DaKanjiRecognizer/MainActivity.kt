@@ -1,4 +1,4 @@
-package com.DaAppLab.DaKanji
+package com.DaAppLab.DaKanjiRecognizer
 
 import io.flutter.embedding.android.FlutterActivity
 
