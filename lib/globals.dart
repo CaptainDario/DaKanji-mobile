@@ -60,7 +60,7 @@ Interpreter CNN_KANJI_ONLY_INTERPRETER;
 String USED_BACKEND = "";
 
 //about page
-const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
+const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanji-Desktop";
 const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanji-Mobile";
 const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanji-ML";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanji-Mobile/issues/new";
@@ -70,7 +70,7 @@ const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
 
 const APPSTORE_PAGE = "";
-const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanji";
+const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab";
 const DAAPPLAB_APPSTORE_PAGE = "";
