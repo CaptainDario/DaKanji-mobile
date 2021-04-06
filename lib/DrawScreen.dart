@@ -42,19 +42,12 @@ class _DrawScreenState extends State<DrawScreen> {
   void initState() {
     super.initState();
 
-    // when the screen was built
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // only show the showcase at an update/new install
-      if(SHOW_SHOWCASE_DRAWING){
-        widget.showcase.init(context);
-        widget.showcase.show();
-      }
-    });
-
     // always rebuild the ui when the kanji buffer changed
     kanjiBuffer.addListener(() {
       setState(() { });
     });
+    
+    
   }
 
   @override
@@ -65,6 +58,20 @@ class _DrawScreenState extends State<DrawScreen> {
     canvasSize = MediaQuery.of(context).size.height * 3/6;
     if(canvasSize >= MediaQuery.of(context).size.width - 20)
       canvasSize = MediaQuery.of(context).size.width - 20;
+    
+    // add a listener to when the Navigator animation finished
+    var route = ModalRoute.of(context);
+    void handler(status) {
+      if (status == AnimationStatus.completed) {
+        route.animation.removeStatusListener(handler);
+        
+        if(SHOW_SHOWCASE_DRAWING){
+          widget.showcase.init(context);
+          widget.showcase.show();
+        }
+      }
+    }
+    route.animation.addStatusListener(handler);
 
     return Scaffold(
       key: DRAWER_KEY,
