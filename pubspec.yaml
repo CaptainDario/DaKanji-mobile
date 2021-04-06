@@ -3,7 +3,7 @@ description: A kanji recognizer app.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+7
+version: 1.1.0+9
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -53,4 +53,5 @@ flutter:
     - CHANGELOG.md
     - assets/about.md
     - media/icon.png
+    - media/banner.png
 
