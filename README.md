@@ -43,7 +43,7 @@ Additionally the tflite models need to be copied from the [Machine Learning](htt
 Go to [the release page](https://github.com/CaptainDario/DaKanji-ML/releases) and download the models.
 
 ### building the app
-To build the app just invoke
+To build the app as app bundle just invoke
 ```
 flutter build appbundle
 ```
@@ -51,6 +51,16 @@ flutter build appbundle
 To obfuscate, save the symbol files and build the app.
 ```{bash}
 flutter build appbundle --obfuscate --split-debug-info=obfuscate_debug_info
+```
+
+To build an fat apk:
+```
+flutter build apk --obfuscate --split-debug-info=obfuscate_debug_info
+```
+
+and platform dependent, smaller apks:
+```
+flutter build apk --split-per-abi --obfuscate --split-debug-info=obfuscate_debug_info
 ```
 
 #### Updating the icons
