@@ -121,7 +121,7 @@ class Settings {
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
     // a different version than last time is being used
-    //VERSION = "1.1.0";
+    //VERSION = "0.0.0";
     if(versionUsed != VERSION){
 
       // show the changelog
