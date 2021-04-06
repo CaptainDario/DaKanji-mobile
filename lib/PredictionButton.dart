@@ -1,4 +1,3 @@
-import 'globals.dart';
 import 'package:flutter/material.dart';
 
 import 'HandlePredictions.dart';
@@ -23,11 +22,6 @@ class PredictionButton extends StatelessWidget {
       aspectRatio: 1,
       child: GestureDetector(
         child: ElevatedButton(
-          style:
-            ButtonStyle(
-              backgroundColor: 
-                MaterialStateProperty.all(CURRENT_STYLING.predictionButtonColor)
-            ),
            
           // handle a short press
           onPressed: () {
@@ -44,7 +38,6 @@ class PredictionButton extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 1000.0,
-                color: CURRENT_STYLING.predictionButtonTextColor
               ),
             )
           )

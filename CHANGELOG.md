@@ -13,9 +13,11 @@ New Features:
 
 Changes:
 - beautiful new icon
+- updated themes
 - renamed to DaKanji
 - Refactoring
 - Provide apk on GitHub
+- added close button to app download dialogues
 
 Fixes:
 - "character copied" message on some devices not showing up 

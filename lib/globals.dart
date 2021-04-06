@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'Styling.dart';
 import 'Settings.dart';
 import 'ShowcaseTuple.dart';
 
@@ -36,8 +35,6 @@ List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
 // the saved settings
 // ignore: non_constant_identifier_names
 final Settings SETTINGS = new Settings();
-// ignore: non_constant_identifier_names
-final Styling CURRENT_STYLING = Styling();
 
 // the global key for the drawer
 // ignore: non_constant_identifier_names
@@ -63,7 +60,7 @@ Interpreter CNN_KANJI_ONLY_INTERPRETER;
 String USED_BACKEND = "";
 
 //about page
-const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanjiRecognizer-Desktop";
+const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanji-Desktop";
 const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanji-Mobile";
 const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanji-ML";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanji-Mobile/issues/new";
@@ -73,7 +70,7 @@ const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
 
 const APPSTORE_PAGE = "";
-const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanji";
+const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
 const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab";
 const DAAPPLAB_APPSTORE_PAGE = "";

@@ -1,3 +1,6 @@
+import 'DarkTheme.dart';
+import 'LightTheme.dart';
+
 import 'ChangelogScreen.dart';
 import 'DrawScreen.dart';
 import 'package:flutter/material.dart';
@@ -133,17 +136,12 @@ class DaKanjiApp extends StatelessWidget {
       //debugShowCheckedModeBanner: false,
 
       // themes
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
 
       //screens
       initialRoute: "/home",
-      //home: HomeScreen(),
       routes: <String, WidgetBuilder>{
         "/home": (BuildContext context) => HomeScreen(),
         "/drawing": (BuildContext context) => DrawScreen(),

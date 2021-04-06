@@ -18,7 +18,9 @@ class AboutScreen extends StatelessWidget {
       appBar: AppBar(title: Text("About")),
       drawer: DaKanjiDrawer(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Image(image: AssetImage("media/banner.png"), width: 200,),
           // show the about.md
           Container(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 2),

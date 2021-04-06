@@ -178,12 +178,6 @@ class HandlePrediction{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    style:
-                      ButtonStyle(
-                        backgroundColor: 
-                          MaterialStateProperty
-                            .all(CURRENT_STYLING.installDialogueButtonColor)
-                      ),
                     onPressed: () async {
                       launch(url);
                     },
@@ -191,12 +185,6 @@ class HandlePrediction{
                   ),
                   SizedBox(width: 10,),
                   ElevatedButton(
-                    style:
-                      ButtonStyle(
-                        backgroundColor: 
-                          MaterialStateProperty
-                            .all(CURRENT_STYLING.installDialogueButtonColor)
-                      ),
                     onPressed: () async {
                       Navigator.pop(context);
                     },

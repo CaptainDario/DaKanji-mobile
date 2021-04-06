@@ -2,7 +2,7 @@
 This app tries to help people which study or use the Japanese language.  
 There are many features planned but right now, it can recognize handwritten Kanji characters.
 A desktop version is available [here.](GITHUB_DESKTOP_REPO)
-The UI was developed using dart and the Flutter framework and is source available.
+The app was developed using dart with the Flutter framework and is source available.
 If you want to learn more about the development of the app, [visit its GitHub repository.](GITHUB_MOBILE_REPO)
 If you want to learn more about the machine learning powering this app, [take a look here.](GITHUB_ML_REPO)
 If you like this app please consider:

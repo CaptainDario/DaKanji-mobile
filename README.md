@@ -1,9 +1,9 @@
-# DaKanjiRecognizer Mobile
-<img src="./media/social_preview.png" style="display:block;margin-left:auto;margin-right:auto;" width="60%"/>
+# DaKanji Mobile
+<img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="60%"/>
 
 ## What is this
-This is the mobile version of DaKanjiRecognizer.
-The desktop version is available [here](https://github.com/CaptainDario/DaKanjiRecognizer-Desktop). </br>
+This is the mobile version of DaKanji.
+The desktop version is available [here](https://github.com/CaptainDario/DaKanji-Desktop). </br>
 This app tries to help students and people which use the Japanese language.
 It can recognize Japanese 'kanji' characters which the user draws by hand.
 Those predictions can than be automatically opened in dictionaries.
@@ -24,26 +24,26 @@ The user can draw a character in the UI and the app will predict which character
 It is also possible to use a translation app of the used device.
 A custom website can also be used with an input field in the settings menu.</br>
 Currently around 3000 characters are supported. 
-All supported characters can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
+All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Next steps and ideas
-If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanjiRecognizer-Mobile/issues).
+If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 
 ## Development
 This app was developed using dart, the flutter framework and Tensorflow.
 Tensorflow was used for the machine learning part.
-This project can be found [here](https://github.com/CaptainDario/DaKanjiRecognizer-ML). </br>
+This project can be found [here](https://github.com/CaptainDario/DaKanji-ML). </br>
 For developing new features this repository has to be downloaded and all necessary packages have to be installed with:
 
 ```{bash}
 flutter pub get
 ```
 
-Additionally the tflite models need to be copied from the [Machine Learning](https://github.com/CaptainDario/DaKanjiRecognizer-ML) repo.
-Go to [the release page](https://github.com/CaptainDario/DaKanjiRecognizer-ML/releases) and download the models.
+Additionally the tflite models need to be copied from the [Machine Learning](https://github.com/CaptainDario/DaKanji-ML) repo.
+Go to [the release page](https://github.com/CaptainDario/DaKanji-ML/releases) and download the models.
 
 ### building the app
-To build the app just invoke
+To build the app as app bundle just invoke
 ```
 flutter build appbundle
 ```
@@ -52,3 +52,25 @@ To obfuscate, save the symbol files and build the app.
 ```{bash}
 flutter build appbundle --obfuscate --split-debug-info=obfuscate_debug_info
 ```
+
+To build an fat apk:
+```
+flutter build apk --obfuscate --split-debug-info=obfuscate_debug_info
+```
+
+and platform dependent, smaller apks:
+```
+flutter build apk --split-per-abi --obfuscate --split-debug-info=obfuscate_debug_info
+```
+
+#### Updating the icons
+For updating the icons the [flutter_launcher_icons package](https://pub.dev/packages/flutter_launcher_icons/versions/0.8.1) was used.
+To update all icons, replace `media/icon.png` and run:
+```
+flutter pub run flutter_launcher_icons:main
+```
+
+## Credits
+* design and UI: Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now.
+* icon: 
+  * "Buddha, with kudos to 2ch/fl/ and HatNyan" and a font from [Adrian Jordanov](https://www.1001fonts.com/theater-font.html)
