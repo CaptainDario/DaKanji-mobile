@@ -27,7 +27,7 @@ Currently around 3000 characters are supported.
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Next steps and ideas
-If you have a good idea how to improve this app feel free to [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
+If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 
 ## Development
 This app was developed using dart, the flutter framework and Tensorflow.
@@ -58,7 +58,7 @@ To build an fat apk:
 flutter build apk --obfuscate --split-debug-info=obfuscate_debug_info
 ```
 
-and platform dependent, smaller apks:
+and platform dependent, smaller apk's:
 ```
 flutter build apk --split-per-abi --obfuscate --split-debug-info=obfuscate_debug_info
 ```
@@ -73,4 +73,5 @@ flutter pub run flutter_launcher_icons:main
 ## Credits
 * design and UI: Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now.
 * icon: 
-  * "Buddha, with kudos to 2ch/fl/ and HatNyan" and a font from [Adrian Jordanov](https://www.1001fonts.com/theater-font.html)
+  * Thank you "Buddha, with kudos to 2ch/fl/ and HatNyan" for designing and giving inspirations
+  * [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the font.
