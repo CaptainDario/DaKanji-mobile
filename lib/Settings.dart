@@ -1,4 +1,4 @@
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,24 +18,6 @@ class Settings {
   /// The URL of the weblio website
   String weblioURL;
 
-  /// Indicates if a long press will use the custom URL.
-  bool openWithCustomURL;
-
-  /// Indicates if a long press will use the jisho URL.
-  bool openWithJisho;
-
-  /// Indicates if a long press will use the takoboto app.
-  bool openWithTakoboto;
-
-  /// Indicates if a long press will use the wadoku URL.
-  bool openWithWadoku;
-
-  /// Indicates if a long press will use the weblio URL.
-  bool openWithWeblio;
-  
-  /// Indicates if a long press will use the default translator.
-  bool openWithDefaultTranslator;
-
   /// A list with all available dictionary options.
   List<String> dictionaries = 
     [
@@ -44,14 +26,13 @@ class Settings {
       "weblio (web)",
       "a custom URL",
       "systemTranslator",
-      "takoboto (app)"
+      "aedict (app)",
+      "akebi (app)",
+      "takoboto (app)",
     ];
 
   /// The string representation of the dictionary which will be used (long press)
   String selectedDictionary;
-
-  // if the showcase view should be shown for the drawing screen
-  bool showShowcaseViewDrawing;
 
   // the application version used when those settings were saved
   String versionUsed;
@@ -63,7 +44,6 @@ class Settings {
   /// A list with all available themes.
   List<String> themes = ["light", "dark", "system"];
   
-
   /// A Map from the string of a theme to the ThemeMode of the theme.
   Map<String, ThemeMode> themesDict = {
     "light": ThemeMode.light,
@@ -71,15 +51,21 @@ class Settings {
     "system": ThemeMode.system
   };
 
-  Settings() {
-    setTogglesToFalse();
+  /// Should the behavior of long and short press be inverted
+  bool invertShortLongPress = false;
 
+  ///
+  bool emptyCanvasAfterDoubleTap = true;
+
+
+  Settings() {
     String kanjiPlaceholder = "%X%";
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
   }
+
 
   /// Get the URL to the predicted kanji in the selected dictionary.
   ///
@@ -88,14 +74,14 @@ class Settings {
     String url;
 
     // determine which URL should be used for finding the character
-    if (openWithCustomURL)
-      url = customURL;
-    else if (openWithJisho)
+    if(selectedDictionary == dictionaries[0])
       url = jishoURL;
-    else if (openWithWadoku)
+    else if(selectedDictionary == dictionaries[1])
       url = wadokuURL;
-    else if (openWithWeblio)
+    else if(selectedDictionary == dictionaries[2])
       url = weblioURL;
+    else if(selectedDictionary == dictionaries[3])
+      url = customURL;
 
     // check that the URL starts with protocol, otherwise launch() fails
     if (!(url.startsWith("http://") || url.startsWith("https://")))
@@ -107,40 +93,6 @@ class Settings {
     return url;
   }
 
-  /// Set all values of the dictionary toggles in the Settings menu to false.
-  void setTogglesToFalse() {
-    openWithCustomURL = false;
-    openWithJisho = false;
-    openWithTakoboto = false;
-    openWithWadoku = false;
-    openWithWeblio = false;
-    openWithDefaultTranslator = false;
-  }
-
-  /// Set the bool of the dictionary which currently being used from string
-  /// 
-  /// @params the string of the currently selected dictionary
-  void setDictionary(String selection){
-
-    setTogglesToFalse();
-    selectedDictionary = selection;
-
-    if(selection == dictionaries[0])
-      openWithJisho = true;
-    else if(selection == dictionaries[1])
-      openWithWadoku = true;
-    else if(selection == dictionaries[2])
-      openWithWeblio = true;
-    else if(selection == dictionaries[3])
-      openWithCustomURL = true;
-    else if(selection == dictionaries[4])
-      openWithDefaultTranslator = true;
-    else if(selection == dictionaries[5])
-      openWithTakoboto = true;
-    else
-      print("dictionary undefined");
-
-  }
 
   /// Saves all settings to the SharedPreferences.
   void save() async {
@@ -148,13 +100,8 @@ class Settings {
     final prefs = await SharedPreferences.getInstance();
 
     // set value in shared preferences
-    prefs.setBool('openWithCustomURL', openWithCustomURL);
-    prefs.setBool('openWithJisho', openWithJisho);
-    prefs.setBool('openWithDefaultTranslator', openWithDefaultTranslator);
-    prefs.setBool('openWithTakoboto', openWithTakoboto);
-    prefs.setBool('openWithWadoku', openWithWadoku);
-    prefs.setBool('openWithWeblio', openWithWeblio);
-    prefs.setBool('showShowcaseViewDrawing', showShowcaseViewDrawing);
+    prefs.setBool('invertShortLongPress', invertShortLongPress);
+    prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
     
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', selectedTheme);
@@ -165,31 +112,25 @@ class Settings {
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
-    openWithCustomURL = await loadBool('openWithCustomURL');
-    openWithJisho = await loadBool('openWithJisho');
-    openWithDefaultTranslator = await loadBool('openWithDefaultTranslator');
-    openWithTakoboto = await loadBool('openWithTakoboto');
-    openWithWadoku = await loadBool('openWithWadoku');
-    openWithWeblio = await loadBool('openWithWeblio');
-    showShowcaseViewDrawing = await loadBool('showShowcaseViewDrawing');
+    invertShortLongPress = await loadBool('invertShortLongPress');
+    emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
 
-    customURL = await loadString('customURL') ?? "";
+    customURL = await loadString('customURL') ?? '';
     selectedTheme = await loadString('selectedTheme') ?? themes[2];
-    versionUsed = await loadString('versionUsed') ?? "";
+    versionUsed = await loadString('versionUsed') ?? '';
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
-    // assure that at least one switch is set to true
-    if (!this.openWithCustomURL &&
-        !this.openWithJisho &&
-        !this.openWithDefaultTranslator &&
-        !this.openWithWadoku &&
-        !this.openWithWeblio) {
-      this.openWithJisho = true;
-    }
+    // a different version than last time is being used
+    //VERSION = "0.0.0";
+    if(versionUsed != VERSION){
 
-    // if another version used than last time -> show showcase
-    if(versionUsed != VERSION){ 
-      showShowcaseViewDrawing = true;
+      // show the changelog
+      SHOW_CHANGELOG = true;
+
+      // this version has new features for drawing screen => show tutorial
+      if(DRAWING_SCREEN_NEW_FEATURES.contains(VERSION)){
+        SHOW_SHOWCASE_DRAWING = true;
+      }
     }
   }
 

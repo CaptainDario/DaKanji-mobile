@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'DaKanjiRecognizerDrawer.dart';
+import 'DaKanjiDrawer.dart';
 import 'globals.dart';
 
+
+/// The "settings"-screen.
+/// 
+/// Here all settings of the app can be managed.
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
+
 
 class _SettingsScreenState extends State<SettingsScreen> {
 
@@ -15,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
-      drawer: DaKanjiRecognizerDrawer(),
+      drawer: DaKanjiDrawer(),
       // ListView of all available settings
       body: ListView(
         padding: EdgeInsets.zero,
@@ -23,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // different options for dictionary on long press
           ListTile(
             title: Text(
-              "Drawing single character", 
+              "Drawing", 
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18
@@ -45,7 +50,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 setState(() {
                   print(newValue);
                   SETTINGS.selectedDictionary = newValue;
-                  SETTINGS.setDictionary(newValue);
                   SETTINGS.save();
                 });
               },
@@ -59,7 +63,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Container(
                   child: Expanded(
                     child: TextField(
-                      enabled: SETTINGS.openWithCustomURL,
+                      enabled:
+                        SETTINGS.selectedDictionary == SETTINGS.dictionaries[3],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: SETTINGS.customURL,
@@ -111,6 +116,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
               onTap: () {}
           ),
+          // invert if short press or long press opens dict / copies to clip
+          CheckboxListTile(
+            title: Text("Invert long/short press"),
+            value: SETTINGS.invertShortLongPress, 
+            onChanged: (bool newValue){
+              setState(() {
+                SETTINGS.invertShortLongPress = newValue;
+                SETTINGS.save();
+              });
+            }
+          ),
+          // 
+          CheckboxListTile(
+            title: Text("Empty canvas after double tap"),
+            value: SETTINGS.emptyCanvasAfterDoubleTap, 
+            onChanged: (bool newValue){
+              setState(() {
+                SETTINGS.emptyCanvasAfterDoubleTap = newValue;
+                SETTINGS.save();
+              });
+            }
+          ),
           Divider(),
           // setting for which theme to use
           ListTile(
@@ -148,7 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             trailing: IconButton(
               icon: Icon(Icons.replay_outlined),
               onPressed: () { 
-                SETTINGS.showShowcaseViewDrawing = true;
+                SHOW_SHOWCASE_DRAWING = true;
                 SETTINGS.save();
                 Phoenix.rebirth(context);
               }

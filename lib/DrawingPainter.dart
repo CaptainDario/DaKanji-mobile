@@ -1,11 +1,13 @@
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 
-import 'package:da_kanji_recognizer_mobile/globals.dart';
+import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as image;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
+
+/// The canvas widget on which the user draws the kanji.
 class DrawingPainter extends CustomPainter {
   /// a list of points which were drawn on the canvas
   List<List<Offset>> pointsList;
@@ -25,10 +27,10 @@ class DrawingPainter extends CustomPainter {
   /// output of the CNN
   List<List<double>> _output;
 
-  /// Constructor to initialize an DrawingPainter instance.
-  ///
-  /// @param A list of points which should be drawn on the canvas
-  /// @param If the app is running in dark mode or not
+  /// Constructs an DrawingPainter instance.
+  /// 
+  /// All points given with [pointsList] will be drawn on the canvas.
+  /// [darkMode] should reflect in which mode the app is running.
   DrawingPainter(List<List<Offset>> pointsList, bool darkMode) {
     this.pointsList = pointsList;
     this.darkMode = darkMode;
@@ -42,9 +44,10 @@ class DrawingPainter extends CustomPainter {
       
   }
 
-  /// Predicted the drawn character by running inference on the CNN
+  /// Create predictions based on the drawing by running inference on the CNN
   ///
-  /// @returns A list of the 10 most likely predictions
+  /// After running the inference the 10 most likely predictions are
+  /// returned ordered by how likely they are [likeliest, ..., unlikeliest].
   Future<List<String>> runInference() async {
     List<String> predictions = List.generate(10, (i) => i.toString());
 
@@ -84,10 +87,8 @@ class DrawingPainter extends CustomPainter {
 
   /// Creates an image of the current canvas.
   ///
-  /// Creates a new ui.Canvas and repaints the current image on it.
-  /// This canvas is than used to create an image.
-  ///
-  /// @returns A list containing an image of the canvas.
+  /// Creates a new ui.Canvas and repaints the current image on it. This canvas 
+  /// than generates an image and returns it.
   Future<Uint8List> getImageFromCanvas() async {
     // mark that the canvas is being recorded
     recording = true;
@@ -108,10 +109,8 @@ class DrawingPainter extends CustomPainter {
     return pngBytes;
   }
 
-  /// Draws on the given canvas a drawing aid (vertical/horizontal dashed lines)
-  ///
-  /// @param the canvas on which should be painted
-  /// @param the size of the canvas
+  /// Draws on the given [canvas] based on its [size] a drawing aid
+  /// (vertical/horizontal dashed lines).
   void paintKanjiDrawingAid(Canvas canvas, Size size) {
     // setup the paint
     Paint paint = Paint()
@@ -146,10 +145,8 @@ class DrawingPainter extends CustomPainter {
     }
   }
 
-  /// Paints the points of the [pointsList] on the given canvas
-  ///
-  /// @param the canvas on which should be painted
-  /// @param the size of the canvas
+  /// Paints the points of the [pointsList] on the given [canvas] with a size
+  /// of [size].
   @override
   void paint(Canvas canvas, Size size) {
     // copy size

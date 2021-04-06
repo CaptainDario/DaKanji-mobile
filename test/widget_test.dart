@@ -8,12 +8,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:da_kanji_recognizer_mobile/main.dart';
+import 'package:da_kanji_mobile/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(DaKanjiRecognizerApp());
+    await tester.pumpWidget(DaKanjiApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

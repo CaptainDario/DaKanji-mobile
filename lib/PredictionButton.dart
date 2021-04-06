@@ -1,130 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:io' show Platform;
 
-import 'package:url_launcher/url_launcher.dart';
-import 'package:android_intent/android_intent.dart';
+import 'HandlePredictions.dart';
 
-import 'package:da_kanji_recognizer_mobile/globals.dart';
 
+/// A button which shows the given [char].
+/// 
+/// It can copy [char] to the clipboard or open it in a dictionary.
 class PredictionButton extends StatelessWidget {
-  String char;
+  
+  final String char;
 
-  PredictionButton(String char) {
-    this.char = char;
-  }
+
+  PredictionButton({this.char});
+
 
   @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
+  Widget build(BuildContext context){
+  return Transform.scale(
+    scale: 0.9, 
+    child: AspectRatio(
       aspectRatio: 1,
-      child: MaterialButton(
-        color: Colors.white.withAlpha(50),
-        padding: EdgeInsets.all(0),
-        // copy the character to clipboard on single press
-        onPressed: () {
-          if (this.char != " ")
-            Clipboard.setData(new ClipboardData(text: this.char));
-        },
-        // open prediction in the dictionary set in setting on long press
-        onLongPress: () async {
-          // only open a page when there is a prediction
-          if (this.char != " ") {
-            // the prediction should be translated with system dialogue
-            if(SETTINGS.openWithDefaultTranslator){ 
-              if(Platform.isAndroid){
-                AndroidIntent intent = AndroidIntent(
-                  action: 'android.intent.action.TRANSLATE',
-                  arguments: <String, dynamic>{
-                    "android.intent.extra.TEXT" : this.char
-                  }
-                );
-                if(await intent.canResolveActivity())
-                  await intent.launch();
-                else{
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context){ 
-                      return SimpleDialog(
-                        title: Center(child: Text("No translator installed")),
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                MaterialButton(
-                                  color: Colors.white.withAlpha(50),
-                                  onPressed: () {
-                                    launch(PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID);
-                                  },
-                                  child: Text("Download Google Translate")
-                                ) 
-                              ]
-                            )
-                          )
-                        ],
-                      );
-                    }
-                  );
-                }
-              }
-              else if(Platform.isIOS && false){
-                print("iOS is not implemented for choosing translator");
-              }
-            }
-            // offline dictionary takoboto (android)
-            else if(SETTINGS.openWithTakoboto){
-              if(Platform.isAndroid){
-                AndroidIntent intent = AndroidIntent(
-                    package: 'jp.takoboto',
-                    action: 'jp.takoboto.SEARCH',
-                    arguments: <String, dynamic>{
-                      "android.intent.extra.PROCESS_TEXT": this.char,
-                    }
-                );
-                if(await intent.canResolveActivity())
-                  await intent.launch();
-                else{
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context){ 
-                      return SimpleDialog(
-                        title: Center(child: Text("Takoboto not installed")),
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                MaterialButton(
-                                  color: Colors.white.withAlpha(50),
-                                  onPressed: () async {
-                                    launch(PLAYSTORE_BASE_URL + TAKOBOTO_ID);
-                                  },
-                                  child: Text("Download takoboto")
-                                ) 
-                              ]
-                            )
-                          )
-                        ],
-                      );
-                    }
-                  );
-                }
-              }
-            }
-            else{
-              launch(SETTINGS.openWithSelectedDictionary(this.char));
-            }
-          }
-        },
-        child: FittedBox(
-          child: Text(
-            this.char,
-            textAlign: TextAlign.center,
-            style: new TextStyle(fontSize: 1000.0),
+      child: GestureDetector(
+        child: ElevatedButton(
+           
+          // handle a short press
+          onPressed: () {
+            HandlePrediction().handlePress(false, context, char);
+          },
+          
+          // handle a long press 
+          onLongPress: () async {
+            HandlePrediction().handlePress(true, context, char);
+          },
+          child: FittedBox(
+            child: Text(
+              char,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 1000.0,
+              ),
+            )
           )
         )
       )
-    );
+    )
+  );
   }
 }
