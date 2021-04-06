@@ -142,7 +142,6 @@ class DaKanjiApp extends StatelessWidget {
 
       //screens
       initialRoute: "/home",
-      //home: HomeScreen(),
       routes: <String, WidgetBuilder>{
         "/home": (BuildContext context) => HomeScreen(),
         "/drawing": (BuildContext context) => DrawScreen(),
