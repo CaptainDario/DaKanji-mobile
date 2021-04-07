@@ -72,5 +72,5 @@ flutter pub run flutter_launcher_icons:main
 
 ## Credits
 * design and UI: Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now.
-* icon: 
-  * "Buddha, with kudos to 2ch/fl/ and HatNyan" and a font from [Adrian Jordanov](https://www.1001fonts.com/theater-font.html)
+* icon/banner: 
+  * Thanks "Buddha, with kudos to 2ch/fl/ and HatNyan" for helping with the icon design and making the banner. Also thank you [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the banner font.
