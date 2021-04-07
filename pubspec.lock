@@ -267,7 +267,7 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -360,9 +360,9 @@ packages:
   tflite_flutter:
     dependency: "direct main"
     description:
-      path: "../tflite_flutter_plugin"
-      relative: true
-    source: path
+      name: tflite_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.6.0"
   tutorial_coach_mark:
     dependency: "direct main"
