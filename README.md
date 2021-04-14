@@ -8,6 +8,7 @@
 
    <tr/>
 <table/>
+
 ## What is this
 This is the mobile version of DaKanji.
 The desktop version is available [here](https://github.com/CaptainDario/DaKanji-Desktop). </br>
