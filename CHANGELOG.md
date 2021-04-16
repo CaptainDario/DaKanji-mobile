@@ -1,6 +1,10 @@
 
 # Da Kanji - changelog
 
+## v 1.2.0
+new Features:
+- deep linking 'dakanji://dakanji/dictionary'
+- 
 
 ## v 1.1.0
 New Features:

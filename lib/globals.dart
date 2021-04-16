@@ -11,6 +11,9 @@ import 'ShowcaseTuple.dart';
 // the title of the app
 const String APP_TITLE = "DaKanji";
 
+// deep link pattern
+const String APP_LINK = r"dakanji://dakanji/";
+
 // the whole changelog of the app
 // ignore: non_constant_identifier_names
 String WHOLE_CHANGELOG = "";

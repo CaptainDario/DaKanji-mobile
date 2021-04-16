@@ -15,6 +15,7 @@ import 'Settingsscreen.dart';
 import 'AboutScreen.dart';
 import 'globals.dart';
 import 'initInterpreter.dart';
+import 'DeepLinks.dart';
 
 
 Future<void> main() async {
@@ -71,6 +72,9 @@ Future<void> init() async {
       List<List<double>>.generate(1, (i) => 
         List<double>.generate(LABEL_LIST.length, (j) => 0.0));
   CNN_KANJI_ONLY_INTERPRETER.run(_input, _output);
+
+  await initDeepLinksStream();
+  await getInitialDeepLink();
 }
 
 /// Reads `CHANGELOG.md` from file and returns a converted version.
@@ -119,9 +123,21 @@ Future<String> initAbout () async {
 
 }
 
-
 /// The starting widget of the app
-class DaKanjiApp extends StatelessWidget {
+class DaKanjiApp extends StatefulWidget {
+
+  @override
+  _DaKanjiAppState createState() => _DaKanjiAppState();
+
+}
+
+class _DaKanjiAppState extends State<DaKanjiApp> {
+
+  @override
+  dispose() {
+    if (linkSub != null) linkSub.cancel();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
