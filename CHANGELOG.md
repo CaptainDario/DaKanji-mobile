@@ -1,12 +1,22 @@
 
 # Da Kanji - changelog
 
-## v 1.2.0
+## v 1.2.0 - アニメ
 new Features:
-- deep linking 'dakanji://dakanji/dictionary'
-- 
+- animations:
+  - double tap on prediction
+  - double tap on kanji box
+  - new character added to kanji box
+  - character removed from kanji box
+- deep linking 'dakanji://dakanji/'
 
-## v 1.1.0
+Changes:
+- color when pressing on kanji box
+- kanji box now shows the last added characters
+
+-------------------------------------------------------------------------
+
+## v 1.1.0 - 熟語
 New Features:
 - multi character search
 - open prediction in akebi (app)
@@ -30,6 +40,7 @@ Fixes:
 - blurry buttons in light mode
 
 -------------------------------------------------------------------------
+
 ## v 1.0.4
 Fixes:
 - a localized link to the play store
@@ -48,7 +59,7 @@ changes:
 - use improved AI from DaKanjiRecognizer v1.1
 - better image processing before feeding images to CNN
 
-## v 1.0.0
+## v 1.0.0 - 初め
 
 features:
 - recognize ~3000 kanji characters
