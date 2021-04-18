@@ -67,33 +67,6 @@ class Settings {
   }
 
 
-  /// Get the URL to the predicted kanji in the selected dictionary.
-  ///
-  /// @returns The URL which leads to the predicted kanji in the selected dict.
-  String openWithSelectedDictionary(String kanji) {
-    String url;
-
-    // determine which URL should be used for finding the character
-    if(selectedDictionary == dictionaries[0])
-      url = jishoURL;
-    else if(selectedDictionary == dictionaries[1])
-      url = wadokuURL;
-    else if(selectedDictionary == dictionaries[2])
-      url = weblioURL;
-    else if(selectedDictionary == dictionaries[3])
-      url = customURL;
-
-    // check that the URL starts with protocol, otherwise launch() fails
-    if (!(url.startsWith("http://") || url.startsWith("https://")))
-      url = "https://" + url;
-
-    // replace the placeholder with the actual character
-    url = url.replaceFirst(new RegExp(kanjiPlaceholder), kanji);
-    url = Uri.encodeFull(url);
-    return url;
-  }
-
-
   /// Saves all settings to the SharedPreferences.
   void save() async {
     // obtain shared preferences

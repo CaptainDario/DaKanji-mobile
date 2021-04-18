@@ -155,9 +155,36 @@ class HandlePrediction{
         }
       }
       else{
-        launch(SETTINGS.openWithSelectedDictionary(char));
+        launch(openWithSelectedDictionary(char));
       }
     }
+  }
+
+
+  /// Get the URL to the predicted kanji in the selected dictionary.
+  ///
+  /// @returns The URL which leads to the predicted kanji in the selected dict.
+  String openWithSelectedDictionary(String kanji) {
+    String url;
+
+    // determine which URL should be used for finding the character
+    if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[0])
+      url = SETTINGS.jishoURL;
+    else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[1])
+      url = SETTINGS.wadokuURL;
+    else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[2])
+      url = SETTINGS.weblioURL;
+    else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[3])
+      url = SETTINGS.customURL;
+
+    // check that the URL starts with protocol, otherwise launch() fails
+    if (!(url.startsWith("http://") || url.startsWith("https://")))
+      url = "https://" + url;
+
+    // replace the placeholder with the actual character
+    url = url.replaceFirst(new RegExp(SETTINGS.kanjiPlaceholder), kanji);
+    url = Uri.encodeFull(url);
+    return url;
   }
 
   /// Show a dialogue using [context] with a [title], some [text] and a button
