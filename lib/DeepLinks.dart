@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:uni_links/uni_links.dart';
@@ -43,33 +44,38 @@ void handleLink(String link){
 
   String short = link.replaceFirst(APP_LINK, "");
 
-  if(short.contains("jisho")){
+  if(short.startsWith("jisho")){
     print("contains jisho");
     SETTINGS.selectedDictionary = SETTINGS.dictionaries[0];
   }
-  else if(short.contains("wadoku")){
+  else if(short.startsWith("wadoku")){
     print("contains wadoku");
     SETTINGS.selectedDictionary = SETTINGS.dictionaries[1];
   }
-  else if(short.contains("weblio")){
+  else if(short.startsWith("weblio")){
     print("contains weblio");
     SETTINGS.selectedDictionary = SETTINGS.dictionaries[2];
   }
-  else if(short.contains("URL")){
-    print("contains URL");
+  else if(short.startsWith("URL")){
+    print("contains custom URL");
     SETTINGS.selectedDictionary = SETTINGS.dictionaries[3];
+    short = Uri.decodeFull(short.replaceFirst("URL/", ""));
+    print("given custom url:" + short);
+    SETTINGS.customURL = short;
   }
-  else if(short.contains("aedict")){
-    print("contains aedict");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[5];
-  }
-  else if(short.contains("akebi")){
-    print("contains akebi");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[6];
-  }
-  else if(short.contains("takoboto")){
-    print("contains takoboto");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[7];
+  else if(Platform.isAndroid){
+    if(short.startsWith("aedict")){
+      print("contains aedict");
+      SETTINGS.selectedDictionary = SETTINGS.dictionaries[5];
+    }
+    else if(short.startsWith("akebi")){
+      print("contains akebi");
+      SETTINGS.selectedDictionary = SETTINGS.dictionaries[6];
+    }
+    else if(short.startsWith("takoboto")){
+      print("contains takoboto");
+      SETTINGS.selectedDictionary = SETTINGS.dictionaries[7];
+    }
   }
   else{
     print("No matching dictionary found!");
