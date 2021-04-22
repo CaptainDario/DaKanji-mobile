@@ -1,6 +1,7 @@
 import 'dart:io' show Platform;
 
 import 'package:android_intent/android_intent.dart';
+import 'package:da_kanji_mobile/WebviewScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -155,7 +156,13 @@ class HandlePrediction{
         }
       }
       else{
-        launch(openWithSelectedDictionary(char));
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (BuildContext context) => 
+              WebviewScreen(char, openWithSelectedDictionary(char))
+          )
+        );
       }
     }
   }
