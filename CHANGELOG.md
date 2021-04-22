@@ -8,11 +8,13 @@ new Features:
   - double tap on kanji box
   - new character added to kanji box
   - character removed from kanji box
+  - opening a prediction in a web dictionary
 - deep linking 'dakanji://dakanji/'
 
 Changes:
 - color when pressing on kanji box
 - kanji box now shows the last added characters
+- use webview instead of default browser
 
 -------------------------------------------------------------------------
 
