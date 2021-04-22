@@ -26,7 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       // if a new version was installed open the what's new pop up 
       if(SHOW_CHANGELOG){
         SHOW_CHANGELOG = false;
-    
+
+        // what's new dialogue 
         showDialog(
           context: context,
           builder: (BuildContext context){ 
@@ -63,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         ).then((value) {
+          // save that the dialogue was shown and open the default screen
           SETTINGS.save();
           Navigator.pushNamedAndRemoveUntil(
             context, "/home", (Route<dynamic> route) => false);
