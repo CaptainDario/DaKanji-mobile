@@ -26,8 +26,9 @@ class DrawScreen extends StatefulWidget {
 class _DrawScreenState extends State<DrawScreen> {
   // the DrawingPainter instance which defines the canvas to drawn on.
   DrawingPainter canvas;
-  //the points which were drawn on the canvas
-  List<List<Offset>> points = [];
+  //the path which should be drawn on the canvas
+  Path path = Path();
+
   // the size of the canvas widget
   double canvasSize;
   // initialize predictions with blank
@@ -44,16 +45,15 @@ class _DrawScreenState extends State<DrawScreen> {
 
     // always rebuild the ui when the kanji buffer changed
     kanjiBuffer.addListener(() {
+      kanjiBuffer.runAnimation = true;
       setState(() { });
     });
-    
-    
   }
 
   @override
   Widget build(BuildContext context) {
     bool darkMode = (Theme.of(context).brightness == Brightness.dark);
-    canvas = new DrawingPainter(points, darkMode);
+    canvas = new DrawingPainter(path, darkMode);
     // init size of canvas and assure that it is min. 20 smaller than screen width
     canvasSize = MediaQuery.of(context).size.height * 3/6;
     if(canvasSize >= MediaQuery.of(context).size.width - 20)
@@ -94,29 +94,27 @@ class _DrawScreenState extends State<DrawScreen> {
                 // drawing pointer moved
                 onPanUpdate: (details) {
                   setState(() {
+
                     RenderBox renderBox = context.findRenderObject();
                     Offset point =
-                        renderBox.globalToLocal(details.localPosition);
-                    points[points.length - 1].add(point);
+                      renderBox.globalToLocal(details.localPosition);
+                    
+                    path.lineTo(point.dx, point.dy);
                   });
                 },
                 // started drawing
                 onPanStart: (details) {
                   setState(() {
-                    points.add([]);
                     RenderBox renderBox = context.findRenderObject();
                     Offset point =
-                        renderBox.globalToLocal(details.localPosition);
-                    points[points.length - 1].add(point);
+                      renderBox.globalToLocal(details.localPosition);
+                    
+                    path.moveTo(point.dx, point.dy);
                   });
                 },
                 // finished drawing a stroke
                 onPanEnd: (details) async {
-                  // remove single points and don't run inference for them
-                  if (points[points.length - 1].length == 1)
-                    points.removeLast();
-                  else
-                    predictions = await canvas.runInference();
+                  predictions = await canvas.runInference();
                   setState(() {});
                 },
                 child: CustomPaint(
@@ -136,27 +134,37 @@ class _DrawScreenState extends State<DrawScreen> {
                     icon: Icon(Icons.undo),
                     onPressed: () async {
                       //only run inference if canvas still has strokes
-                      if(points.length > 1){
-                        points.removeLast();
+                      if(path.computeMetrics().isNotEmpty){
+                        path = () {
+                          var p = path.computeMetrics().
+                            take(path.computeMetrics().length - 1);
+                          var newPath = Path();
+                          p.forEach((element) {
+                            newPath.addPath(element.extractPath(0, double.infinity), Offset.zero);
+                          });
+                          return newPath;
+                        } ();
                         predictions = await canvas.runInference();
                       }
-                      else{
-                        points.removeLast();
-                        predictions = List.generate(10, (i) => " ");
-                      }
+                      //else if(points.length == 1){
+                      //  points.removeLast();
+                      //  predictions = List.generate(10, (i) => " ");
+                      //}
                       setState(() {});
                     }
                   ),
                   // multi character search input
-                  Expanded(
-                      child: Center(
-                        key: SHOWCASE_DRAWING[6].key,
-                        child: KanjiBufferWidget(
-                          canvasSize: canvasSize,
-                          kanjiBuffer: kanjiBuffer,
-                        ),
-                      )
-                    //),
+                    Expanded(
+                    child: Hero(
+                      tag: "webviewHero_" + 
+                          (kanjiBuffer.kanjiBuffer == "" ? 
+                          "Buffer" : kanjiBuffer.kanjiBuffer),
+                        child: Center(
+                          key: SHOWCASE_DRAWING[6].key,
+                          child: KanjiBufferWidget(kanjiBuffer, canvasSize)
+                        )
+                      //),
+                    ),
                   ),
                   // clear
                   IconButton(
@@ -165,7 +173,7 @@ class _DrawScreenState extends State<DrawScreen> {
                     onPressed: () {
                       setState(() {
                         predictions = List.generate(10, (i) => " ");
-                        points.clear();
+                        path.reset();
                       });
                     }
                   ), 
@@ -182,28 +190,27 @@ class _DrawScreenState extends State<DrawScreen> {
                 physics: new NeverScrollableScrollPhysics(),
                 crossAxisCount: 5,
                 children: List.generate(10, (i) {
-                  var ret;
-                  // instantiate short/long press showcase button
-                  if(i == 0){
-                    ret = Container(
-                      key: SHOWCASE_DRAWING[4].key,
-                      child: PredictionButton(
-                        char: predictions[i],
-                      )
-                    );
-                  }
-                  // instantiate the other buttons
-                  else ret = PredictionButton(char: predictions[i]);
-                  
-                  return GestureDetector(
-                    child: ret,
-                    onDoubleTap: (){
+                  Widget widget = PredictionButton(
+                    predictions[i],
+                    () {
                       setState(() {
                         if(SETTINGS.emptyCanvasAfterDoubleTap)
-                          points.clear();
+                          path.reset();
                         kanjiBuffer.kanjiBuffer += predictions[i];
                       });
-                    },
+                    }
+                  );
+                  // instantiate short/long press showcase button
+                  if(i == 0){
+                    widget = Container(
+                      key: SHOWCASE_DRAWING[4].key,
+                      child: widget 
+                    );
+                  }
+                  return Hero(
+                    tag: "webviewHero_" + (predictions[i] == " " ? 
+                      i.toString() : predictions[i]),
+                    child: widget,
                   );
                 },
                 )

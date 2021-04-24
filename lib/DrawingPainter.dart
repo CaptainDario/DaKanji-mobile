@@ -9,8 +9,8 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 /// The canvas widget on which the user draws the kanji.
 class DrawingPainter extends CustomPainter {
-  /// a list of points which were drawn on the canvas
-  List<List<Offset>> pointsList;
+  /// the path which should be drawn on the canvas
+  Path path = Path();
 
   /// if the app is running in dark mode
   bool darkMode;
@@ -31,8 +31,9 @@ class DrawingPainter extends CustomPainter {
   /// 
   /// All points given with [pointsList] will be drawn on the canvas.
   /// [darkMode] should reflect in which mode the app is running.
-  DrawingPainter(List<List<Offset>> pointsList, bool darkMode) {
-    this.pointsList = pointsList;
+  DrawingPainter(Path path, bool darkMode) {
+    //this.pointsList = pointsList;
+    this.path = path;
     this.darkMode = darkMode;
     this.recording = false;
     this._input = List<List<double>>.generate(
@@ -155,7 +156,8 @@ class DrawingPainter extends CustomPainter {
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
     Paint paint = Paint()
       ..strokeWidth = size.width / 50.0
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
 
     if (this.darkMode || this.recording)
       paint.color = Colors.white;
@@ -163,14 +165,7 @@ class DrawingPainter extends CustomPainter {
       paint.color = Colors.black;
 
     // paint the strokes
-    // iterate over all strokes
-    for (int s = 0; s < pointsList.length; s++) {
-      // iterate over all points
-      for (int p = 0; p < pointsList[s].length - 1; p++) {
-        // draw the stroke
-        canvas.drawLine(pointsList[s][p], pointsList[s][p + 1], paint);
-      }
-    }
+    canvas.drawPath(this.path, paint);
 
     // if the canvas is NOT being recorded draw rectangle and dashed lines
     if (!recording) this.paintKanjiDrawingAid(canvas, size);
