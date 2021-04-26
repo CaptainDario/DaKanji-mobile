@@ -117,8 +117,16 @@ class _DrawScreenState extends State<DrawScreen> {
                   predictions = await canvas.runInference();
                   setState(() {});
                 },
-                child: CustomPaint(
-                  painter: canvas,
+                child: Stack(
+                  children: [
+                    Image(image: 
+                      AssetImage("assets/kanji_drawing_aid_b.png")
+                    ),
+                    CustomPaint(
+                      size: Size(canvasSize, canvasSize),
+                      painter: canvas,
+                    )
+                  ],
                 ),
               ),
             ),

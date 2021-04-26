@@ -19,7 +19,7 @@ class DrawingPainter extends CustomPainter {
   Size size;
 
   /// if the canvas is currently being recorded
-  bool recording = false;
+  bool recording;
 
   /// input to the CNN
   List<List<List<List<double>>>> _input;
@@ -27,12 +27,15 @@ class DrawingPainter extends CustomPainter {
   /// output of the CNN
   List<List<double>> _output;
 
+  Uint8List snapImage;
+
+
   /// Constructs an DrawingPainter instance.
   /// 
   /// All points given with [pointsList] will be drawn on the canvas.
   /// [darkMode] should reflect in which mode the app is running.
-  DrawingPainter(Path path, bool darkMode) {
-    //this.pointsList = pointsList;
+  DrawingPainter(Path path, bool darkMode, Size size) {
+    this.size = size;
     this.path = path;
     this.darkMode = darkMode;
     this.recording = false;
@@ -42,7 +45,6 @@ class DrawingPainter extends CustomPainter {
     this._output =
       List<List<double>>.generate(1, (i) => 
       List<double>.generate(LABEL_LIST.length, (j) => 0.0));
-      
   }
 
   /// Create predictions based on the drawing by running inference on the CNN
@@ -86,72 +88,33 @@ class DrawingPainter extends CustomPainter {
     return predictions;
   }
 
+  
   /// Creates an image of the current canvas.
   ///
   /// Creates a new ui.Canvas and repaints the current image on it. This canvas 
   /// than generates an image and returns it.
   Future<Uint8List> getImageFromCanvas() async {
-    // mark that the canvas is being recorded
-    recording = true;
-
     // record the drawn character on a new canvas
+    this.recording = true;
     ui.PictureRecorder drawnImageRecorder = ui.PictureRecorder();
     Canvas getImageCanvas = new ui.Canvas(drawnImageRecorder);
     paint(getImageCanvas, size);
     ui.Picture pic = drawnImageRecorder.endRecording();
-    recording = false;
+    this.recording = false;
 
     // convert the recording to an image
     final ui.Image img =
         await pic.toImage(size.width.floor(), size.height.floor());
+    
     ByteData byteData = await img.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
 
     return pngBytes;
   }
 
-  /// Draws on the given [canvas] based on its [size] a drawing aid
-  /// (vertical/horizontal dashed lines).
-  void paintKanjiDrawingAid(Canvas canvas, Size size) {
-    // setup the paint
-    Paint paint = Paint()
-      ..strokeWidth = 6.0
-      ..style = PaintingStyle.stroke;
-    // because the stroke color is black in lite mode
-    // color must be set to black if an image is taken for inference
-    if (this.darkMode)
-      paint.color = Colors.white;
-    else
-      paint.color = Colors.black;
 
-    // the frame around the drawing canvas
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    // setup the amount of dashes to draw on the canvas
-    int dashAmount = 16;
-    double dashLength = (size.width / (dashAmount + 1));
-
-    // vertical
-    paint.strokeWidth = 3.0;
-    for (int i = 0; i < dashAmount + 1; i++) {
-      if (i % 2 == 1) continue;
-      canvas.drawLine(Offset(size.width / 2.0, dashLength * (i * 1.0)),
-          Offset(size.width / 2.0, dashLength * (i + 1.0)), paint);
-    }
-    // horizontal
-    for (int i = 0; i < dashAmount + 1; i++) {
-      if (i % 2 == 1) continue;
-      canvas.drawLine(Offset(dashLength * (i * 1.0), size.width / 2.0),
-          Offset(dashLength * (i + 1.0), size.width / 2.0), paint);
-    }
-  }
-
-  /// Paints the points of the [pointsList] on the given [canvas] with a size
-  /// of [size].
-  @override
-  void paint(Canvas canvas, Size size) {
-    // copy size
-    this.size = size;
+  /// Paints the [path] on the given [canvas].
+  void drawPath(Canvas canvas) {
     // Setup canvas and paint
     canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
     Paint paint = Paint()
@@ -166,9 +129,11 @@ class DrawingPainter extends CustomPainter {
 
     // paint the strokes
     canvas.drawPath(this.path, paint);
+  }
 
-    // if the canvas is NOT being recorded draw rectangle and dashed lines
-    if (!recording) this.paintKanjiDrawingAid(canvas, size);
+  @override
+  void paint(Canvas canvas, Size size) async {
+    drawPath(canvas);
   }
 
   @override
