@@ -1,6 +1,6 @@
-
-import 'package:da_kanji_mobile/PredictionButton.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'globals.dart';
@@ -22,12 +22,25 @@ class WebviewScreen extends StatefulWidget {
   _WebviewScreenState createState() => _WebviewScreenState();
 }
 
-class _WebviewScreenState extends State<WebviewScreen>{
+class _WebviewScreenState extends State<WebviewScreen>
+  with TickerProviderStateMixin{
 
   /// should the webview be shown
-  bool loadWebview = false;
-  /// should the loading text (predicted character) be hidden
-  bool showLoading = true;
+  bool loadWebview;
+
+  /// 
+  bool showLoading;
+
+  double width;
+
+
+  int switchAnimationTime;
+
+  int leaveTime;
+
+  AnimationController _controller;
+
+  Animation _rotationAnimation;
 
 
   WebView webview;
@@ -35,16 +48,43 @@ class _WebviewScreenState extends State<WebviewScreen>{
   @override
   void initState() { 
     super.initState();
+
+    loadWebview = false;
+    showLoading = false;
+
+    switchAnimationTime = 500;
+    leaveTime = switchAnimationTime + 250;
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _rotationAnimation = new Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(new CurvedAnimation(
+      parent: _controller,
+      curve: Interval(
+        0.0, 1.00,
+        curve: Curves.linear
+      ),
+    ));
+    _controller.addListener(() {setState(() {});});
+    
   }
 
   @override
   void dispose() { 
     super.dispose();
+    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context){
-    // add a listener to when the Navigator animation finished
+
+    width = MediaQuery.of(context).size.width;
+
+    // add a listener to when the screen change animation finished
     var route = ModalRoute.of(context);
     void handler(status) {
       if (status == AnimationStatus.completed) {
@@ -56,80 +96,92 @@ class _WebviewScreenState extends State<WebviewScreen>{
     }
     route.animation.addStatusListener(handler);
     
-    return 
-      Scaffold(body: WillPopScope(
+    return Scaffold(
+      appBar: AppBar(
+        title: 
+        Text(SETTINGS.selectedDictionary + ": " + widget.char),
+      ),
+      body: WillPopScope(
         // when leaving this screen hide the webview and  
         onWillPop: () {
           setState(() {
-            loadWebview = false;
-            showLoading = true;
+            showLoading = false;
+            _controller.reverse();
           });
-          return Future.delayed(Duration(milliseconds: 1250), () => true);
+          return Future.delayed(Duration(milliseconds: leaveTime), () => true);
         },
         child: Container(
-        child: Scaffold(
-          appBar: AppBar(
-            title: 
-            Text(SETTINGS.selectedDictionary + ": " + widget.char),
-          ),
-          body: Hero(
-            tag: "webviewHero_" + widget.char,
-            child: () {
-              return AnimatedSwitcher(
-                duration: Duration(milliseconds: 1000),
-                child: () {
-                  return Stack(
-                    key: ValueKey<String>(showLoading ? "Loading" : "Webview"),
-                    children: [
-                      // show the webview after it has finished loading
-                      if(loadWebview) 
-                        WebView(
-                          initialUrl: widget.url,
-                          onPageFinished: (s) {
-                            showLoading = false;
-                            setState(() { });
-                          }
-                        ),
-                      // only show predicted character while the webview is loading
-                      if(showLoading)
-                        Container(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          child: Center(
-                            child: () {
-                              if(widget.char.contains("buffer"))
-                                return OutlinedButton(
-                                  child: Text(
-                                    widget.char,
-                                    textScaleFactor: 1.5,
-                                    softWrap: false,
-                                    style: TextStyle(color: Colors.black, fontSize: 40)
-                                  ),
-                                  onPressed: () {},
-                                );
-                              else
-                                return PredictionButton(widget.char, () {});
-                            } ()
+          child: 
+            //Hero(
+            //tag: "webviewHero_" + widget.char,
+            //child: 
+            Stack(
+              children: [
+                Transform.translate(
+                  offset: Offset(
+                    (width) * (1 - _rotationAnimation.value), 
+                    0
+                  ),
+                  child: Transform(
+                    transform: new Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..multiply(Matrix4.rotationY(
+                        (_rotationAnimation.value - 1) * (pi/2))
+                      ),
+                    alignment: Alignment.centerLeft,
+                    child: () {
+                        if(loadWebview){
+                          return WebView(
+                            initialUrl: widget.url,
+                            onPageFinished: (s) {
+                              _controller.forward(from: 0.0);
+                            }
+                          );
+                        }
+                        else
+                          return Container(color: Colors.green,);
+                    } ()
+                  )
+                ),
+                
+                // only show predicted character while the webview is loading
+                Transform.translate(
+                  offset: Offset(
+                    (width) * (1 - _rotationAnimation.value) - width,
+                    0
+                  ),
+                  child: Transform(
+                    transform: new Matrix4.identity()
+                      ..setEntry(3, 2, 0.001)
+                      ..multiply(Matrix4.rotationY(
+                        _rotationAnimation.value * pi/2
+                      )),
+                    alignment: Alignment.centerRight,
+                    child: Hero(
+                      tag: "webviewHero_" + widget.char,
+                      child: Container(
+                        //color: Colors.grey,
+                        child: Center(
+                          child: Text(
+                            widget.char,
+                            style: TextStyle(
+                              color: Colors.black,
+                              decoration: TextDecoration.none,
+                              fontSize: 80,
+                              fontWeight: FontWeight.normal,
+                            ),
                           )
-                        ),
-                        
-                    ]
-                  );
-                } (),
-                transitionBuilder: (Widget child, Animation<double> animation){
-                  return ScaleTransition(
-                    scale: animation,
-                    child: FadeTransition(
-                      child: child,
-                      opacity: animation,
-                    ),
-                  );
-                },
-              );
-            } ()
+                        )
+                      )
+                    )
+                  )
+                )
+              ]
+            ),
           )
         )
-      )
-    ));
+      //)
+    );
   }
 }
 
