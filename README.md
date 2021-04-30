@@ -38,7 +38,7 @@ Other applications can link to DaKanji via deep linking.
 The base link is defined as `dakanji://dakanji`.
 Adding a dictionary to the link will result in predictions opening in this dictionary.<br/>
 Example:
-> Setting the link to `dakanji://dakanji/jisho` will open DaKanji.
+> Setting the link to <code>dakanji://dakanji/jisho</code> will open DaKanji.
 > All look ups made, will than use jisho.org. <br/>
 > <a href="dakanji://dakanji/jisho"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
@@ -48,7 +48,7 @@ Example:
 
 >  If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
 >  Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
->  <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
+>  Click <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%">here</a> here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
 #### Android
 Currently supported links are:
