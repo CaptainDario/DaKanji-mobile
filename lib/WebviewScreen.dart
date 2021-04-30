@@ -160,17 +160,16 @@ class _WebviewScreenState extends State<WebviewScreen>
                     child: Hero(
                       tag: "webviewHero_" + widget.char,
                       child: Container(
-                        //color: Colors.grey,
                         child: Center(
                           child: Text(
                             widget.char,
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).textTheme.button.color,
                               decoration: TextDecoration.none,
-                              fontSize: 80,
+                              fontSize: 60,
                               fontWeight: FontWeight.normal,
                             ),
-                          )
+                          ),
                         )
                       )
                     )
