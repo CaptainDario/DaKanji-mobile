@@ -48,7 +48,7 @@ Example:
 
 >  If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
 >  Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
->  Click <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%">here</a> here to try it out (DaKanji v1.2+ needs to be installed) </a>
+>  Click [here]("dakanji://dakanji/URL/https://www/japandict.com/%X%") here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
 #### Android
 Currently supported links are:
