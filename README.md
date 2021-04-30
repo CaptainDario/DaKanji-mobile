@@ -42,17 +42,13 @@ Example:
 > All look ups made, will than use jisho.org. <br/>
 > <a href="dakanji://dakanji/jisho"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
-For web dictionaries which are currently not supported, you can use the `dakanji://dakanji/URL/YOUR_URL_HERE` link.
+For web dictionaries which are currently not supported, you can use the <code>dakanji://dakanji/URL/YOUR_URL_HERE</code> link.
 Just replace `YOUR_URL_HERE` with the search url of your dictionary and put `%X%` as a placeholder for the character to search.<br/>
 Example:
 
-<ul>
-  <li style="list-style-type: none">
-    If you want to link to japandict.com with the search url: `https://www.japandict.com/%X%`
-    Setting the link to `dakanji://dakanji/URL/https://www/japandict.com/%X%` is all one needs to do.
-    <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
-  </li>
-</ul>
+  If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
+  Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
+  <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
 #### Android
 Currently supported links are:
