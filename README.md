@@ -46,9 +46,14 @@ For web dictionaries which are currently not supported, you can use the <code>da
 Just replace `YOUR_URL_HERE` with the search url of your dictionary and put `%X%` as a placeholder for the character to search.<br/>
 Example:
 
->  If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
->  Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
->  Click [here]("dakanji://dakanji/URL/https://www/japandict.com/%X%") here to try it out (DaKanji v1.2+ needs to be installed) </a>
+
+If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
+Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
+Click <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%">here</a> to try it out (DaKanji v1.2+ needs to be installed)
+[testset](dakanji://dakanji/URL/https://www/japandict.com/%X%)
+
+
+
 
 #### Android
 Currently supported links are:
