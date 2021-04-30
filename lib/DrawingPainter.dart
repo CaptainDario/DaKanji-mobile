@@ -55,7 +55,7 @@ class DrawingPainter extends CustomPainter {
     List<String> predictions = List.generate(10, (i) => i.toString());
 
     // take image from canvas and resize it
-    image.Image base = image.decodeImage(await getImageFromCanvas());
+    image.Image base = image.decodeImage(await getPNGListFromCanvas());
     image.Image resizedImage = image.copyResize(base,
       height: 64, width: 64, interpolation: image.Interpolation.cubic);
     Uint8List resizedBytes =
@@ -89,11 +89,11 @@ class DrawingPainter extends CustomPainter {
   }
 
   
-  /// Creates an image of the current canvas.
+  /// Returns an image of the current canvas as ui.Image.
   ///
   /// Creates a new ui.Canvas and repaints the current image on it. This canvas 
   /// than generates an image and returns it.
-  Future<Uint8List> getImageFromCanvas() async {
+  Future<ui.Image> getImageFromCanvas() async {
     // record the drawn character on a new canvas
     this.recording = true;
     ui.PictureRecorder drawnImageRecorder = ui.PictureRecorder();
@@ -103,15 +103,32 @@ class DrawingPainter extends CustomPainter {
     this.recording = false;
 
     // convert the recording to an image
-    final ui.Image img =
-        await pic.toImage(size.width.floor(), size.height.floor());
+    return pic.toImage(size.width.floor(), size.height.floor());
+  }
+
+  /// Returns an image of the current canvas as Uint8List.
+  ///
+  /// Creates a new ui.Canvas and repaints the current image on it. This canvas 
+  /// than generates an the drawn image and returns a Uint8List of it.
+  Future<Uint8List> getPNGListFromCanvas() async {
+
+    final ui.Image img = await getImageFromCanvas();
     
     ByteData byteData = await img.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
 
     return pngBytes;
   }
+  
+  Future<Uint8List> getRGBAListFromCanvas() async {
 
+    final ui.Image img = await getImageFromCanvas();
+    
+    ByteData byteData = await img.toByteData(format: ui.ImageByteFormat.rawRgba);
+    Uint8List rgbaBytes = byteData.buffer.asUint8List();
+
+    return rgbaBytes;
+  }
 
   /// Paints the [path] on the given [canvas].
   void drawPath(Canvas canvas) {
