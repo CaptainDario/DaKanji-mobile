@@ -28,9 +28,8 @@ You can also [setup a development environment](#development) and build the app o
 ## Usage
 In this section the features of the app are explained in more detail.
 ### Handwritten kanji recognition
-The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. The used dictionary can be set in the settings.
-It is also possible to use a translation app of the used device.
-A custom website can also be used with an input field in the settings menu.</br>
+The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. A dictionary can be chosen in the settings.
+It is also possible to use a translation app or custom URL can be defined in the settings menu.</br>
 Currently around 3000 characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
@@ -39,19 +38,19 @@ Other applications can link to DaKanji via deep linking.
 The base link is defined as `dakanji://dakanji`.
 Adding a dictionary to the link will result in predictions opening in this dictionary.<br/>
 Example:
-> Setting the link to `dakanji://dakanji/jisho` will link open DaKanji.
-> All look ups made, will use jisho.org. <br/>
-> <a href="dakanji://dakanji/jisho"> click here to try it out (DaKanji needs to be installed) </a>
+> Setting the link to `dakanji://dakanji/jisho` will open DaKanji.
+> All look ups made, will than use jisho.org. <br/>
+> <a href="dakanji://dakanji/jisho"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
 For web dictionaries which are currently not supported, you can use the `dakanji://dakanji/URL/YOUR_URL_HERE` link.
 Just replace `YOUR_URL_HERE` with the search url of your dictionary and put `%X%` as a placeholder for the character to search.<br/>
 Example:
-> Linking to japandict.com with the search url: `https://www.japandict.com/%X%`
+> If you want to link to japandict.com with the search url: `https://www.japandict.com/%X%`
 > Setting the link to `dakanji://dakanji/URL/https://www/japandict.com/%X%` is all one needs to do.
-> <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%"> click here to try it out (DaKanji needs to be installed) </a>
+> <a href="dakanji://dakanji/URL/https://www/japandict.com/%X%"> click here to try it out (DaKanji v1.2+ needs to be installed) </a>
 
 #### Android
-On android currently supported links are:
+Currently supported links are:
 * `dakanji://dakanji/jisho` (web)
 * `dakanji://dakanji/wadoku` (web)
 * `dakanji://dakanji/weblio` (web)
