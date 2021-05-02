@@ -37,7 +37,7 @@ class Snappable extends StatefulWidget {
     Key key,
     @required this.child,
     this.offset = const Offset(16, -16),
-    this.duration = const Duration(milliseconds: 250),
+    this.duration = const Duration(milliseconds: 500),
     this.randomDislocationOffset = const Offset(16, 16),
     this.numberOfBuckets = 8,
     this.onSnapped,
