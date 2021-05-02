@@ -87,7 +87,7 @@ class _PredictionButtonState extends State<PredictionButton>
                 widget.char,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 1000.0,
+                  fontSize: 60,
                 ),
               )
             )
