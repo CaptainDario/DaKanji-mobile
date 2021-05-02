@@ -1,15 +1,18 @@
-import 'DarkTheme.dart';
-import 'LightTheme.dart';
+import 'package:da_kanji_mobile/TestScreen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+import 'dart:io' show Platform;
+import 'package:package_info/package_info.dart';
+
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 import 'ChangelogScreen.dart';
 import 'DrawScreen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:io' show Platform;
-import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:package_info/package_info.dart';
-
+import 'Strokes.dart';
+import 'DarkTheme.dart';
+import 'LightTheme.dart';
 import 'HomeScreen.dart';
 import 'Settingsscreen.dart';
 import 'AboutScreen.dart';
@@ -45,6 +48,8 @@ Future<void> init() async {
   
   // load the settings
   SETTINGS.load();
+
+  setupGetIt();
 
   // initialize the TFLite interpreter
   if (Platform.isAndroid) 
@@ -123,6 +128,10 @@ Future<String> initAbout () async {
 
 }
 
+void setupGetIt(){
+  GetIt.I.registerSingleton<Strokes>(Strokes());
+}
+
 /// The starting widget of the app
 class DaKanjiApp extends StatefulWidget {
 
@@ -157,13 +166,14 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
       themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
 
       //screens
-      initialRoute: "/home",
+      initialRoute: "/testScreen",//"/home",
       routes: <String, WidgetBuilder>{
         "/home": (BuildContext context) => HomeScreen(),
         "/drawing": (BuildContext context) => DrawScreen(),
         "/settings": (BuildContext context) => SettingsScreen(),
         "/about": (BuildContext context) => AboutScreen(),
-        "/changelog": (BuildContext context) => ChangelogScreen()
+        "/changelog": (BuildContext context) => ChangelogScreen(),
+        "/testScreen": (BuildContext context) => TestScreen(),
       },
     );
   }
