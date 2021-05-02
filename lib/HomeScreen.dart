@@ -17,9 +17,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  ScrollController _scrollController;
+
   @override
   void initState() { 
     super.initState();
+
+    _scrollController = ScrollController();
 
     // after the page was build 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -39,7 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        child: Markdown(data: NEW_CHANGELOG,),
+                        child: Scrollbar(
+                          isAlwaysShown: true,
+                          controller: _scrollController,
+                          child: Markdown(
+                            controller: _scrollController,
+                            data: NEW_CHANGELOG,
+                          ),
+                        ),
                         width: MediaQuery.of(context).size.width * 3/4,
                         height: MediaQuery.of(context).size.height * 2/4,
                       ),
