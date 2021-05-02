@@ -9,7 +9,9 @@ new Features:
   - new character added to kanji box
   - character removed from kanji box
   - opening a prediction in a web dictionary
+  - delete stroke / image from canvas
 - deep linking 'dakanji://dakanji/'
+- splash screen
 
 Changes:
 - color when pressing on kanji box
