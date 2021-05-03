@@ -15,7 +15,7 @@ class FoldingWidget extends StatefulWidget {
       this.height,
       {this.unfoldCell = false,
       this.foldingColor = Colors.white,
-      this.animationDuration = const Duration(milliseconds: 500),
+      this.animationDuration = const Duration(milliseconds: 2000),
       this.onOpen,
       this.onClose}) : super(key: foldingKey);
 
@@ -69,44 +69,47 @@ class FoldingWidgetState extends State<FoldingWidget>
   void initState() {
     super.initState();
   
-    final duration = 0.5;
-
     _animationController =
-      AnimationController(vsync: this, duration: Duration(seconds: 1));
+      AnimationController(vsync: this, duration: widget.animationDuration);
+    // vertical fold
     _animation1 = Tween<double>(
       begin: 0.0,
       end: 1.0
     ).animate( CurvedAnimation(
       parent: _animationController,
-      curve: Interval(0*duration, 1*duration, curve: Curves.ease)
+      curve: Interval(0.0, 0.25, curve: Curves.ease)
     ));
     _animation2 = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate( CurvedAnimation(
       parent: _animationController,
-      curve: Interval(1*duration, 2*duration, curve: Curves.ease)
+      curve: Interval(0.25, 0.5, curve: Curves.ease)
     ));
+    // horizontal fold
     _animation3 = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate( CurvedAnimation(
       parent: _animationController,
-      curve: Interval(2*duration, 3*duration, curve: Curves.ease)
+      curve: Interval(0.5, 0.75, curve: Curves.ease)
     ));
     _animation4 = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate( CurvedAnimation(
       parent: _animationController,
-      curve: Interval(3*duration, 4*duration, curve: Curves.ease)
+      curve: Interval(0.75, 1.0, curve: Curves.ease)
     ));
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        if (widget.onOpen != null) widget.onOpen();
-      } else if (status == AnimationStatus.dismissed) {
-        if (widget.onClose != null) widget.onClose();
+        if (widget.onClose != null)
+          widget.onClose();
+      }
+      else if (status == AnimationStatus.dismissed) {
+        if (widget.onOpen != null)
+          widget.onOpen();
         // mark the folding widget as completely unfolded
         setState(() {
           _isUnfolded = true;
@@ -132,65 +135,16 @@ class FoldingWidgetState extends State<FoldingWidget>
       animation: _animationController,
       builder: (context, child) {
 
-      double folds = 5;
-
-      double sliceHeight = widget.height * 1/folds;
+      int folds = 5;
+      double cellHeight = widget.height / folds;
+      double cellWidth  = widget.width  / folds;
 
       return SizedBox(
         width: widget.width,
         height: widget.height,
         child: () {
           if(!_isUnfolded)
-            return Stack(
-
-              clipBehavior: Clip.antiAlias,
-              children: [
-                // middle part of the image which stays in place
-                Positioned(
-                  top: sliceHeight*2,
-                  child: ClipRect(
-                    child: Transform.translate(
-                      offset: Offset(0, -2*sliceHeight),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        heightFactor: 1/folds,
-                        child: widget.innerWidget
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: sliceHeight,
-                  child: innerSliceVertical(2,
-                    hFactor: 1/folds,
-                    bottomCard: false,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  child: outerSliceVertical(
-                    sliceHeight, widget.width, 1,
-                    hFactor: 1/folds,
-                    bottomCard: false
-                  ),
-                ),
-                // 4th slice
-                Positioned(
-                  top: sliceHeight*3,
-                  child: innerSliceVertical(4,
-                    hFactor: 1/folds
-                  ),
-                ),
-                // 5th slice
-                Positioned(
-                  top: sliceHeight*4,
-                  child: outerSliceVertical(
-                    sliceHeight, widget.width, 5,
-                    hFactor: 1/folds
-                  ),
-                )
-              ],
-            );
+            return verticalFold(cellHeight, cellWidth, folds);
           else
             return widget.innerWidget;
         } (),
@@ -198,96 +152,214 @@ class FoldingWidgetState extends State<FoldingWidget>
       }
     );
   }
-  
-  Widget outerSliceHorizontal(double height, double width, int sliceNumber, 
-    {double hFactor = 1.0, double wFactor = 1.0, bool leftCard = true}){
 
-    return Opacity(
-      opacity: 1.0, //_animation1.value < 1.0 ? 1.0 : 0.0,
-      child: Transform(
-        transform: new Matrix4.identity()
-          ..setEntry(3, 2, 0.001)
-          ..rotateY((leftCard ? -1 : 1) * _animation1.value * pi),
-        alignment: leftCard 
-          ? Alignment.centerRight
-          : Alignment.centerLeft,
+  Widget verticalFold(double cellHeight, double cellWidth, int folds){
+    return Stack(
+      children: [
+        // middle part of the image which stays in place
+        Positioned(
+          top: cellHeight*2,
+          child: horizontalFold(cellHeight, cellWidth, folds) 
+        ),
+        Positioned(
+          top: cellHeight,
+          child: innerSliceVertical(2,
+            hFactor: 1/folds,
+            bottomCard: false,
+          ),
+        ),
+        Positioned(
+          top: 0,
+          child: outerSliceVertical(
+            cellHeight, widget.width, 1,
+            hFactor: 1/folds,
+            bottomCard: false
+          ),
+        ),
+        // 4th slice
+        Positioned(
+          top: cellHeight*3,
+          child: innerSliceVertical(4,
+            hFactor: 1/folds
+          ),
+        ),
+        // 5th slice
+        Positioned(
+          top: cellHeight*4,
+          child: outerSliceVertical(
+            cellHeight, widget.width, 5,
+            hFactor: 1/folds
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget horizontalFold(double cellHeight, double cellWidth, int folds){
+      
+    // if the vertical folding did not finish
+    if(_animation2.value < 1.0)
+      return ClipRect(
+        child: Transform.translate(
+          offset: Offset(0, -2*cellHeight),
+          child: Align(
+            alignment: Alignment.topCenter,
+            heightFactor: 1/folds,
+            child: widget.innerWidget
+          ),
+        ),
+      );
+    // after the vertical folding fold the widget horizontally 
+    else
+      return SizedBox(
+        height: cellHeight,
+        width: widget.width,
         child: Stack(
           children: [
-            // inner
-            Visibility(
-              visible: _animation1.value < 0.5,
-              child: Container(
-                width: width,
-                height: height,
-                child: Opacity(
-                  opacity: 1.0, //_animation1.value < 1.0 ? 1.0 : 0.0,
-                  child: ClipRect(
-                    child: Transform.translate(
-                      offset: Offset(-(sliceNumber+1)*width, 2*height),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        heightFactor: hFactor,
-                        widthFactor: wFactor,
-                        child: widget.innerWidget 
-                      ),
-                    ),
-                  ),
-                ),
-              )
+            Positioned(
+              left: 2*cellWidth,
+              child: () { 
+                if(_animation4.value < 1.0)
+                  return Container(
+                    width: cellWidth,
+                    height: cellHeight,
+                    color: widget.foldingColor 
+                  );
+                else
+                  return Container(
+                    width: cellWidth,
+                    height: cellHeight,
+                    color: widget.foldingColor
+                  );
+              } ()
             ),
-            // outer 
-            //Visibility(
-            //  visible: true,//_animation1.value > 0.5,
-            //  child: Container(
-            //    width: width,
-            //    height: height,
-            //    color: widget.foldingColor,
-            //  ),
-            //),
-          ],
+            Positioned(
+              left: 0,
+              child: outerSliceHorizontal(cellHeight, cellWidth),
+            ),
+            Positioned(
+              left: cellWidth,
+              child: innerSliceHorizontal(cellHeight, cellWidth)
+            ),
+            Positioned(
+              left: cellWidth * 4,
+              child: outerSliceHorizontal(cellHeight, cellWidth, leftCell: false),
+            ),
+            Positioned(
+              left: cellWidth * 3,
+              child: innerSliceHorizontal(cellHeight, cellWidth, leftCell: false)
+            ),
+          ]
         ),
+      );
+  }
+
+  Widget innerWidget(double height, double width){
+    return Transform(
+      transform: new Matrix4.identity()
+        ..setEntry(3, 2, 0.001)
+        ..rotateY(-_animation4.value * pi),
+      alignment: Alignment.centerRight,
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: widget.outerWidget
+      )
+    );
+  }
+
+  Widget outerSliceHorizontal(double height, double width, 
+    {bool leftCell = true}){
+    return Transform(
+      transform: new Matrix4.identity()
+        ..setEntry(3, 2, 0.001)
+        ..rotateY((leftCell ? -1 : 1) * _animation3.value * pi),
+      alignment: leftCell 
+        ? Alignment.centerRight
+        : Alignment.centerLeft,
+      child: Visibility(
+        visible: _animation3.value < 1.0,
+        child: Container(
+          width: width,
+          height: height,
+          color: widget.foldingColor,
+        )
       ),
+    );
+  }
+  
+  Widget innerSliceHorizontal(double height, double width, 
+    {bool leftCell = true}){
+    return Transform(
+      transform: new Matrix4.identity()
+        ..setEntry(3, 2, 0.001)
+        ..rotateY((leftCell ? -1 : 1) * _animation4.value * pi),
+      alignment: leftCell 
+        ? Alignment.centerRight
+        : Alignment.centerLeft,
+      child:  ()
+      {
+        if(_animation4.value < 0.5 || leftCell)
+          return Container(
+            width: width,
+            height: height,
+            color: widget.foldingColor,
+          );
+        else
+          return SizedBox(
+            width: width,
+            height: height,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(pi),
+              child: widget.outerWidget
+            ),
+          );
+      } ()
     );
   }
 
   Widget innerSliceVertical(int sliceNumber,
     {double hFactor = 1.0, double wFactor = 1.0, bool bottomCard = true}){
 
-    return Transform(
-      transform: new Matrix4.identity()
-        ..setEntry(3, 2, 0.001)
-        ..rotateX((bottomCard ? -1 : 1) * _animation2.value * pi),
-      alignment: bottomCard
-        ? Alignment.topCenter
-        : Alignment.bottomCenter,
-      child: Stack(
-        children: [
-          // outer
-          Visibility(
-            visible: _animation2.value > 0.0,
-            child: () { 
-              return Container(
-                width: widget.width * wFactor,
-                height: widget.height * hFactor,
-                color: widget.foldingColor,
-              );
-            } ()
-          ),
-          Visibility(
-            visible: _animation1.value < 1.0,
-            child: ClipRect(
-              child: Transform.translate(
-                offset: Offset(0.0, -(sliceNumber-1)*(widget.height*hFactor)),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  heightFactor: hFactor,
-                  widthFactor: wFactor,
-                  child: widget.innerWidget 
+    return Opacity(
+      opacity: _animation2.value < 1.0 ? 1.0 : 0.0,
+      child: Transform(
+        transform: new Matrix4.identity()
+          ..setEntry(3, 2, 0.001)
+          ..rotateX((bottomCard ? -1 : 1) * _animation2.value * pi),
+        alignment: bottomCard
+          ? Alignment.topCenter
+          : Alignment.bottomCenter,
+        child: Stack(
+          children: [
+            // outer
+            Visibility(
+              visible: _animation2.value > 0.0,
+              child: () { 
+                return Container(
+                  width: widget.width * wFactor,
+                  height: widget.height * hFactor,
+                  color: widget.foldingColor,
+                );
+              } ()
+            ),
+            Visibility(
+              visible: _animation1.value < 1.0,
+              child: ClipRect(
+                child: Transform.translate(
+                  offset: Offset(0.0, -(sliceNumber-1)*(widget.height*hFactor)),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    heightFactor: hFactor,
+                    widthFactor: wFactor,
+                    child: widget.innerWidget 
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
