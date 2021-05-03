@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 
 
@@ -73,7 +72,7 @@ class FoldingWidgetState extends State<FoldingWidget>
     final duration = 0.5;
 
     _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+      AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animation1 = Tween<double>(
       begin: 0.0,
       end: 1.0
@@ -274,11 +273,11 @@ class FoldingWidgetState extends State<FoldingWidget>
               );
             } ()
           ),
-          Opacity(
-            opacity: _animation1.value < 1.0 ? 1.0 : 0.0,
+          Visibility(
+            visible: _animation1.value < 1.0,
             child: ClipRect(
               child: Transform.translate(
-                offset: Offset(0.0, -(sliceNumber)*widget.height),
+                offset: Offset(0.0, -(sliceNumber-1)*(widget.height*hFactor)),
                 child: Align(
                   alignment: Alignment.topCenter,
                   heightFactor: hFactor,
