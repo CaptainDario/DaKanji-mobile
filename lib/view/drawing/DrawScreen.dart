@@ -4,15 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
-import 'package:da_kanji_mobile/view/canvasSnappable.dart';
-import 'package:da_kanji_mobile/provider/Strokes.dart';
-import 'DrawScreenShowcase.dart';
+import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
-import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/provider/Strokes.dart';
+import 'package:da_kanji_mobile/view/canvasSnappable.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
 import 'package:da_kanji_mobile/view/drawing//PredictionButton.dart';
 import 'package:da_kanji_mobile/view/drawing/KanjiBufferWidget.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// The "draw"-screen.
@@ -35,8 +35,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   double canvasSize;
   // save the context for the Showcase view
   BuildContext myContext;
-  // widget in which character can be saved to look up words/sentences. 
-  KanjiBuffer kanjiBuffer = KanjiBuffer();
   // global keys for running animations
   GlobalKey<SnappableState> snappableKey;
 
@@ -49,12 +47,12 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     snappableKey = GlobalKey<SnappableState>();
 
     // always rebuild the ui when the kanji buffer changed
-    kanjiBuffer.addListener(() {
-      kanjiBuffer.runAnimation = true;
+    GetIt.I<KanjiBuffer>().addListener(() {
+      GetIt.I<KanjiBuffer>().runAnimation = true;
       setState(() { });
     });
 
-    // initialize the drawing interrpeter
+    // initialize the drawing interpreter
     GetIt.I<DrawingInterpreter>().init();
   }
 
@@ -186,11 +184,11 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       Expanded(
                       child: Hero(
                         tag: "webviewHero_b_" + 
-                            (kanjiBuffer.kanjiBuffer == "" ? 
-                            "Buffer" : kanjiBuffer.kanjiBuffer),
+                            (GetIt.I<KanjiBuffer>().kanjiBuffer == "" ? 
+                            "Buffer" : GetIt.I<KanjiBuffer>().kanjiBuffer),
                           child: Center(
                             key: SHOWCASE_DRAWING[6].key,
-                            child: KanjiBufferWidget(kanjiBuffer, canvasSize)
+                            child: KanjiBufferWidget(canvasSize)
                           )
                         //),
                       ),
@@ -224,15 +222,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                   crossAxisCount: 5,
                   children: List.generate(10, (i) {
                     Widget widget = PredictionButton(
-                      GetIt.I<DrawingInterpreter>().predictions[i],
-                      () {
-                        setState(() {
-                          if(SETTINGS.emptyCanvasAfterDoubleTap)
-                            GetIt.I<Strokes>().deleteAllStrokes(); 
-                          kanjiBuffer.kanjiBuffer += 
-                            GetIt.I<DrawingInterpreter>().predictions[i];
-                        });
-                      }
+                      GetIt.I<DrawingInterpreter>().predictions[i]
                     );
                     // instantiate short/long press showcase button
                     if(i == 0){

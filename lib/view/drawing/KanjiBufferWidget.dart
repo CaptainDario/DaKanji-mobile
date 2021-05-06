@@ -1,20 +1,21 @@
 import 'dart:math';
 
+import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
 import 'package:da_kanji_mobile/model/helper/HandlePredictions.dart';
+import 'package:get_it/get_it.dart';
 
 
 
 /// A draggable `OutlinedButton` that moves back to `Alignment.center` when it's
 /// released.
 class KanjiBufferWidget extends StatefulWidget {
-  final KanjiBuffer kanjiBuffer;
   final double canvasSize;
 
-  KanjiBufferWidget(this.kanjiBuffer, this.canvasSize);
+  KanjiBufferWidget(this.canvasSize);
 
   @override
   _KanjiBufferWidgetState createState() => _KanjiBufferWidgetState();
@@ -149,9 +150,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    if(widget.kanjiBuffer.runAnimation){
+    if(GetIt.I<KanjiBuffer>().runAnimation){
       _scaleInNewCharController.forward(from: 0.0);
-      widget.kanjiBuffer.runAnimation = false;
+      GetIt.I<KanjiBuffer>().runAnimation = false;
     }
     return GestureDetector(
       onPanDown: (details) {
@@ -166,12 +167,12 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
           );
           // delete the last char if drag over the threshold
           if(_dragAlignment.x < -0.03 && !deletedWithSwipe &&
-            widget.kanjiBuffer.kanjiBuffer.length > 0){
+            GetIt.I<KanjiBuffer>().kanjiBuffer.length > 0){
 
             // if the delete animation is already running delete the character
             // of the old animation
             if(_scaleInNewCharController.status == AnimationStatus.reverse)
-              widget.kanjiBuffer.removeLastChar();
+              GetIt.I<KanjiBuffer>().removeLastChar();
 
             // run the animation in reverse and at the end delete the char
             _scaleInNewCharController.reverse();
@@ -180,7 +181,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
               () { 
                 _scaleInNewCharController.stop();
                 _scaleInNewCharController.value = 1.0;
-                widget.kanjiBuffer.removeLastChar();
+                GetIt.I<KanjiBuffer>().removeLastChar();
               }
              );
             deletedWithSwipe = true;
@@ -195,13 +196,13 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
       // empty on double press
       onDoubleTap: () {
         // start the delete animation if there are characters in the buffer
-        if(widget.kanjiBuffer.kanjiBuffer.length > 0){
+        if(GetIt.I<KanjiBuffer>().kanjiBuffer.length > 0){
           _rotationXController.forward(from: 0.0);
 
           //delete the characters after the animation
           Future.delayed(Duration(milliseconds: (_rotationXDuration/8).round()), (){
             setState(() {
-               widget.kanjiBuffer.kanjiBuffer = "";           
+               GetIt.I<KanjiBuffer>().kanjiBuffer = "";           
             });
           });
         }
@@ -217,30 +218,36 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             child: OutlinedButton(
               // copy to clipboard and show snackbar
               onPressed: (){
-                HandlePrediction()
-                  .handlePress(false, context, widget.kanjiBuffer.kanjiBuffer); 
+                GetIt.I<Lookup>().setChar(
+                  GetIt.I<KanjiBuffer>().kanjiBuffer, buffer: true
+                );
+                HandlePrediction().handlePress(context); 
               },
               // open with dictionary on long press
               onLongPress: (){
-                HandlePrediction()
-                  .handlePress(true, context, widget.kanjiBuffer.kanjiBuffer); 
+                GetIt.I<Lookup>().setChar(
+                  GetIt.I<KanjiBuffer>().kanjiBuffer,
+                  buffer: true, longPress: true
+                );
+                HandlePrediction().handlePress(context); 
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     () { 
-                      int length = widget.kanjiBuffer.kanjiBuffer.length;
+                      int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
                       
                       // more than one character is in the kanjibuffer
                       if(length > 1){
                         // more character in the buffer than can be shown
-                        if(widget.kanjiBuffer.kanjiBuffer.length > charactersFit)
-                          return "…" +  widget.kanjiBuffer.kanjiBuffer
+                        if(GetIt.I<KanjiBuffer>().kanjiBuffer.length > charactersFit)
+                          return "…" +  GetIt.I<KanjiBuffer>().kanjiBuffer
                             .substring(length-charactersFit, length-1);
                         // whole buffer can be shown
                         else{
-                          return widget.kanjiBuffer.kanjiBuffer.substring(0, length-1);
+                          return GetIt.I<KanjiBuffer>()
+                            .kanjiBuffer.substring(0, length-1);
                         }
                       }
                       else
@@ -253,9 +260,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
                     scale: _scaleInNewCharAnimation,
                     child: Text(
                       () {
-                        int length = widget.kanjiBuffer.kanjiBuffer.length;
+                        int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
                         if(length > 0)
-                          return widget.kanjiBuffer.kanjiBuffer[length - 1];
+                          return GetIt.I<KanjiBuffer>().kanjiBuffer[length - 1];
                         else
                           return "";
                       } (),
