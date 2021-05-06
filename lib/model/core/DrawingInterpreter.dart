@@ -90,7 +90,6 @@ class DrawingInterpreter with ChangeNotifier{
       List<double>.generate(_labels.length, (j) => 0.0));
   }
 
-
   List<String> get predictions{
     return _predictions;
   }
@@ -98,7 +97,6 @@ class DrawingInterpreter with ChangeNotifier{
   void _setPredictions(List<String> predictions){
     _predictions = predictions;
   }
-
 
   /// Call this to free the memory of this interpreter
   /// 
@@ -112,14 +110,11 @@ class DrawingInterpreter with ChangeNotifier{
     _wasInitialized = false;
   }
 
+  /// Clear all predictions by setting them to " "
   void clearPredictions(){
     _setPredictions(List.generate(_noPredictions, (index) => " "));
   }
 
-  Interpreter get interpreter{
-
-    return _interpreter;
-  }
 
   /// Create predictions based on the drawing by running inference on the CNN
   ///
