@@ -52,7 +52,7 @@ class DrawingPainter extends CustomPainter {
     return pic.toImage(size.width.floor(), size.height.floor());
   }
 
-  /// Returns an image of the current canvas as Uint8List.
+  /// Returns an image of the current canvas as Uint8List (PNG-format).
   ///
   /// Creates a new ui.Canvas and repaints the current image on it. This canvas 
   /// than generates an the drawn image and returns a Uint8List of it.
@@ -66,6 +66,10 @@ class DrawingPainter extends CustomPainter {
     return pngBytes;
   }
   
+  /// Returns an image of the current canvas as Uint8List (raw RGBA-format).
+  ///
+  /// Creates a new ui.Canvas and repaints the current image on it. This canvas 
+  /// than generates an the drawn image and returns a Uint8List of it.
   Future<Uint8List> getRGBAListFromCanvas() async {
 
     final ui.Image img = await getImageFromCanvas();
