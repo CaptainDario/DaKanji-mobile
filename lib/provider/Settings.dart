@@ -45,10 +45,9 @@ class Settings with ChangeNotifier {
 
 
   Settings(){
-    String kanjiPlaceholder = "%X%";
+    kanjiPlaceholder = "%X%";
 
-    dictionaries = 
-    [
+    dictionaries = [
       "jisho (web)", 
       "wadoku (web)",
       "weblio (web)",
@@ -84,8 +83,12 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
 
-  String get selectedTheme{
+  get selectedTheme{
     return _selectedTheme;
+  }
+
+  ThemeMode selectedThemeMode() {
+    return themesDict[_selectedTheme];
   }
   
   set selectedTheme(String newTheme){
@@ -121,7 +124,7 @@ class Settings with ChangeNotifier {
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
     
     prefs.setString('customURL', customURL);
-    prefs.setString('selectedTheme', selectedTheme);
+    prefs.setString('selectedTheme', _selectedTheme);
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
 
@@ -133,7 +136,7 @@ class Settings with ChangeNotifier {
     emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
 
     customURL = await loadString('customURL') ?? '';
-    selectedTheme = await loadString('selectedTheme') ?? themes[2];
+    _selectedTheme = await loadString('selectedTheme') ?? themes[2];
     versionUsed = await loadString('versionUsed') ?? '';
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 
