@@ -1,13 +1,16 @@
 import 'dart:io' show Platform;
-
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_appavailability/flutter_appavailability.dart';
 
+import 'package:android_intent/android_intent.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
+import 'package:get_it/get_it.dart';
+
+import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/provider/Lookup.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/view/DownloadAppDialogue.dart';
 import 'package:da_kanji_mobile/view/WebviewScreen.dart';
-import '../../globals.dart';
 
 
 /// A convenience class to handle long and short press for the predictions.
@@ -18,21 +21,21 @@ class HandlePrediction{
 
   HandlePrediction._internal();
 
-  void handlePress(bool longPress, BuildContext context, String char){
+  void handlePress(BuildContext context){
 
     // presses should be inverted
-    if(SETTINGS.invertShortLongPress){
-      if(!longPress)
-        openDictionary(context, char);
+    if(GetIt.I<Settings>().invertShortLongPress){
+      if(!GetIt.I<Lookup>().longPress)
+        openDictionary(context, GetIt.I<Lookup>().chars);
       else
-        copy(context, char);
+        copy(context, GetIt.I<Lookup>().chars);
     }
     // presses should NOT be inverted
-    if(!SETTINGS.invertShortLongPress){
-      if(!longPress)
-        copy(context, char);
+    if(!GetIt.I<Settings>().invertShortLongPress){
+      if(!GetIt.I<Lookup>().longPress)
+        copy(context, GetIt.I<Lookup>().chars);
       else
-        openDictionary(context, char);
+        openDictionary(context, GetIt.I<Lookup>().chars);
     }
   }
 
@@ -60,7 +63,7 @@ class HandlePrediction{
     // only open a page when there is a prediction
     if (char != " " && char != "") {
       // the prediction should be translated with system dialogue
-      if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[4]){ 
+      if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){ 
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
             action: 'android.intent.action.TRANSLATE',
@@ -84,7 +87,7 @@ class HandlePrediction{
         }
       }
       // offline dictionary aedict3 (android)
-      else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[5]){
+      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
         if(Platform.isAndroid){
           try{
             // make sure the package is installed
@@ -112,7 +115,7 @@ class HandlePrediction{
         }
       }
       // offline dictionary akebi (android)
-      else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[6]){
+      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
               package: AKEBI_ID,
@@ -135,7 +138,7 @@ class HandlePrediction{
         }
       }
       // offline dictionary takoboto (android)
-      else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[7]){
+      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[7]){
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
               package: TAKOBOTO_ID,
@@ -158,10 +161,7 @@ class HandlePrediction{
       else{
         Navigator.push(
           context, 
-          MaterialPageRoute(
-            builder: (BuildContext context) => 
-              WebviewScreen(char, openWithSelectedDictionary(char))
-          )
+          MaterialPageRoute(builder: (BuildContext context) => WebviewScreen())
         );
       }
     }
@@ -175,61 +175,24 @@ class HandlePrediction{
     String url;
 
     // determine which URL should be used for finding the character
-    if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[0])
-      url = SETTINGS.jishoURL;
-    else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[1])
-      url = SETTINGS.wadokuURL;
-    else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[2])
-      url = SETTINGS.weblioURL;
-    else if(SETTINGS.selectedDictionary == SETTINGS.dictionaries[3])
-      url = SETTINGS.customURL;
+    if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[0])
+      url = GetIt.I<Settings>().jishoURL;
+    else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[1])
+      url = GetIt.I<Settings>().wadokuURL;
+    else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[2])
+      url = GetIt.I<Settings>().weblioURL;
+    else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3])
+      url = GetIt.I<Settings>().customURL;
 
     // check that the URL starts with protocol, otherwise launch() fails
     if (!(url.startsWith("http://") || url.startsWith("https://")))
       url = "https://" + url;
 
     // replace the placeholder with the actual character
-    url = url.replaceFirst(new RegExp(SETTINGS.kanjiPlaceholder), kanji);
+    url =
+      url.replaceFirst(new RegExp(GetIt.I<Settings>().kanjiPlaceholder), kanji);
     url = Uri.encodeFull(url);
     return url;
   }
 
-  /// Show a dialogue using [context] with a [title], some [text] and a button
-  /// to open the [url].
-  void showDownloadDialogue(
-    BuildContext context, String title, String text, String url){
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context){ 
-        return SimpleDialog(
-          title: Center(child: Text(title)),
-          children: [
-            Center(child:
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      launch(url);
-                    },
-                    child: Text(text)
-                  ),
-                  SizedBox(width: 10,),
-                  ElevatedButton(
-                    onPressed: () async {
-                      Navigator.pop(context);
-                    },
-                    child: Text("Close")
-                  ),
-                ]
-              )
-            ))
-          ],
-        );
-      }
-    );
-  }
 }

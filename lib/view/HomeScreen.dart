@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:get_it/get_it.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/globals.dart';
 
 
@@ -62,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                         ),
                         onPressed: () async {
-                          SETTINGS.save();
+                          GetIt.I<Settings>().save();
                           Navigator.pushNamedAndRemoveUntil(
                             context, "/home", (Route<dynamic> route) => false);
                         },
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         ).then((value) {
           // save that the dialogue was shown and open the default screen
-          SETTINGS.save();
+          GetIt.I<Settings>().save();
           Navigator.pushNamedAndRemoveUntil(
             context, "/home", (Route<dynamic> route) => false);
         });

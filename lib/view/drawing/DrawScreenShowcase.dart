@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:get_it/get_it.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-import '../../model/core/Showcase.dart';
-import '../../model/core/ShowcaseTuple.dart';
-import '../../globals.dart';
+import 'package:da_kanji_mobile/model/core/Showcase.dart';
+import 'package:da_kanji_mobile/model/core/ShowcaseTuple.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// The showcase of the features of the draw screen.
@@ -140,7 +143,7 @@ class DrawScreenShowcase extends Showcase {
 
         // don't show the tutorial again
         SHOW_SHOWCASE_DRAWING = false;
-        SETTINGS.save();
+        GetIt.I<Settings>().save();
       },
       onClickTarget: (target) {
         // open drawer after clicking on the swipe left showcase
@@ -150,7 +153,7 @@ class DrawScreenShowcase extends Showcase {
       onSkip: () {
         // don't show the tutorial again
         SHOW_SHOWCASE_DRAWING = false;
-        SETTINGS.save();
+        GetIt.I<Settings>().save();
       },
       onClickOverlay: (target) {},
     );

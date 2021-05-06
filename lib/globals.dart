@@ -1,6 +1,5 @@
 library my_prj.globals;
 
-import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -33,10 +32,6 @@ String VERSION;
 // all versions which implemented new features for the drawing screen
 // ignore: non_constant_identifier_names
 List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
-
-// the saved settings
-// ignore: non_constant_identifier_names
-final Settings SETTINGS = new Settings();
 
 // the global key for the drawer
 // ignore: non_constant_identifier_names

@@ -1,11 +1,12 @@
-
 import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/services.dart';
+
+import 'package:get_it/get_it.dart';
 import 'package:uni_links/uni_links.dart';
 
-import '../../globals.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 StreamSubscription linkSub;
@@ -46,35 +47,35 @@ void handleLink(String link){
 
   if(short.startsWith("jisho")){
     print("contains jisho");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[0];
+    GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[0];
   }
   else if(short.startsWith("wadoku")){
     print("contains wadoku");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[1];
+    GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[1];
   }
   else if(short.startsWith("weblio")){
     print("contains weblio");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[2];
+    GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[2];
   }
   else if(short.startsWith("URL")){
     print("contains custom URL");
-    SETTINGS.selectedDictionary = SETTINGS.dictionaries[3];
+    GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[3];
     short = Uri.decodeFull(short.replaceFirst("URL/", ""));
     print("given custom url:" + short);
-    SETTINGS.customURL = short;
+    GetIt.I<Settings>().customURL = short;
   }
   else if(Platform.isAndroid){
     if(short.startsWith("aedict")){
       print("contains aedict");
-      SETTINGS.selectedDictionary = SETTINGS.dictionaries[5];
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[5];
     }
     else if(short.startsWith("akebi")){
       print("contains akebi");
-      SETTINGS.selectedDictionary = SETTINGS.dictionaries[6];
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[6];
     }
     else if(short.startsWith("takoboto")){
       print("contains takoboto");
-      SETTINGS.selectedDictionary = SETTINGS.dictionaries[7];
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[7];
     }
   }
   else{
