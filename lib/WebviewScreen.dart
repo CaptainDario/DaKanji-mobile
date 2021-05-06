@@ -112,9 +112,6 @@ class _WebviewScreenState extends State<WebviewScreen>
         },
         child: Container(
           child: 
-            //Hero(
-            //tag: "webviewHero_" + widget.char,
-            //child: 
             Stack(
               children: [
                 Transform.translate(
