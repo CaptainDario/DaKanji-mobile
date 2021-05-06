@@ -1,3 +1,5 @@
+import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -46,9 +48,6 @@ Future<void> init() async {
   // get the app's version 
   VERSION = (await PackageInfo.fromPlatform()).version;
   
-  // load the settings
-  SETTINGS.load();
-
   setupGetIt();
 
   // load CHANGELOG and about from file
@@ -109,9 +108,12 @@ Future<String> initAbout () async {
 }
 
 void setupGetIt(){
+  GetIt.I.registerSingleton<Settings>(Settings());
+  GetIt.I<Settings>().load();
   GetIt.I.registerSingleton<DrawingInterpreter>(DrawingInterpreter());
   GetIt.I.registerSingleton<Strokes>(Strokes());
   GetIt.I.registerSingleton<Lookup>(Lookup());
+  GetIt.I.registerSingleton<KanjiBuffer>(KanjiBuffer());
 }
 
 /// The starting widget of the app
@@ -145,7 +147,7 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
       // themes
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
+      themeMode: GetIt.I<Settings>().selectedThemeMode(),
 
       //screens
       initialRoute: "/home", // "/testScreen",//
