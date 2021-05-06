@@ -1,4 +1,3 @@
-import 'package:da_kanji_mobile/TestScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -6,19 +5,20 @@ import 'dart:io' show Platform;
 import 'package:package_info/package_info.dart';
 
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'ChangelogScreen.dart';
-import 'DrawScreen.dart';
-import 'Strokes.dart';
-import 'DarkTheme.dart';
-import 'LightTheme.dart';
-import 'HomeScreen.dart';
-import 'Settingsscreen.dart';
-import 'AboutScreen.dart';
+import 'package:da_kanji_mobile/view/TestScreen.dart';
+import 'package:da_kanji_mobile/provider/Lookup.dart';
+import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
+import 'view/drawing/DrawScreen.dart';
+import 'package:da_kanji_mobile/provider/Strokes.dart';
+import 'package:da_kanji_mobile/model/core/DarkTheme.dart';
+import 'package:da_kanji_mobile/model/core/LightTheme.dart';
+import 'package:da_kanji_mobile/view/HomeScreen.dart';
+import 'package:da_kanji_mobile/view/Settingsscreen.dart';
+import 'view/AboutScreen.dart';
 import 'globals.dart';
-import 'initInterpreter.dart';
-import 'DeepLinks.dart';
+import 'model/core/DrawingInterpreter.dart';
+import 'model/services/DeepLinks.dart';
 
 
 Future<void> main() async {
@@ -51,32 +51,12 @@ Future<void> init() async {
 
   setupGetIt();
 
-  // initialize the TFLite interpreter
-  if (Platform.isAndroid) 
-    CNN_KANJI_ONLY_INTERPRETER = await initInterpreterAndroid();
-  else if (Platform.isIOS) 
-    CNN_KANJI_ONLY_INTERPRETER = await initInterpreterIOS();
-  else
-    throw PlatformException(code: "Platform not supported.");
-
-  // load labels, CHANGELOG and about from file
-  String labels = 
-    await rootBundle.loadString("assets/labels_CNN_kanji_only.txt");
-  LABEL_LIST = labels.split("");
+  // load CHANGELOG and about from file
   final changelogs = await initChangelog();
   NEW_CHANGELOG = changelogs[0];
   WHOLE_CHANGELOG = changelogs[1];
   // about
   ABOUT = await initAbout();
-
-  // run inference once at init -> no delay for first inference
-  List<List<List<List<double>>>> _input = List<List<double>>.generate(
-    64, (i) => List<double>.generate(64, (j) => 0.0)).
-    reshape<double>([1, 64, 64, 1]);
-  List<List<double>> _output =
-      List<List<double>>.generate(1, (i) => 
-        List<double>.generate(LABEL_LIST.length, (j) => 0.0));
-  CNN_KANJI_ONLY_INTERPRETER.run(_input, _output);
 
   await initDeepLinksStream();
   await getInitialDeepLink();
@@ -121,7 +101,7 @@ Future<String> initAbout () async {
     about = about.replaceAll("DAAPPLAB_STORE_PAGE", DAAPPLAB_APPSTORE_PAGE);
   }
   
-  about = about.replaceAll("USED_BACKEND", USED_BACKEND);
+  //about = about.replaceAll("USED_BACKEND", USED_BACKEND);
   about = about.replaceAll("VERSION", VERSION);
 
   return about;
@@ -129,7 +109,9 @@ Future<String> initAbout () async {
 }
 
 void setupGetIt(){
+  GetIt.I.registerSingleton<DrawingInterpreter>(DrawingInterpreter());
   GetIt.I.registerSingleton<Strokes>(Strokes());
+  GetIt.I.registerSingleton<Lookup>(Lookup());
 }
 
 /// The starting widget of the app
@@ -166,7 +148,7 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
       themeMode: SETTINGS.themesDict[SETTINGS.selectedTheme],
 
       //screens
-      initialRoute: "/testScreen",//"/home",
+      initialRoute: "/home", // "/testScreen",//
       routes: <String, WidgetBuilder>{
         "/home": (BuildContext context) => HomeScreen(),
         "/drawing": (BuildContext context) => DrawScreen(),

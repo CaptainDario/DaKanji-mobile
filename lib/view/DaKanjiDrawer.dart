@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'globals.dart';
+import '../globals.dart';
 
 
 /// Da Kanji's drawer.

@@ -3,7 +3,7 @@ library snappable;
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
-import 'bitmap.dart';
+import 'package:da_kanji_mobile/model/core/Bitmap.dart';
 
 import 'package:flutter/painting.dart';
 import 'package:flutter/foundation.dart';

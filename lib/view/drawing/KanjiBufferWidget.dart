@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'KanjiBuffer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 
-import 'HandlePredictions.dart';
+import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
+import 'package:da_kanji_mobile/model/helper/HandlePredictions.dart';
 
 
 

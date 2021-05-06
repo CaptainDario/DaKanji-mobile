@@ -1,8 +1,8 @@
-import 'globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// The "home"-screen

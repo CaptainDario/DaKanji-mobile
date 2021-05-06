@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'HandlePredictions.dart';
+import 'package:da_kanji_mobile/model/helper/HandlePredictions.dart';
 
 
 /// A button which shows the given [char].

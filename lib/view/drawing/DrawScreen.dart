@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
-import 'canvasSnappable.dart';
 
-import 'Strokes.dart';
+import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
+import 'package:da_kanji_mobile/view/canvasSnappable.dart';
+import 'package:da_kanji_mobile/provider/Strokes.dart';
 import 'DrawScreenShowcase.dart';
-import 'KanjiBuffer.dart';
-import 'globals.dart';
-import 'DaKanjiDrawer.dart';
-import 'DrawingPainter.dart';
-import 'PredictionButton.dart';
-import 'KanjiBufferWidget.dart';
+import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
+import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
+import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
+import 'package:da_kanji_mobile/view/drawing//PredictionButton.dart';
+import 'package:da_kanji_mobile/view/drawing/KanjiBufferWidget.dart';
 
 
 /// The "draw"-screen.
@@ -32,8 +33,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   DrawingPainter canvas;
   // the size of the canvas widget
   double canvasSize;
-  // initialize predictions with blank
-  List<String> predictions = List.generate(10, (index) => " ");
   // save the context for the Showcase view
   BuildContext myContext;
   // widget in which character can be saved to look up words/sentences. 
@@ -54,6 +53,9 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
       kanjiBuffer.runAnimation = true;
       setState(() { });
     });
+
+    // initialize the drawing interrpeter
+    GetIt.I<DrawingInterpreter>().init();
   }
 
   @override
@@ -94,7 +96,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
         title: Text("Drawing"),
       ),
       drawer: DaKanjiDrawer(),
-      body: Center(
+      body:
+      Center(
           child: Column( 
             children: [
               // the canvas to draw on
@@ -128,7 +131,9 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     },
                     // finished drawing a stroke
                     onPanEnd: (details) async {
-                      predictions = await canvas.runInference();
+                      GetIt.I<DrawingInterpreter>().runInference(
+                        await canvas.getPNGListFromCanvas()
+                      );
                       setState(() {});
                     },
                     child: Stack(
@@ -167,10 +172,12 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                         //only run inference if canvas still has strokes
                         if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
                           GetIt.I<Strokes>().removeLastStroke();
-                          predictions = await canvas.runInference();
+                          GetIt.I<DrawingInterpreter>().runInference(
+                            await canvas.getPNGListFromCanvas()
+                          ); 
                         }
                         if(GetIt.I<Strokes>().path.computeMetrics().isEmpty){
-                          predictions = List.generate(10, (i) => " ");
+                          GetIt.I<DrawingInterpreter>().clearPredictions(); 
                         }
                         setState(() {});
                       }
@@ -178,7 +185,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     // multi character search input
                       Expanded(
                       child: Hero(
-                        tag: "webviewHero_" + 
+                        tag: "webviewHero_b_" + 
                             (kanjiBuffer.kanjiBuffer == "" ? 
                             "Buffer" : kanjiBuffer.kanjiBuffer),
                           child: Center(
@@ -199,7 +206,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                           canvasSize.floor()
                         );
                         setState(() {
-                          predictions = List.generate(10, (i) => " ");
+                          GetIt.I<DrawingInterpreter>().clearPredictions(); 
                         });
                       }
                     ), 
@@ -217,12 +224,13 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                   crossAxisCount: 5,
                   children: List.generate(10, (i) {
                     Widget widget = PredictionButton(
-                      predictions[i],
+                      GetIt.I<DrawingInterpreter>().predictions[i],
                       () {
                         setState(() {
                           if(SETTINGS.emptyCanvasAfterDoubleTap)
                             GetIt.I<Strokes>().deleteAllStrokes(); 
-                          kanjiBuffer.kanjiBuffer += predictions[i];
+                          kanjiBuffer.kanjiBuffer += 
+                            GetIt.I<DrawingInterpreter>().predictions[i];
                         });
                       }
                     );
@@ -234,8 +242,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       );
                     }
                     return Hero(
-                      tag: "webviewHero_" + (predictions[i] == " " ? 
-                        i.toString() : predictions[i]),
+                      tag: "webviewHero_" + 
+                        (GetIt.I<DrawingInterpreter>().predictions[i] == " "
+                        ? i.toString()
+                        : GetIt.I<DrawingInterpreter>().predictions[i]),
                       child: widget,
                     );
                   },

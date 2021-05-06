@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:uni_links/uni_links.dart';
 
-import 'globals.dart';
+import '../../globals.dart';
 
 
 StreamSubscription linkSub;

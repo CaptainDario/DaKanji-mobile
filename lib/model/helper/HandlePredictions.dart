@@ -1,13 +1,13 @@
 import 'dart:io' show Platform;
 
 import 'package:android_intent/android_intent.dart';
-import 'package:da_kanji_mobile/WebviewScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_appavailability/flutter_appavailability.dart';
 
-import 'globals.dart';
+import 'package:da_kanji_mobile/view/WebviewScreen.dart';
+import '../../globals.dart';
 
 
 /// A convenience class to handle long and short press for the predictions.

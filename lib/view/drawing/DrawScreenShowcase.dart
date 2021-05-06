@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-import 'Showcase.dart';
-import 'ShowcaseTuple.dart';
-import 'globals.dart';
+import '../../model/core/Showcase.dart';
+import '../../model/core/ShowcaseTuple.dart';
+import '../../globals.dart';
 
 
 /// The showcase of the features of the draw screen.

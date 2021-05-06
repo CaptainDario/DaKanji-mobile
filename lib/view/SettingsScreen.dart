@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'DaKanjiDrawer.dart';
-import 'globals.dart';
+import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// The "settings"-screen.
