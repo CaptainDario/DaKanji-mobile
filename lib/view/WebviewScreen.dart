@@ -1,9 +1,11 @@
 import 'dart:math';
+import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:flutter/material.dart';
 
+import 'package:get_it/get_it.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
 
 
 
@@ -11,12 +13,7 @@ import 'package:da_kanji_mobile/globals.dart';
 /// and shows [char] fullscreen while loading.
 class WebviewScreen extends StatefulWidget {
 
-  /// the characters which will be searched
-  final String char;
-  /// the url which will be opened
-  final String url;
-
-  WebviewScreen(this.char, this.url);
+  WebviewScreen();
 
   @override
   _WebviewScreenState createState() => _WebviewScreenState();
@@ -99,7 +96,9 @@ class _WebviewScreenState extends State<WebviewScreen>
     return Scaffold(
       appBar: AppBar(
         title: 
-        Text(SETTINGS.selectedDictionary + ": " + widget.char),
+        Text(GetIt.I<Settings>().selectedDictionary
+        + ": "
+        + GetIt.I<Lookup>().chars),
       ),
       body: WillPopScope(
         // when leaving this screen hide the webview and  
@@ -129,7 +128,7 @@ class _WebviewScreenState extends State<WebviewScreen>
                     child: () {
                         if(loadWebview){
                           return WebView(
-                            initialUrl: widget.url,
+                            initialUrl: GetIt.I<Lookup>().url,
                             onPageFinished: (s) {
                               _controller.forward(from: 0.0);
                             }
@@ -155,11 +154,13 @@ class _WebviewScreenState extends State<WebviewScreen>
                       )),
                     alignment: Alignment.centerRight,
                     child: Hero(
-                      tag: "webviewHero_" + widget.char,
+                      tag: "webviewHero_" 
+                        + (GetIt.I<Lookup>().buffer ? "b_" : "")
+                        + GetIt.I<Lookup>().chars,
                       child: Container(
                         child: Center(
                           child: Text(
-                            widget.char,
+                            GetIt.I<Lookup>().chars,
                             style: TextStyle(
                               color: Theme.of(context).textTheme.button.color,
                               decoration: TextDecoration.none,
