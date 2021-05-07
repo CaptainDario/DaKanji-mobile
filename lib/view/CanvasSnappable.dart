@@ -33,7 +33,7 @@ class CanvasSnappable extends StatefulWidget {
   /// Function that gets called when snap ends
   final VoidCallback onSnapped;
 
-  ///
+  /// The color of the particles from the snap
   final Color snapColor;
 
   const CanvasSnappable({
@@ -72,8 +72,6 @@ class CanvasSnappableState extends State<CanvasSnappable>
   List<double> _randoms;
 
   /// Size of child widget
-  Size size;
-
   int width;
   int height;
 
@@ -101,8 +99,7 @@ class CanvasSnappableState extends State<CanvasSnappable>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Stack(
+      return Stack(
         children: <Widget>[
           if (_layers != null) ..._layers.map(_imageToWidget),
           AnimatedBuilder(
@@ -116,8 +113,7 @@ class CanvasSnappableState extends State<CanvasSnappable>
             ),
           )
         ],
-      ),
-    );
+      );
   }
 
   /// I am... INEVITABLE      ~Thanos
@@ -165,7 +161,7 @@ class CanvasSnappableState extends State<CanvasSnappable>
     });
 
     //give a short delay to draw images
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 50));
 
     //start the snap!
     _animationController.forward();
@@ -237,6 +233,10 @@ class CanvasSnappableState extends State<CanvasSnappable>
       rnd -= weights[i];
     }
     return chosenImage;
+  }
+
+  bool snapIsRunning(){
+    return _animationController.status == AnimationStatus.forward;
   }
 
   int _gauss(double center, double value) {
