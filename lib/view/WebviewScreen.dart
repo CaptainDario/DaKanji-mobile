@@ -22,24 +22,17 @@ class WebviewScreen extends StatefulWidget {
 class _WebviewScreenState extends State<WebviewScreen>
   with TickerProviderStateMixin{
 
-  /// should the webview be shown
+  /// should the webview be loaded 
   bool loadWebview;
-
-  /// 
+  /// should the loading screen be shown (hides webview)
   bool showLoading;
-
+  /// the screen's width 
   double width;
-
-
-  int switchAnimationTime;
-
-  int leaveTime;
-
+  /// the AnimationController to rotate the loading / webview
   AnimationController _controller;
-
+  /// the animation to rotate the loading / webview
   Animation _rotationAnimation;
-
-
+  /// the webview to show the dictionary search
   WebView webview;
 
   @override
@@ -48,9 +41,6 @@ class _WebviewScreenState extends State<WebviewScreen>
 
     loadWebview = false;
     showLoading = false;
-
-    switchAnimationTime = 500;
-    leaveTime = switchAnimationTime + 250;
 
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
@@ -107,7 +97,7 @@ class _WebviewScreenState extends State<WebviewScreen>
             showLoading = false;
             _controller.reverse();
           });
-          return Future.delayed(Duration(milliseconds: leaveTime), () => true);
+          return Future.delayed(Duration(milliseconds: 500), () => true);
         },
         child: Container(
           child: 
