@@ -70,9 +70,9 @@ class DrawingInterpreter with ChangeNotifier{
   void init() async {
 
     if (Platform.isAndroid) 
-      _interpreter = await initInterpreterAndroid();
+      _interpreter = await _cpuInterpreter();
     else if (Platform.isIOS) 
-      _interpreter = await initInterpreterIOS();
+      _interpreter = await _initInterpreterIOS();
     else
       throw PlatformException(code: "Platform not supported.");
   
@@ -103,6 +103,7 @@ class DrawingInterpreter with ChangeNotifier{
   /// Should be invoked when a different screen is opened which uses a 
   /// different interpreter.
   void free() {
+    _interpreter.close();
     _output = null;
     _input = null;
     _interpreter = null;
@@ -114,7 +115,6 @@ class DrawingInterpreter with ChangeNotifier{
   void clearPredictions(){
     _setPredictions(List.generate(_noPredictions, (index) => " "));
   }
-
 
   /// Create predictions based on the drawing by running inference on the CNN
   ///
@@ -166,7 +166,7 @@ class DrawingInterpreter with ChangeNotifier{
   /// Uses NnAPI for devices with Android API >= 27. Otherwise uses the 
   /// GPUDelegate. If it is detected that the apps runs on an emulator CPU mode 
   /// is used
-  Future<Interpreter> initInterpreterAndroid() async {
+  Future<Interpreter> _initInterpreterAndroid() async {
 
     Interpreter interpreter;
 
@@ -176,44 +176,67 @@ class DrawingInterpreter with ChangeNotifier{
 
     // if the application is running not in an emulator
     if (androidInfo.isPhysicalDevice) {
-      InterpreterOptions interpreterOptions;
 
       // use NNAPI on android if android API >= 27
       if (androidInfo.version.sdkInt >= 27) {
         usedBackend = "Android NNAPI Delegate";
-        interpreterOptions = InterpreterOptions()..useNnApiForAndroid = true;
+        interpreter = await _nnapiInterpreter();
       }
       // otherwise fallback to GPU delegate
       else {
         usedBackend = "Android GPU Delegate";
-        final gpuDelegateV2 = GpuDelegateV2(
-            options: GpuDelegateOptionsV2(
-                false,
-                TfLiteGpuInferenceUsage.preferenceSustainSpeed,
-                TfLiteGpuInferencePriority.minLatency,
-                TfLiteGpuInferencePriority.auto,
-                TfLiteGpuInferencePriority.auto));
-        interpreterOptions = InterpreterOptions()..addDelegate(gpuDelegateV2);
+        interpreter = await _gpuInterpreterAndroid();
       }
-
-      // initialize interpreter(s)
-      interpreter = await Interpreter.fromAsset(
-          _assetPath,
-          options: interpreterOptions);
     }
     // use CPU inference on emulators
     else{
-      interpreter = await initInterpreterFallback();
+      usedBackend = "CPU";
+      interpreter = await _cpuInterpreter();
     }
 
     return interpreter;
+  }
+
+
+  /// Initializes the interpreter with NPU acceleration for Android.
+  Future<Interpreter> _nnapiInterpreter() async {
+    final options = InterpreterOptions()..useNnApiForAndroid = true;
+    return await Interpreter.fromAsset(_assetPath, options: options);
+  }
+
+  /// Initializes the interpreter with GPU acceleration for Android.
+  Future<Interpreter> _gpuInterpreterAndroid() async {
+    final gpuDelegateV2 = GpuDelegateV2(
+        options: GpuDelegateOptionsV2(
+            false,
+            TfLiteGpuInferenceUsage.preferenceSustainSpeed,
+            TfLiteGpuInferencePriority.minLatency,
+            TfLiteGpuInferencePriority.auto,
+            TfLiteGpuInferencePriority.auto));
+    final options = InterpreterOptions()..addDelegate(gpuDelegateV2);
+    return await Interpreter.fromAsset(_assetPath, options: options);
+  }
+
+  /// Initializes the interpreter with GPU acceleration for iOS.
+  Future<Interpreter> _gpuInterpreterIOS() async {
+
+    final gpuDelegate = GpuDelegate(
+      options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
+    );
+    var interpreterOptions = InterpreterOptions()..addDelegate(gpuDelegate);
+    return await Interpreter.fromAsset(_assetPath, options: interpreterOptions);
+  }
+
+  /// Initializes the interpreter with CPU mode set.
+  Future<Interpreter> _cpuInterpreter() async {
+    return await Interpreter.fromAsset(_assetPath);
   }
 
   /// Initializes the TFLite interpreter on iOS.
   ///
   /// Uses the metal delegate if running on an actual device.
   /// Otherwise uses CPU mode.
-  Future<Interpreter> initInterpreterIOS() async {
+  Future<Interpreter> _initInterpreterIOS() async {
 
     Interpreter interpreter;
 
@@ -222,30 +245,14 @@ class DrawingInterpreter with ChangeNotifier{
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
     if (iosInfo.isPhysicalDevice) {
-      final gpuDelegate = GpuDelegate(
-        options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
-      );
-      var interpreterOptions = InterpreterOptions()..addDelegate(gpuDelegate);
-      Interpreter interpreterIOS = await Interpreter.fromAsset(
-          _assetPath,
-          options: interpreterOptions);
-
       usedBackend = "IOS Metal Delegate";
-      interpreter = interpreterIOS;
+      interpreter = await _gpuInterpreterIOS();
     } 
     // use CPU inference on emulators
     else 
-      interpreter = await initInterpreterFallback();
+      interpreter = await _cpuInterpreter();
     
     return interpreter;
 
-  }
-
-
-  /// Initializes the interpreter with CPU mode set.
-  Future<Interpreter> initInterpreterFallback() async {
-    usedBackend = "CPU";
-    
-    return await Interpreter.fromAsset(_assetPath);
   }
 }
