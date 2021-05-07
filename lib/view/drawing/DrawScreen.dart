@@ -114,17 +114,19 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                         RenderBox renderBox = context.findRenderObject();
                         Offset point =
                           renderBox.globalToLocal(details.localPosition);
-                        
                         GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
                       });
                     },
                     // started drawing
                     onPanStart: (details) {
                       setState(() {
+                        // end the snapping animation when user starts drawing
+                        if(snappableKey.currentState.snapIsRunning())
+                          snappableKey.currentState.reset();
+
                         RenderBox renderBox = context.findRenderObject();
                         Offset point =
                           renderBox.globalToLocal(details.localPosition);
-                        
                         GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
                       });
                     },
@@ -144,6 +146,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                         ),
                         CanvasSnappable(
                           key: snappableKey,
+                          duration: Duration(milliseconds: 500),
                           child: CustomPaint(
                             size: Size(canvasSize, canvasSize),
                             painter: canvas,
@@ -153,7 +156,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                             ? Colors.white
                             : Colors.black,
                           onSnapped: () {
-                            GetIt.I<Strokes>().deleteAllStrokes();
                             snappableKey.currentState.reset();
                           },
                         )
@@ -203,14 +205,18 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       key: SHOWCASE_DRAWING[2].key,
                       icon: Icon(Icons.clear),
                       onPressed: () async {
-                        snappableKey.currentState.snap(
-                          await canvas.getRGBAListFromCanvas(),
-                          canvasSize.floor(),
-                          canvasSize.floor()
-                        );
-                        setState(() {
-                          GetIt.I<DrawingInterpreter>().clearPredictions(); 
-                        });
+                        if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
+                          snappableKey.currentState.snap(
+                            await canvas.getRGBAListFromCanvas(),
+                            canvasSize.floor(), canvasSize.floor()
+                          );
+                          setState(() {
+                            GetIt.I<DrawingInterpreter>().clearPredictions(); 
+                          });
+                          
+                          await Future.delayed(Duration(milliseconds: 50));
+                          GetIt.I<Strokes>().deleteAllStrokes();
+                        }
                       }
                     ), 
                   ]
