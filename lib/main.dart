@@ -1,13 +1,14 @@
-import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
-import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
 import 'dart:io' show Platform;
-import 'package:package_info/package_info.dart';
 
+import 'package:package_info/package_info.dart';
+import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
+import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/TestScreen.dart';
 import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
@@ -99,8 +100,40 @@ Future<String> initAbout () async {
     about = about.replaceAll("RATE_ON_MOBILE_STORE", APPSTORE_PAGE);
     about = about.replaceAll("DAAPPLAB_STORE_PAGE", DAAPPLAB_APPSTORE_PAGE);
   }
+
+  String backend = "";
+
+  if (Platform.isAndroid){
+    // get platform information
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    if (androidInfo.isPhysicalDevice) {
+      // use NNAPI on android if android API >= 27
+      if (androidInfo.version.sdkInt >= 27) 
+        backend = "Android NNAPI Delegate";
+      // otherwise fallback to GPU delegate
+      else 
+        backend = "Android GPU Delegate";
+    }
+    // use CPU inference on emulators
+    else{
+      backend = "CPU";
+    }
+  }
+  else if (Platform.isIOS){
+    // get platform information
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+    if (iosInfo.isPhysicalDevice) 
+      backend = "IOS Metal Delegate";
+    // use CPU inference on emulators
+    else 
+      backend = "CPU";
+  }
   
-  //about = about.replaceAll("USED_BACKEND", USED_BACKEND);
+  about =
+    about.replaceAll("USED_BACKEND", backend);
   about = about.replaceAll("VERSION", VERSION);
 
   return about;
