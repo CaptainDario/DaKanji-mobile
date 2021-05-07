@@ -2,10 +2,8 @@ library my_prj.globals;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
 
-import 'Settings.dart';
-import 'ShowcaseTuple.dart';
+import 'model/core/ShowcaseTuple.dart';
 
 
 // the title of the app
@@ -35,10 +33,6 @@ String VERSION;
 // ignore: non_constant_identifier_names
 List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
 
-// the saved settings
-// ignore: non_constant_identifier_names
-final Settings SETTINGS = new Settings();
-
 // the global key for the drawer
 // ignore: non_constant_identifier_names
 final GlobalKey<ScaffoldState> DRAWER_KEY = GlobalKey();
@@ -49,18 +43,6 @@ List<ShowcaseTuple> SHOWCASE_DRAWING = [];
 // should the showcase of the draw screen be shown
 // ignore: non_constant_identifier_names
 bool SHOW_SHOWCASE_DRAWING = false;
-
-// Assets
-const String CNN_KANJI_ONLY_ASSET = 'model_CNN_kanji_only.tflite';
-
-// inference
-// ignore: non_constant_identifier_names
-List<String> LABEL_LIST;
-// ignore: non_constant_identifier_names
-Interpreter CNN_KANJI_ONLY_INTERPRETER;
-// the backend used for inference CPU/GPU
-// ignore: non_constant_identifier_names
-String USED_BACKEND = "";
 
 //about page
 const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanji-Desktop";

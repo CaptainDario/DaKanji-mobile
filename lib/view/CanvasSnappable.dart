@@ -3,14 +3,14 @@ library snappable;
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui';
-import 'bitmap.dart';
+import 'package:da_kanji_mobile/model/core/Bitmap.dart';
 
 import 'package:flutter/painting.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Snappable extends StatefulWidget {
+class CanvasSnappable extends StatefulWidget {
   /// Widget to be snapped
   final Widget child;
 
@@ -33,9 +33,13 @@ class Snappable extends StatefulWidget {
   /// Function that gets called when snap ends
   final VoidCallback onSnapped;
 
-  const Snappable({
+  /// The color of the particles from the snap
+  final Color snapColor;
+
+  const CanvasSnappable({
     Key key,
     @required this.child,
+    @required this.snapColor,
     this.offset = const Offset(16, -16),
     this.duration = const Duration(milliseconds: 500),
     this.randomDislocationOffset = const Offset(16, 16),
@@ -44,10 +48,10 @@ class Snappable extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  SnappableState createState() => SnappableState();
+  CanvasSnappableState createState() => CanvasSnappableState();
 }
 
-class SnappableState extends State<Snappable>
+class CanvasSnappableState extends State<CanvasSnappable>
     with SingleTickerProviderStateMixin {
   static const double _singleLayerAnimationLength = 0.6;
   static const double _lastLayerAnimationStart =
@@ -68,8 +72,6 @@ class SnappableState extends State<Snappable>
   List<double> _randoms;
 
   /// Size of child widget
-  Size size;
-
   int width;
   int height;
 
@@ -97,8 +99,7 @@ class SnappableState extends State<Snappable>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Stack(
+      return Stack(
         children: <Widget>[
           if (_layers != null) ..._layers.map(_imageToWidget),
           AnimatedBuilder(
@@ -112,8 +113,7 @@ class SnappableState extends State<Snappable>
             ),
           )
         ],
-      ),
-    );
+      );
   }
 
   /// I am... INEVITABLE      ~Thanos
@@ -148,7 +148,7 @@ class SnappableState extends State<Snappable>
         for (int i = 0; i < 4; i++){
           _layers[imageIndex][(y * width + x) * 4 + i] =
             canvas[(y * width + x) * 4 + 1];
-        }
+      }
       }
     }
 
@@ -161,7 +161,7 @@ class SnappableState extends State<Snappable>
     });
 
     //give a short delay to draw images
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(Duration(milliseconds: 50));
 
     //start the snap!
     _animationController.forward();
@@ -205,11 +205,10 @@ class SnappableState extends State<Snappable>
 
     return AnimatedBuilder(
       animation: _animationController,
-      child: Image.memory(Bitmap.fromHeadless(
-          this.width,
-          this.height,
-          layer
-        ).buildHeaded()),
+      child: Image.memory(
+        Bitmap.fromHeadless(this.width, this.height, layer).buildHeaded(),
+        color: widget.snapColor 
+      ),
       builder: (context, child) {
         return Transform.translate(
           offset: offsetAnimation.value,
@@ -234,6 +233,10 @@ class SnappableState extends State<Snappable>
       rnd -= weights[i];
     }
     return chosenImage;
+  }
+
+  bool snapIsRunning(){
+    return _animationController.status == AnimationStatus.forward;
   }
 
   int _gauss(double center, double value) {

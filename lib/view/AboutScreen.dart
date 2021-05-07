@@ -1,10 +1,10 @@
-import 'ChangelogScreen.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
 import 'DaKanjiDrawer.dart';
-import 'globals.dart';
+import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
+import '../globals.dart';
 
 
 /// The "about"-screen

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'HandlePredictions.dart';
+import 'package:get_it/get_it.dart';
+
+import 'package:da_kanji_mobile/model/helper/HandlePredictions.dart';
+import 'package:da_kanji_mobile/provider/Lookup.dart';
+import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/provider/Strokes.dart';
 
 
 /// A button which shows the given [char].
@@ -10,8 +16,7 @@ class PredictionButton extends StatefulWidget {
 
   
   final String char;
-  final void Function() tapFunction;
-  PredictionButton (this.char, this.tapFunction);
+  PredictionButton (this.char);
   
   @override
   _PredictionButtonState createState() => _PredictionButtonState();
@@ -69,18 +74,22 @@ class _PredictionButtonState extends State<PredictionButton>
 
           onDoubleTap: () {
             controller.forward(from: 0.0);
-            widget.tapFunction();
+            if(GetIt.I<Settings>().emptyCanvasAfterDoubleTap)
+              GetIt.I<Strokes>().deleteAllStrokes(); 
+            GetIt.I<KanjiBuffer>().kanjiBuffer += widget.char;
           },
 
           child: ElevatedButton(
             // handle a short press
             onPressed: () {
-              HandlePrediction().handlePress(false, context, widget.char);
+              GetIt.I<Lookup>().setChar(widget.char);
+              HandlePrediction().handlePress(context);
             },
             
             // handle a long press 
             onLongPress: () async {
-              HandlePrediction().handlePress(true, context, widget.char);
+              GetIt.I<Lookup>().setChar(widget.char, longPress: true);
+              HandlePrediction().handlePress(context);
             },
             child: FittedBox(
               child: Text(

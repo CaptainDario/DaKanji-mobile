@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
-import 'canvasSnappable.dart';
 
-import 'Strokes.dart';
-import 'DrawScreenShowcase.dart';
-import 'KanjiBuffer.dart';
-import 'globals.dart';
-import 'DaKanjiDrawer.dart';
-import 'DrawingPainter.dart';
-import 'PredictionButton.dart';
-import 'KanjiBufferWidget.dart';
+import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
+import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
+import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
+import 'package:da_kanji_mobile/provider/Strokes.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/view/canvasSnappable.dart';
+import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
+import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
+import 'package:da_kanji_mobile/view/drawing//PredictionButton.dart';
+import 'package:da_kanji_mobile/view/drawing/KanjiBufferWidget.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// The "draw"-screen.
@@ -32,14 +34,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   DrawingPainter canvas;
   // the size of the canvas widget
   double canvasSize;
-  // initialize predictions with blank
-  List<String> predictions = List.generate(10, (index) => " ");
   // save the context for the Showcase view
   BuildContext myContext;
-  // widget in which character can be saved to look up words/sentences. 
-  KanjiBuffer kanjiBuffer = KanjiBuffer();
   // global keys for running animations
-  GlobalKey<SnappableState> snappableKey;
+  GlobalKey<CanvasSnappableState> snappableKey;
 
 
   @override
@@ -47,13 +45,16 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     super.initState();
 
     // initialize the global keys
-    snappableKey = GlobalKey<SnappableState>();
+    snappableKey = GlobalKey<CanvasSnappableState>();
 
     // always rebuild the ui when the kanji buffer changed
-    kanjiBuffer.addListener(() {
-      kanjiBuffer.runAnimation = true;
+    GetIt.I<KanjiBuffer>().addListener(() {
+      GetIt.I<KanjiBuffer>().runAnimation = true;
       setState(() { });
     });
+
+    // initialize the drawing interpreter
+    GetIt.I<DrawingInterpreter>().init();
   }
 
   @override
@@ -94,7 +95,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
         title: Text("Drawing"),
       ),
       drawer: DaKanjiDrawer(),
-      body: Center(
+      body:
+      Center(
           child: Column( 
             children: [
               // the canvas to draw on
@@ -112,23 +114,27 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                         RenderBox renderBox = context.findRenderObject();
                         Offset point =
                           renderBox.globalToLocal(details.localPosition);
-                        
                         GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
                       });
                     },
                     // started drawing
                     onPanStart: (details) {
                       setState(() {
+                        // end the snapping animation when user starts drawing
+                        if(snappableKey.currentState.snapIsRunning())
+                          snappableKey.currentState.reset();
+
                         RenderBox renderBox = context.findRenderObject();
                         Offset point =
                           renderBox.globalToLocal(details.localPosition);
-                        
                         GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
                       });
                     },
                     // finished drawing a stroke
                     onPanEnd: (details) async {
-                      predictions = await canvas.runInference();
+                      GetIt.I<DrawingInterpreter>().runInference(
+                        await canvas.getPNGListFromCanvas()
+                      );
                       setState(() {});
                     },
                     child: Stack(
@@ -138,14 +144,18 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                             ? "assets/kanji_drawing_aid_w.png"
                             : "assets/kanji_drawing_aid_b.png")
                         ),
-                        Snappable(
+                        CanvasSnappable(
                           key: snappableKey,
+                          duration: Duration(milliseconds: 500),
                           child: CustomPaint(
                             size: Size(canvasSize, canvasSize),
                             painter: canvas,
                           ),
+                          snapColor: GetIt.I<Settings>().selectedThemeMode() 
+                            == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                           onSnapped: () {
-                            GetIt.I<Strokes>().deleteAllStrokes();
                             snappableKey.currentState.reset();
                           },
                         )
@@ -167,10 +177,12 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                         //only run inference if canvas still has strokes
                         if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
                           GetIt.I<Strokes>().removeLastStroke();
-                          predictions = await canvas.runInference();
+                          GetIt.I<DrawingInterpreter>().runInference(
+                            await canvas.getPNGListFromCanvas()
+                          ); 
                         }
                         if(GetIt.I<Strokes>().path.computeMetrics().isEmpty){
-                          predictions = List.generate(10, (i) => " ");
+                          GetIt.I<DrawingInterpreter>().clearPredictions(); 
                         }
                         setState(() {});
                       }
@@ -178,12 +190,12 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     // multi character search input
                       Expanded(
                       child: Hero(
-                        tag: "webviewHero_" + 
-                            (kanjiBuffer.kanjiBuffer == "" ? 
-                            "Buffer" : kanjiBuffer.kanjiBuffer),
+                        tag: "webviewHero_b_" + 
+                            (GetIt.I<KanjiBuffer>().kanjiBuffer == "" ? 
+                            "Buffer" : GetIt.I<KanjiBuffer>().kanjiBuffer),
                           child: Center(
                             key: SHOWCASE_DRAWING[6].key,
-                            child: KanjiBufferWidget(kanjiBuffer, canvasSize)
+                            child: KanjiBufferWidget(canvasSize)
                           )
                         //),
                       ),
@@ -193,14 +205,18 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       key: SHOWCASE_DRAWING[2].key,
                       icon: Icon(Icons.clear),
                       onPressed: () async {
-                        snappableKey.currentState.snap(
-                          await canvas.getRGBAListFromCanvas(),
-                          canvasSize.floor(),
-                          canvasSize.floor()
-                        );
-                        setState(() {
-                          predictions = List.generate(10, (i) => " ");
-                        });
+                        if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
+                          snappableKey.currentState.snap(
+                            await canvas.getRGBAListFromCanvas(),
+                            canvasSize.floor(), canvasSize.floor()
+                          );
+                          setState(() {
+                            GetIt.I<DrawingInterpreter>().clearPredictions(); 
+                          });
+                          
+                          await Future.delayed(Duration(milliseconds: 50));
+                          GetIt.I<Strokes>().deleteAllStrokes();
+                        }
                       }
                     ), 
                   ]
@@ -217,14 +233,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                   crossAxisCount: 5,
                   children: List.generate(10, (i) {
                     Widget widget = PredictionButton(
-                      predictions[i],
-                      () {
-                        setState(() {
-                          if(SETTINGS.emptyCanvasAfterDoubleTap)
-                            GetIt.I<Strokes>().deleteAllStrokes(); 
-                          kanjiBuffer.kanjiBuffer += predictions[i];
-                        });
-                      }
+                      GetIt.I<DrawingInterpreter>().predictions[i]
                     );
                     // instantiate short/long press showcase button
                     if(i == 0){
@@ -234,8 +243,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       );
                     }
                     return Hero(
-                      tag: "webviewHero_" + (predictions[i] == " " ? 
-                        i.toString() : predictions[i]),
+                      tag: "webviewHero_" + 
+                        (GetIt.I<DrawingInterpreter>().predictions[i] == " "
+                        ? i.toString()
+                        : GetIt.I<DrawingInterpreter>().predictions[i]),
                       child: widget,
                     );
                   },
