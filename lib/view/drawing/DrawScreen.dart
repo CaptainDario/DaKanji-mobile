@@ -7,6 +7,7 @@ import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/canvasSnappable.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
@@ -36,7 +37,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   // save the context for the Showcase view
   BuildContext myContext;
   // global keys for running animations
-  GlobalKey<SnappableState> snappableKey;
+  GlobalKey<CanvasSnappableState> snappableKey;
 
 
   @override
@@ -44,7 +45,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     super.initState();
 
     // initialize the global keys
-    snappableKey = GlobalKey<SnappableState>();
+    snappableKey = GlobalKey<CanvasSnappableState>();
 
     // always rebuild the ui when the kanji buffer changed
     GetIt.I<KanjiBuffer>().addListener(() {
@@ -141,12 +142,16 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                             ? "assets/kanji_drawing_aid_w.png"
                             : "assets/kanji_drawing_aid_b.png")
                         ),
-                        Snappable(
+                        CanvasSnappable(
                           key: snappableKey,
                           child: CustomPaint(
                             size: Size(canvasSize, canvasSize),
                             painter: canvas,
                           ),
+                          snapColor: GetIt.I<Settings>().selectedThemeMode() 
+                            == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                           onSnapped: () {
                             GetIt.I<Strokes>().deleteAllStrokes();
                             snappableKey.currentState.reset();

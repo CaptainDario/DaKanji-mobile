@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class Snappable extends StatefulWidget {
+class CanvasSnappable extends StatefulWidget {
   /// Widget to be snapped
   final Widget child;
 
@@ -33,9 +33,13 @@ class Snappable extends StatefulWidget {
   /// Function that gets called when snap ends
   final VoidCallback onSnapped;
 
-  const Snappable({
+  ///
+  final Color snapColor;
+
+  const CanvasSnappable({
     Key key,
     @required this.child,
+    @required this.snapColor,
     this.offset = const Offset(16, -16),
     this.duration = const Duration(milliseconds: 500),
     this.randomDislocationOffset = const Offset(16, 16),
@@ -44,10 +48,10 @@ class Snappable extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  SnappableState createState() => SnappableState();
+  CanvasSnappableState createState() => CanvasSnappableState();
 }
 
-class SnappableState extends State<Snappable>
+class CanvasSnappableState extends State<CanvasSnappable>
     with SingleTickerProviderStateMixin {
   static const double _singleLayerAnimationLength = 0.6;
   static const double _lastLayerAnimationStart =
@@ -148,7 +152,7 @@ class SnappableState extends State<Snappable>
         for (int i = 0; i < 4; i++){
           _layers[imageIndex][(y * width + x) * 4 + i] =
             canvas[(y * width + x) * 4 + 1];
-        }
+      }
       }
     }
 
@@ -205,11 +209,10 @@ class SnappableState extends State<Snappable>
 
     return AnimatedBuilder(
       animation: _animationController,
-      child: Image.memory(Bitmap.fromHeadless(
-          this.width,
-          this.height,
-          layer
-        ).buildHeaded()),
+      child: Image.memory(
+        Bitmap.fromHeadless(this.width, this.height, layer).buildHeaded(),
+        color: widget.snapColor 
+      ),
       builder: (context, child) {
         return Transform.translate(
           offset: offsetAnimation.value,
