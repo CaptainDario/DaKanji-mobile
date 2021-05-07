@@ -1,5 +1,4 @@
-import 'package:da_kanji_mobile/DrawScreen.dart';
-import 'package:da_kanji_mobile/FoldingWidget.dart';
+import 'package:da_kanji_mobile/view/FoldingWidget.dart';
 import 'package:flutter/material.dart';
 
 

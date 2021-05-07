@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-import 'DaKanjiDrawer.dart';
-import 'globals.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:get_it/get_it.dart';
+
+import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// The "settings"-screen.
@@ -38,8 +41,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: Text("Long press opens"),
             trailing: DropdownButton<String>(
-              value: SETTINGS.selectedDictionary,
-              items: SETTINGS.dictionaries 
+              value: GetIt.I<Settings>().selectedDictionary,
+              items: GetIt.I<Settings>().dictionaries 
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -49,8 +52,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onChanged: (String newValue) {
                 setState(() {
                   print(newValue);
-                  SETTINGS.selectedDictionary = newValue;
-                  SETTINGS.save();
+                  GetIt.I<Settings>().selectedDictionary = newValue;
+                  GetIt.I<Settings>().save();
                 });
               },
             ),
@@ -64,14 +67,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Expanded(
                     child: TextField(
                       enabled:
-                        SETTINGS.selectedDictionary == SETTINGS.dictionaries[3],
+                        GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3],
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: SETTINGS.customURL,
+                        labelText: GetIt.I<Settings>().customURL,
                         hintText: "URL of your dictionary"), 
                       onChanged: (value) {
-                        SETTINGS.customURL = value;
-                        SETTINGS.save();
+                        GetIt.I<Settings>().customURL = value;
+                        GetIt.I<Settings>().save();
                       },
                     )
                   )
@@ -91,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 children: [
                                   Text(
                                     "The app will replace a placeholder in the URL with the predicted character. " +
-                                    "This placeholder is: " + SETTINGS.kanjiPlaceholder + 
+                                    "This placeholder is: " + GetIt.I<Settings>().kanjiPlaceholder + 
                                     "\n" +
                                     "\n" +
                                     "Example:" +
@@ -101,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     "First you have to get the URL of the website for searching. " + 
                                     "In this case: 'https://jisho.org/search/口'. " + 
                                     "Now only the character in the URL has to be replaced with the placeholder. " + 
-                                    "This leads to 'https://jisho.org/search/" + SETTINGS.kanjiPlaceholder + "'."
+                                    "This leads to 'https://jisho.org/search/" + GetIt.I<Settings>().kanjiPlaceholder + "'."
                                     ),
                                 ]
                               )
@@ -119,22 +122,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // invert if short press or long press opens dict / copies to clip
           CheckboxListTile(
             title: Text("Invert long/short press"),
-            value: SETTINGS.invertShortLongPress, 
+            value: GetIt.I<Settings>().invertShortLongPress, 
             onChanged: (bool newValue){
               setState(() {
-                SETTINGS.invertShortLongPress = newValue;
-                SETTINGS.save();
+                GetIt.I<Settings>().invertShortLongPress = newValue;
+                GetIt.I<Settings>().save();
               });
             }
           ),
           // 
           CheckboxListTile(
             title: Text("Empty canvas after double tap"),
-            value: SETTINGS.emptyCanvasAfterDoubleTap, 
+            value: GetIt.I<Settings>().emptyCanvasAfterDoubleTap, 
             onChanged: (bool newValue){
               setState(() {
-                SETTINGS.emptyCanvasAfterDoubleTap = newValue;
-                SETTINGS.save();
+                GetIt.I<Settings>().emptyCanvasAfterDoubleTap = newValue;
+                GetIt.I<Settings>().save();
               });
             }
           ),
@@ -152,8 +155,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: Text("theme (restarts app)"),
             trailing: DropdownButton<String>(
-              value: SETTINGS.selectedTheme,
-              items: SETTINGS.themes
+              value: GetIt.I<Settings>().selectedTheme,
+              items: GetIt.I<Settings>().themes
                   .map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -162,8 +165,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }).toList(),
               onChanged: (String newValue) {
                 setState(() {
-                  SETTINGS.selectedTheme = newValue;
-                  SETTINGS.save();
+                  GetIt.I<Settings>().selectedTheme = newValue;
+                  GetIt.I<Settings>().save();
                   Phoenix.rebirth(context);
                 });
               },
@@ -176,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               icon: Icon(Icons.replay_outlined),
               onPressed: () { 
                 SHOW_SHOWCASE_DRAWING = true;
-                SETTINGS.save();
+                GetIt.I<Settings>().save();
                 Phoenix.rebirth(context);
               }
             )

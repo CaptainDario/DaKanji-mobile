@@ -1,10 +1,10 @@
-import 'globals.dart';
+import 'package:da_kanji_mobile/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Settings {
+class Settings with ChangeNotifier {
   /// The placeholder in the URL's which will be replaced by the predicted kanji
-  String kanjiPlaceholder = "%X%";
+  String kanjiPlaceholder;
 
   /// The custom URL a user can define on the settings page.
   String customURL;
@@ -19,8 +19,35 @@ class Settings {
   String weblioURL;
 
   /// A list with all available dictionary options.
-  List<String> dictionaries = 
-    [
+  List<String> dictionaries;
+
+  /// The string representation of the dictionary which will be used (long press)
+  String _selectedDictionary;
+
+  // the application version used when those settings were saved
+  String versionUsed;
+  
+  /// The theme which the application will use.
+  /// System will match the settings of the system.
+  String _selectedTheme;
+
+  /// A list with all available themes.
+  List<String> themes;
+  
+  /// A Map from the string of a theme to the ThemeMode of the theme.
+  Map<String, ThemeMode> themesDict;
+
+  /// Should the behavior of long and short press be inverted
+  bool _invertShortLongPress;
+
+  /// Should the canvas be cleared when a prediction was copied to kanjibuffer
+  bool _emptyCanvasAfterDoubleTap;
+
+
+  Settings(){
+    kanjiPlaceholder = "%X%";
+
+    dictionaries = [
       "jisho (web)", 
       "wadoku (web)",
       "weblio (web)",
@@ -31,41 +58,61 @@ class Settings {
       "takoboto (app)",
     ];
 
-  /// The string representation of the dictionary which will be used (long press)
-  String selectedDictionary;
+    themes = ["light", "dark", "system"];
 
-  // the application version used when those settings were saved
-  String versionUsed;
-  
-  /// The theme which the application will use.
-  /// System will match the settings of the system.
-  String selectedTheme;
+    themesDict = {
+      "light": ThemeMode.light,
+      "dark": ThemeMode.dark,
+      "system": ThemeMode.system
+    };
 
-  /// A list with all available themes.
-  List<String> themes = ["light", "dark", "system"];
-  
-  /// A Map from the string of a theme to the ThemeMode of the theme.
-  Map<String, ThemeMode> themesDict = {
-    "light": ThemeMode.light,
-    "dark": ThemeMode.dark,
-    "system": ThemeMode.system
-  };
-
-  /// Should the behavior of long and short press be inverted
-  bool invertShortLongPress = false;
-
-  ///
-  bool emptyCanvasAfterDoubleTap = true;
-
-
-  Settings() {
-    String kanjiPlaceholder = "%X%";
+    invertShortLongPress = false;
+    emptyCanvasAfterDoubleTap = true;
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
   }
 
+  String get selectedDictionary{
+    return _selectedDictionary;
+  }
+
+  set selectedDictionary(String newDictionary){
+    _selectedDictionary = newDictionary;
+    notifyListeners();
+  }
+
+  get selectedTheme{
+    return _selectedTheme;
+  }
+
+  ThemeMode selectedThemeMode() {
+    return themesDict[_selectedTheme];
+  }
+  
+  set selectedTheme(String newTheme){
+    _selectedTheme = newTheme;
+    notifyListeners();
+  }
+  
+  bool get invertShortLongPress{
+    return _invertShortLongPress;
+  }
+
+  set invertShortLongPress(bool invert){
+    _invertShortLongPress = invert;
+    notifyListeners();
+  }
+
+  bool get emptyCanvasAfterDoubleTap{
+    return _emptyCanvasAfterDoubleTap;
+  }
+  
+  set emptyCanvasAfterDoubleTap(bool empty){
+    _emptyCanvasAfterDoubleTap = empty;
+    notifyListeners();
+  }
 
   /// Saves all settings to the SharedPreferences.
   void save() async {
@@ -77,7 +124,7 @@ class Settings {
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
     
     prefs.setString('customURL', customURL);
-    prefs.setString('selectedTheme', selectedTheme);
+    prefs.setString('selectedTheme', _selectedTheme);
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
 
@@ -89,7 +136,7 @@ class Settings {
     emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
 
     customURL = await loadString('customURL') ?? '';
-    selectedTheme = await loadString('selectedTheme') ?? themes[2];
+    _selectedTheme = await loadString('selectedTheme') ?? themes[2];
     versionUsed = await loadString('versionUsed') ?? '';
     selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
 

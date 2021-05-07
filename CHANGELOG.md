@@ -3,13 +3,12 @@
 
 ## v 1.2.0 - アニメ
 new Features:
+- *extremly* fast startup
 - animations:
-  - double tap on prediction
-  - double tap on kanji box
-  - new character added to kanji box
-  - character removed from kanji box
+  - double tap on prediction / kanji box
+  - character added / added to / from kanji box
   - opening a prediction in a web dictionary
-  - delete stroke / image from canvas
+  - delete stroke(s) from canvas
 - deep linking 'dakanji://dakanji/'
 - splash screen
 
@@ -17,6 +16,7 @@ Changes:
 - color when pressing on kanji box
 - kanji box now shows the last added characters
 - use webview instead of default browser
+- better drawing
 
 -------------------------------------------------------------------------
 
