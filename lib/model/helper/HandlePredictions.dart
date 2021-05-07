@@ -184,14 +184,16 @@ class HandlePrediction{
     else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3])
       url = GetIt.I<Settings>().customURL;
 
-    // check that the URL starts with protocol, otherwise launch() fails
-    if (!(url.startsWith("http://") || url.startsWith("https://")))
-      url = "https://" + url;
+    if(url != null){
+      // check that the URL starts with protocol, otherwise launch() fails
+      if (!(url.startsWith("http://") || url.startsWith("https://")))
+        url = "https://" + url;
 
-    // replace the placeholder with the actual character
-    url =
-      url.replaceFirst(new RegExp(GetIt.I<Settings>().kanjiPlaceholder), kanji);
-    url = Uri.encodeFull(url);
+      // replace the placeholder with the actual character
+      url =
+        url.replaceFirst(new RegExp(GetIt.I<Settings>().kanjiPlaceholder), kanji);
+      url = Uri.encodeFull(url);
+    }
     return url;
   }
 
