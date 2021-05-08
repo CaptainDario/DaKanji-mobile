@@ -4,12 +4,12 @@
 ## v 1.2.0 - アニメ
 new Features:
 - *extremly* fast startup
+- [deep linking 'dakanji://dakanji/'](https://github.com/CaptainDario/DaKanji-Mobile#deep-linking)
 - animations:
   - double tap on prediction / kanji box
-  - character added / added to / from kanji box
+  - character added/deleted to/from kanji box
   - opening a prediction in a web dictionary
   - delete stroke(s) from canvas
-- deep linking 'dakanji://dakanji/'
 - splash screen
 
 Changes:
