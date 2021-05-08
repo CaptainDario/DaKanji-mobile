@@ -2,6 +2,7 @@ import 'package:da_kanji_mobile/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 /// The "changelog"-screen.
@@ -25,7 +26,15 @@ class ChangelogScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: Markdown(data: WHOLE_CHANGELOG)
+                    child: Markdown(
+                      data: WHOLE_CHANGELOG,
+                      selectable: false,
+                      onTapLink: 
+                      (String text, String url, String title) async {
+                        if(await canLaunch(url))
+                          launch(url);
+                      },
+                    )
                   ),
                 ]
               )

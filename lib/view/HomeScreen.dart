@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/globals.dart';
@@ -50,8 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           isAlwaysShown: true,
                           controller: _scrollController,
                           child: Markdown(
+                            selectable: false,
                             controller: _scrollController,
                             data: NEW_CHANGELOG,
+                            onTapLink:
+                            (String text, String url, String title) async {
+                              if(await canLaunch(url))
+                                launch(url);
+                            },
                           ),
                         ),
                         width: MediaQuery.of(context).size.width * 3/4,
