@@ -7,7 +7,6 @@ import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
-import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/canvasSnappable.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
@@ -38,6 +37,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   BuildContext myContext;
   // global keys for running animations
   GlobalKey<CanvasSnappableState> snappableKey;
+  // the ID of the pointer which is currently drawing
+  int pointerID;
 
 
   @override
@@ -106,35 +107,44 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                 margin: EdgeInsets.fromLTRB(0, 
                   (MediaQuery.of(context).size.width - canvasSize) / 2, 
                   0, 0),
-                  child: GestureDetector(
+                  child: Listener(
                     key: SHOWCASE_DRAWING[0].key,
                     // drawing pointer moved
-                    onPanUpdate: (details) {
-                      setState(() {
-                        RenderBox renderBox = context.findRenderObject();
-                        Offset point =
-                          renderBox.globalToLocal(details.localPosition);
-                        GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
-                      });
+                    onPointerMove: (details) {
+                      // allow only one pointer at a time
+                      if(pointerID == details.pointer){
+                        setState(() {
+                          RenderBox renderBox = context.findRenderObject();
+                          Offset point =
+                            renderBox.globalToLocal(details.localPosition);
+                          GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
+                        });
+                      }
                     },
                     // started drawing
-                    onPanStart: (details) {
-                      setState(() {
-                        // end the snapping animation when user starts drawing
-                        if(snappableKey.currentState.snapIsRunning())
-                          snappableKey.currentState.reset();
+                    onPointerDown: (details) {
+                      // allow only one pointer at a time
+                      if(pointerID == null){
+                        pointerID = details.pointer;
+                        setState(() {
+                          // end the snapping animation when user starts drawing
+                          if(snappableKey.currentState.snapIsRunning())
+                            snappableKey.currentState.reset();
 
-                        RenderBox renderBox = context.findRenderObject();
-                        Offset point =
-                          renderBox.globalToLocal(details.localPosition);
-                        GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
-                      });
+                          RenderBox renderBox = context.findRenderObject();
+                          Offset point =
+                            renderBox.globalToLocal(details.localPosition);
+                          GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
+                        });
+                      }
                     },
                     // finished drawing a stroke
-                    onPanEnd: (details) async {
+                    onPointerUp: (details) async {
                       GetIt.I<DrawingInterpreter>().runInference(
                         await canvas.getPNGListFromCanvas()
                       );
+                      // mark this pointer as removed
+                      pointerID = null;
                       setState(() {});
                     },
                     child: Stack(
@@ -151,8 +161,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                             size: Size(canvasSize, canvasSize),
                             painter: canvas,
                           ),
-                          snapColor: GetIt.I<Settings>().selectedThemeMode() 
-                            == ThemeMode.dark
+                          snapColor:
+                            Theme.of(context).brightness == Brightness.dark
                             ? Colors.white
                             : Colors.black,
                           onSnapped: () {
