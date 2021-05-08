@@ -146,7 +146,7 @@ class DrawScreenShowcase extends Showcase {
         GetIt.I<Settings>().save();
       },
       onClickTarget: (target) {
-        // open drawer after clicking on the swipe left showcase
+        // open drawer after clicking on the second last showcase
         if(target.identify == SHOWCASE_DRAWING[11].title)
           DRAWER_KEY.currentState.openDrawer();
       },
