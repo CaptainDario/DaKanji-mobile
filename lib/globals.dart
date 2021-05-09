@@ -12,20 +12,6 @@ const String APP_TITLE = "DaKanji";
 // deep link pattern
 const String APP_LINK = r"dakanji://dakanji/";
 
-// the whole changelog of the app
-// ignore: non_constant_identifier_names
-String WHOLE_CHANGELOG = "";
-// changelog of the newest version
-// ignore: non_constant_identifier_names
-String NEW_CHANGELOG = "";
-// should the changelog be shown
-// ignore: non_constant_identifier_names
-bool SHOW_CHANGELOG = false;
-
-// about page
-// ignore: non_constant_identifier_names
-String ABOUT = "";
-
 // the version number of this app
 // ignore: non_constant_identifier_names
 String VERSION;

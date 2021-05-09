@@ -1,3 +1,4 @@
+import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -6,7 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:da_kanji_mobile/provider/Settings.dart';
-import 'package:da_kanji_mobile/globals.dart';
+
 
 
 /// The "home"-screen
@@ -32,8 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // after the page was build 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // if a new version was installed open the what's new pop up 
-      if(SHOW_CHANGELOG){
-        SHOW_CHANGELOG = false;
+      if(GetIt.I<Changelog>().showChangelog){
+        GetIt.I<Changelog>().showChangelog = false;
 
         // what's new dialogue 
         showDialog(
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Markdown(
                             selectable: false,
                             controller: _scrollController,
-                            data: NEW_CHANGELOG,
+                            data: GetIt.I<Changelog>().newestChangelog,
                             onTapLink:
                             (String text, String url, String title) async {
                               if(await canLaunch(url))

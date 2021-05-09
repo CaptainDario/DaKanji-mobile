@@ -1,10 +1,12 @@
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 
-import 'DaKanjiDrawer.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:da_kanji_mobile/provider/About.dart';
+import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
-import '../globals.dart';
 
 
 /// The "about"-screen
@@ -21,26 +23,11 @@ class AboutScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Image(image: AssetImage("media/banner.png"), width: 200,),
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: (){
-                          //launch(STORE)
-                        }, 
-                        child: Text("Rate this app")
-                      ),
-                    ),
-                  ],
-                ),
-              ),
           // show the about.md
           Container(
             padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
             child: MarkdownBody(
-              data: ABOUT,
+              data: GetIt.I<About>().about,
               onTapLink: (text, url, title) {
                 print((text + " " + url + " " + title));
                 launch(url);
@@ -65,7 +52,23 @@ class AboutScreen extends StatelessWidget {
                 )
               )
             ]
-          )
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if(await canLaunch(GetIt.I<About>().mobileStoreLink))
+                        launch(GetIt.I<About>().mobileStoreLink);
+                    }, 
+                    child: Text("Rate this app")
+                  ),
+                ),
+              ],
+            ),
+          ),
         ]
       ),
     );

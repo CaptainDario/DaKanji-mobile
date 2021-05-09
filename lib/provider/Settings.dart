@@ -1,5 +1,7 @@
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings with ChangeNotifier {
@@ -145,7 +147,7 @@ class Settings with ChangeNotifier {
     if(versionUsed != VERSION){
 
       // show the changelog
-      SHOW_CHANGELOG = true;
+      GetIt.I<Changelog>().showChangelog = true;
 
       // this version has new features for drawing screen => show tutorial
       if(DRAWING_SCREEN_NEW_FEATURES.contains(VERSION)){
