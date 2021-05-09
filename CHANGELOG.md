@@ -13,10 +13,10 @@ new Features:
 - splash screen
 
 Changes:
-- color when pressing on kanji box
+- better drawing
 - kanji box now shows the last added characters
 - use webview instead of default browser
-- better drawing
+- color when pressing on kanji box
 
 -------------------------------------------------------------------------
 
