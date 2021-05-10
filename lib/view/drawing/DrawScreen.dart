@@ -92,12 +92,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
 
     return Scaffold(
       key: DRAWER_KEY,
-      appBar: AppBar(
-        title: Text("Drawing"),
-      ),
-      drawer: DaKanjiDrawer(),
-      body:
-      Center(
+      body: DaKanjiDrawer(
+        child: Center(
           child: Column( 
             children: [
               // the canvas to draw on
@@ -266,10 +262,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
               Spacer(),
             ],
           ),
+        ),
       )
     );
   }
-  
-
-
 }

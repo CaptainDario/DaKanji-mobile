@@ -17,60 +17,60 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("About")),
-      drawer: DaKanjiDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image(image: AssetImage("media/banner.png"), width: 200,),
-          // show the about.md
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
-            child: MarkdownBody(
-              data: GetIt.I<About>().about,
-              onTapLink: (text, url, title) {
-                print((text + " " + url + " " + title));
-                launch(url);
-              },
+      body: DaKanjiDrawer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image(image: AssetImage("media/banner.png"), width: 200,),
+            // show the about.md
+            Container(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
+              child: MarkdownBody(
+                data: GetIt.I<About>().about,
+                onTapLink: (text, url, title) {
+                  print((text + " " + url + " " + title));
+                  launch(url);
+                },
+              ),
             ),
-          ),
-          // text with link to open the "changelog"-screen
-          Row(
-            children:[
-              Container(
-                padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
-                child: GestureDetector(
-                  child: Text(
-                    "Show me the changelog.",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  onTap: () => Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => ChangelogScreen()),
+            // text with link to open the "changelog"-screen
+            Row(
+              children:[
+                Container(
+                  padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
+                  child: GestureDetector(
+                    child: Text(
+                      "Show me the changelog.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    onTap: () => Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => ChangelogScreen()),
+                    )
                   )
                 )
-              )
-            ]
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if(await canLaunch(GetIt.I<About>().mobileStoreLink))
-                        launch(GetIt.I<About>().mobileStoreLink);
-                    }, 
-                    child: Text("Rate this app")
-                  ),
-                ),
-              ],
+              ]
             ),
-          ),
-        ]
-      ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if(await canLaunch(GetIt.I<About>().mobileStoreLink))
+                          launch(GetIt.I<About>().mobileStoreLink);
+                      }, 
+                      child: Text("Rate this app")
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]
+        ),
+      )
     );
   }
 }
