@@ -6,31 +6,29 @@ import 'package:flutter/material.dart';
 
 /// The canvas widget on which the user draws the kanji.
 class DrawingPainter extends CustomPainter {
+  
   /// the path which should be drawn on the canvas
-  Path path = Path();
-
+  Path _path;
   /// if the app is running in dark mode
-  bool darkMode;
-
+  bool _darkMode;
   /// the size of the canvas
-  Size size;
-
+  Size _size;
   /// if the canvas is currently being recorded
-  bool recording;
-
-
-  Uint8List snapImage;
+  bool _recording;
+  /// Amount of the last stroke which should be shown (delete stroke animation)
+  double _deleteProgress;
 
 
   /// Constructs an DrawingPainter instance.
   /// 
   /// All points given with [pointsList] will be drawn on the canvas.
   /// [darkMode] should reflect in which mode the app is running.
-  DrawingPainter(Path path, bool darkMode, Size size) {
-    this.size = size;
-    this.path = path;
-    this.darkMode = darkMode;
-    this.recording = false;
+  DrawingPainter(Path path, bool darkMode, Size size, double progress) {
+    this._size = size;
+    this._path = path;
+    this._darkMode = darkMode;
+    this._recording = false;
+    this._deleteProgress = progress;
   }
 
 
@@ -41,15 +39,15 @@ class DrawingPainter extends CustomPainter {
   /// than generates an image and returns it.
   Future<ui.Image> getImageFromCanvas() async {
     // record the drawn character on a new canvas
-    this.recording = true;
+    this._recording = true;
     ui.PictureRecorder drawnImageRecorder = ui.PictureRecorder();
     Canvas getImageCanvas = new ui.Canvas(drawnImageRecorder);
-    paint(getImageCanvas, size);
+    paint(getImageCanvas, _size);
     ui.Picture pic = drawnImageRecorder.endRecording();
-    this.recording = false;
+    this._recording = false;
 
     // convert the recording to an image
-    return pic.toImage(size.width.floor(), size.height.floor());
+    return pic.toImage(_size.width.floor(), _size.height.floor());
   }
 
   /// Returns an image of the current canvas as Uint8List (PNG-format).
@@ -80,22 +78,36 @@ class DrawingPainter extends CustomPainter {
     return rgbaBytes;
   }
 
-  /// Paints the [path] on the given [canvas].
+  /// Paints the [_path] on the given [canvas].
   void drawPath(Canvas canvas) {
     // Setup canvas and paint
-    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.clipRect(Rect.fromLTWH(0, 0, _size.width, _size.height));
     Paint paint = Paint()
-      ..strokeWidth = size.width / 50.0
+      ..strokeWidth = _size.width / 50.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
-    if (this.darkMode || this.recording)
+    if (this._darkMode || this._recording)
       paint.color = Colors.white;
     else
       paint.color = Colors.black;
 
     // paint the strokes
-    canvas.drawPath(this.path, paint);
+    ui.PathMetrics metrics = _path.computeMetrics();
+    int metricsAmount = _path.computeMetrics().length;
+    int metricsCount = 0;
+    for (ui.PathMetric metric in metrics){
+      double percentage;
+
+      // draw all paths except the last one at full length
+      if(metricsAmount > metricsCount+1)
+        percentage = metric.length;
+      else
+        percentage = metric.length * _deleteProgress;
+      Path extractPath = metric.extractPath(0.0, percentage);
+      canvas.drawPath(extractPath, paint);
+      metricsCount += 1;
+    }
   }
 
   @override

@@ -34,50 +34,57 @@ class DrawScreen extends StatefulWidget {
 }
 
 class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
-  // the DrawingPainter instance which defines the canvas to drawn on.
-  DrawingPainter canvas;
-  // the size of the canvas widget
-  double canvasSize;
-  // save the context for the Showcase view
-  BuildContext myContext;
-  // global keys for running animations
-  GlobalKey<CanvasSnappableState> snappableKey;
-  // the ID of the pointer which is currently drawing
-  int pointerID;
+  /// the DrawingPainter instance which defines the canvas to drawn on.
+  DrawingPainter _canvas;
+  /// the size of the canvas widget
+  double _canvasSize;
+  /// global keys for running animations
+  GlobalKey<CanvasSnappableState> _snappableKey;
+  /// the ID of the pointer which is currently drawing
+  int _pointerID;
+  ///
+  AnimationController _canvasController;
 
   @override
   void initState() {
     super.initState();
 
     // initialize the global keys
-    snappableKey = GlobalKey<CanvasSnappableState>();
+    _snappableKey = GlobalKey<CanvasSnappableState>();
 
     // always rebuild the ui when the kanji buffer changed
     GetIt.I<KanjiBuffer>().addListener(() {
       GetIt.I<KanjiBuffer>().runAnimation = true;
     });
-
     // initialize the drawing interpreter
     GetIt.I<DrawingInterpreter>().init();
+
+    _canvasController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200)
+    );
+    _canvasController.value = 1.0;
+    _canvasController.addStatusListener((status) {
+      if(status == AnimationStatus.dismissed){
+        GetIt.I<Strokes>().removeLastStroke();
+        _canvasController.value = 1.0;
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    GetIt.I<DrawingInterpreter>().free();
   }
 
   @override
   Widget build(BuildContext context) {
     bool darkMode = (Theme.of(context).brightness == Brightness.dark);
     // init size of canvas and assure that it is min. 20 smaller than screen width
-    canvasSize = MediaQuery.of(context).size.height * 3/6;
-    if(canvasSize >= MediaQuery.of(context).size.width - 20)
-      canvasSize = MediaQuery.of(context).size.width - 20;
-    canvas = new DrawingPainter(
-      GetIt.I<Strokes>().path,
-      darkMode,
-      Size(canvasSize, canvasSize),
-    );
+    _canvasSize = MediaQuery.of(context).size.height * 3/6;
+    if(_canvasSize >= MediaQuery.of(context).size.width - 20)
+      _canvasSize = MediaQuery.of(context).size.width - 20;
     
     // add a listener to when the Navigator animation finished
     var route = ModalRoute.of(context);
@@ -101,81 +108,91 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
           children: [
             // the canvas to draw on
             Container(
-              width: canvasSize,
-              height: canvasSize,
+              width: _canvasSize,
+              height: _canvasSize,
               margin: EdgeInsets.fromLTRB(0, 
-                (MediaQuery.of(context).size.width - canvasSize) / 2, 
+                (MediaQuery.of(context).size.width - _canvasSize) / 2, 
                 0, 0),
-                child: Listener(
-                  key: SHOWCASE_DRAWING[0].key,
-                  // drawing pointer moved
-                  onPointerMove: (details) {
-                    // allow only one pointer at a time
-                    if(pointerID == details.pointer){
-                      setState(() {
-                        RenderBox renderBox = context.findRenderObject();
-                        Offset point =
-                          renderBox.globalToLocal(details.localPosition);
-                        GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
-                      });
-                    }
-                  },
-                  // started drawing
-                  onPointerDown: (details) {
-                    // allow only one pointer at a time
-                    if(pointerID == null){
-                      pointerID = details.pointer;
-                      setState(() {
-                        // end the snapping animation when user starts drawing
-                        if(snappableKey.currentState.snapIsRunning())
-                          snappableKey.currentState.reset();
+              child: Listener(
+                key: SHOWCASE_DRAWING[0].key,
+                // drawing pointer moved
+                onPointerMove: (details) {
+                  // allow only one pointer at a time
+                  if(_pointerID == details.pointer){
+                    setState(() {
+                      RenderBox renderBox = context.findRenderObject();
+                      Offset point =
+                        renderBox.globalToLocal(details.localPosition);
+                      GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
+                    });
+                  }
+                },
+                // started drawing
+                onPointerDown: (details) {
+                  // allow only one pointer at a time
+                  if(_pointerID == null){
+                    _pointerID = details.pointer;
+                    setState(() {
+                      // end the snapping animation when user starts drawing
+                      if(_snappableKey.currentState.snapIsRunning())
+                        _snappableKey.currentState.reset();
 
-                        RenderBox renderBox = context.findRenderObject();
-                        Offset point =
-                          renderBox.globalToLocal(details.localPosition);
-                        GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
-                      });
-                    }
-                  },
-                  // finished drawing a stroke
-                  onPointerUp: (details) async {
-                    GetIt.I<DrawingInterpreter>().runInference(
-                      await canvas.getPNGListFromCanvas()
-                    );
-                    // mark this pointer as removed
-                    pointerID = null;
-                    setState(() {});
-                  },
-                  child: Stack(
-                    children: [
-                      Image(image: 
-                        AssetImage(darkMode
-                          ? "assets/kanji_drawing_aid_w.png"
-                          : "assets/kanji_drawing_aid_b.png")
+                      RenderBox renderBox = context.findRenderObject();
+                      Offset point =
+                        renderBox.globalToLocal(details.localPosition);
+                      GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
+                    });
+                  }
+                },
+                // finished drawing a stroke
+                onPointerUp: (details) async {
+                  GetIt.I<DrawingInterpreter>().runInference(
+                    await _canvas.getPNGListFromCanvas()
+                  );
+                  // mark this pointer as removed
+                  _pointerID = null;
+                  setState(() {});
+                },
+                child: Stack(
+                  children: [
+                    Image(image: 
+                      AssetImage(darkMode
+                        ? "assets/kanji_drawing_aid_w.png"
+                        : "assets/kanji_drawing_aid_b.png")
+                    ),
+                    CanvasSnappable(
+                      key: _snappableKey,
+                      duration: Duration(milliseconds: 500),
+                      child: AnimatedBuilder(
+                        animation: _canvasController,
+                        builder: (BuildContext context, Widget child){
+                          _canvas = DrawingPainter(
+                            GetIt.I<Strokes>().path, darkMode, 
+                            Size(_canvasSize, _canvasSize),
+                            _canvasController.value
+                          );
+                          return CustomPaint(
+                            size: Size(_canvasSize, _canvasSize),
+                            painter: _canvas,
+                          );
+                        }
                       ),
-                      CanvasSnappable(
-                        key: snappableKey,
-                        duration: Duration(milliseconds: 500),
-                        child: CustomPaint(
-                          size: Size(canvasSize, canvasSize),
-                          painter: canvas,
-                        ),
-                        snapColor:
-                          Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
-                        onSnapped: () {
-                          snappableKey.currentState.reset();
-                        },
-                      )
-                    ],
-                  ),
-                ),
+                      snapColor:
+                        Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black,
+                      onSnapped: () {
+                        _snappableKey.currentState.reset();
+                      },
+                    )
+                  ],
+                )
+              )
             ),
             Spacer(),
             // undo/clear button and kanjiBuffer,
             Container(
-              width: canvasSize,
+              width: _canvasSize,
               child: Row(
                 children: [
                   // undo
@@ -183,14 +200,23 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     key: SHOWCASE_DRAWING[1].key,
                     icon: Icon(Icons.undo),
                     onPressed: () async {
-                      //only run inference if canvas still has strokes
-                      if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
+                      int strokes = GetIt.I<Strokes>().path.computeMetrics().length;
+
+                      // if animation is already running stop it
+                      // and delete old stroke before deleting this stroke
+                      if(_canvasController.status == AnimationStatus.reverse){
                         GetIt.I<Strokes>().removeLastStroke();
+                        _canvasController.value = 1.0;
+                      } 
+
+                      //only run inference if canvas still has strokes
+                      if(strokes >= 1){
+                         _canvasController.reverse(from: 1.0);
                         GetIt.I<DrawingInterpreter>().runInference(
-                          await canvas.getPNGListFromCanvas()
+                          await _canvas.getPNGListFromCanvas()
                         ); 
                       }
-                      if(GetIt.I<Strokes>().path.computeMetrics().isEmpty){
+                      if(strokes == 0){
                         GetIt.I<DrawingInterpreter>().clearPredictions(); 
                       }
                       setState(() {});
@@ -204,7 +230,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                           "Buffer" : GetIt.I<KanjiBuffer>().kanjiBuffer),
                         child: Center(
                           key: SHOWCASE_DRAWING[6].key,
-                          child: KanjiBufferWidget(canvasSize)
+                          child: KanjiBufferWidget(_canvasSize)
                         )
                       //),
                     ),
@@ -215,9 +241,9 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     icon: Icon(Icons.clear),
                     onPressed: () async {
                       if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
-                        snappableKey.currentState.snap(
-                          await canvas.getRGBAListFromCanvas(),
-                          canvasSize.floor(), canvasSize.floor()
+                        _snappableKey.currentState.snap(
+                          await _canvas.getRGBAListFromCanvas(),
+                          _canvasSize.floor(), _canvasSize.floor()
                         );
                         setState(() {
                           GetIt.I<DrawingInterpreter>().clearPredictions(); 
@@ -234,9 +260,9 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
             // prediction buttons
             Container(
               key: SHOWCASE_DRAWING[3].key,
-              width: canvasSize,
+              width: _canvasSize,
               // approximated button height (width/5) * numRows + padding  
-              height: (canvasSize / 5.0) * 2.0 + 10, 
+              height: (_canvasSize / 5.0) * 2.0 + 10, 
               child: GridView.count(
                 physics: new NeverScrollableScrollPhysics(),
                 crossAxisCount: 5,
