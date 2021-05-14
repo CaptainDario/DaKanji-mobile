@@ -14,7 +14,7 @@ new Features:
 - splash screen
 
 Changes:
-- better drawing
+- improved drawing experience
 - kanji box now shows the last added characters
 - use webview instead of default browser
 - drawer now indicates current location
