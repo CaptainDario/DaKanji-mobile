@@ -16,6 +16,7 @@ import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
 import 'package:da_kanji_mobile/provider/Changelog.dart';
+import 'package:da_kanji_mobile/provider/DrawerListener.dart';
 import 'package:da_kanji_mobile/view/HomeScreen.dart';
 import 'package:da_kanji_mobile/view/Settingsscreen.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
@@ -68,6 +69,7 @@ void setupGetIt() {
   GetIt.I<About>().init();
   GetIt.I.registerSingleton<Changelog>(Changelog());
   GetIt.I<Changelog>().init();
+  GetIt.I.registerSingleton(DrawerListener());
 }
 
 /// The starting widget of the app
