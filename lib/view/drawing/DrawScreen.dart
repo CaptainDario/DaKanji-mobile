@@ -93,182 +93,179 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     }
     route.animation.addStatusListener(handler);
 
-    return Scaffold(
-      key: DRAWER_KEY,
-      body: DaKanjiDrawer(
-        currentScreen: Screens.drawing,
-        animationAtStart: !widget.openedByDrawer,
-        child: Center(
-          child: Column( 
-            children: [
-              // the canvas to draw on
-              Container(
-                width: canvasSize,
-                height: canvasSize,
-                margin: EdgeInsets.fromLTRB(0, 
-                  (MediaQuery.of(context).size.width - canvasSize) / 2, 
-                  0, 0),
-                  child: Listener(
-                    key: SHOWCASE_DRAWING[0].key,
-                    // drawing pointer moved
-                    onPointerMove: (details) {
-                      // allow only one pointer at a time
-                      if(pointerID == details.pointer){
-                        setState(() {
-                          RenderBox renderBox = context.findRenderObject();
-                          Offset point =
-                            renderBox.globalToLocal(details.localPosition);
-                          GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
-                        });
-                      }
-                    },
-                    // started drawing
-                    onPointerDown: (details) {
-                      // allow only one pointer at a time
-                      if(pointerID == null){
-                        pointerID = details.pointer;
-                        setState(() {
-                          // end the snapping animation when user starts drawing
-                          if(snappableKey.currentState.snapIsRunning())
-                            snappableKey.currentState.reset();
+    return DaKanjiDrawer(
+      currentScreen: Screens.drawing,
+      animationAtStart: !widget.openedByDrawer,
+      child: Center(
+        child: Column( 
+          children: [
+            // the canvas to draw on
+            Container(
+              width: canvasSize,
+              height: canvasSize,
+              margin: EdgeInsets.fromLTRB(0, 
+                (MediaQuery.of(context).size.width - canvasSize) / 2, 
+                0, 0),
+                child: Listener(
+                  key: SHOWCASE_DRAWING[0].key,
+                  // drawing pointer moved
+                  onPointerMove: (details) {
+                    // allow only one pointer at a time
+                    if(pointerID == details.pointer){
+                      setState(() {
+                        RenderBox renderBox = context.findRenderObject();
+                        Offset point =
+                          renderBox.globalToLocal(details.localPosition);
+                        GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
+                      });
+                    }
+                  },
+                  // started drawing
+                  onPointerDown: (details) {
+                    // allow only one pointer at a time
+                    if(pointerID == null){
+                      pointerID = details.pointer;
+                      setState(() {
+                        // end the snapping animation when user starts drawing
+                        if(snappableKey.currentState.snapIsRunning())
+                          snappableKey.currentState.reset();
 
-                          RenderBox renderBox = context.findRenderObject();
-                          Offset point =
-                            renderBox.globalToLocal(details.localPosition);
-                          GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
-                        });
-                      }
-                    },
-                    // finished drawing a stroke
-                    onPointerUp: (details) async {
-                      GetIt.I<DrawingInterpreter>().runInference(
-                        await canvas.getPNGListFromCanvas()
-                      );
-                      // mark this pointer as removed
-                      pointerID = null;
-                      setState(() {});
-                    },
-                    child: Stack(
-                      children: [
-                        Image(image: 
-                          AssetImage(darkMode
-                            ? "assets/kanji_drawing_aid_w.png"
-                            : "assets/kanji_drawing_aid_b.png")
+                        RenderBox renderBox = context.findRenderObject();
+                        Offset point =
+                          renderBox.globalToLocal(details.localPosition);
+                        GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
+                      });
+                    }
+                  },
+                  // finished drawing a stroke
+                  onPointerUp: (details) async {
+                    GetIt.I<DrawingInterpreter>().runInference(
+                      await canvas.getPNGListFromCanvas()
+                    );
+                    // mark this pointer as removed
+                    pointerID = null;
+                    setState(() {});
+                  },
+                  child: Stack(
+                    children: [
+                      Image(image: 
+                        AssetImage(darkMode
+                          ? "assets/kanji_drawing_aid_w.png"
+                          : "assets/kanji_drawing_aid_b.png")
+                      ),
+                      CanvasSnappable(
+                        key: snappableKey,
+                        duration: Duration(milliseconds: 500),
+                        child: CustomPaint(
+                          size: Size(canvasSize, canvasSize),
+                          painter: canvas,
                         ),
-                        CanvasSnappable(
-                          key: snappableKey,
-                          duration: Duration(milliseconds: 500),
-                          child: CustomPaint(
-                            size: Size(canvasSize, canvasSize),
-                            painter: canvas,
-                          ),
-                          snapColor:
-                            Theme.of(context).brightness == Brightness.dark
+                        snapColor:
+                          Theme.of(context).brightness == Brightness.dark
                             ? Colors.white
                             : Colors.black,
-                          onSnapped: () {
-                            snappableKey.currentState.reset();
-                          },
+                        onSnapped: () {
+                          snappableKey.currentState.reset();
+                        },
+                      )
+                    ],
+                  ),
+                ),
+            ),
+            Spacer(),
+            // undo/clear button and kanjiBuffer,
+            Container(
+              width: canvasSize,
+              child: Row(
+                children: [
+                  // undo
+                  IconButton(
+                    key: SHOWCASE_DRAWING[1].key,
+                    icon: Icon(Icons.undo),
+                    onPressed: () async {
+                      //only run inference if canvas still has strokes
+                      if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
+                        GetIt.I<Strokes>().removeLastStroke();
+                        GetIt.I<DrawingInterpreter>().runInference(
+                          await canvas.getPNGListFromCanvas()
+                        ); 
+                      }
+                      if(GetIt.I<Strokes>().path.computeMetrics().isEmpty){
+                        GetIt.I<DrawingInterpreter>().clearPredictions(); 
+                      }
+                      setState(() {});
+                    }
+                  ),
+                  // multi character search input
+                    Expanded(
+                    child: Hero(
+                      tag: "webviewHero_b_" + 
+                          (GetIt.I<KanjiBuffer>().kanjiBuffer == "" ? 
+                          "Buffer" : GetIt.I<KanjiBuffer>().kanjiBuffer),
+                        child: Center(
+                          key: SHOWCASE_DRAWING[6].key,
+                          child: KanjiBufferWidget(canvasSize)
                         )
-                      ],
+                      //),
                     ),
                   ),
-              ),
-              Spacer(),
-              // undo/clear button and kanjiBuffer,
-              Container(
-                width: canvasSize,
-                child: Row(
-                  children: [
-                    // undo
-                    IconButton(
-                      key: SHOWCASE_DRAWING[1].key,
-                      icon: Icon(Icons.undo),
-                      onPressed: () async {
-                        //only run inference if canvas still has strokes
-                        if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
-                          GetIt.I<Strokes>().removeLastStroke();
-                          GetIt.I<DrawingInterpreter>().runInference(
-                            await canvas.getPNGListFromCanvas()
-                          ); 
-                        }
-                        if(GetIt.I<Strokes>().path.computeMetrics().isEmpty){
+                  // clear
+                  IconButton(
+                    key: SHOWCASE_DRAWING[2].key,
+                    icon: Icon(Icons.clear),
+                    onPressed: () async {
+                      if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
+                        snappableKey.currentState.snap(
+                          await canvas.getRGBAListFromCanvas(),
+                          canvasSize.floor(), canvasSize.floor()
+                        );
+                        setState(() {
                           GetIt.I<DrawingInterpreter>().clearPredictions(); 
-                        }
-                        setState(() {});
+                        });
+                        
+                        await Future.delayed(Duration(milliseconds: 50));
+                        GetIt.I<Strokes>().deleteAllStrokes();
                       }
-                    ),
-                    // multi character search input
-                      Expanded(
-                      child: Hero(
-                        tag: "webviewHero_b_" + 
-                            (GetIt.I<KanjiBuffer>().kanjiBuffer == "" ? 
-                            "Buffer" : GetIt.I<KanjiBuffer>().kanjiBuffer),
-                          child: Center(
-                            key: SHOWCASE_DRAWING[6].key,
-                            child: KanjiBufferWidget(canvasSize)
-                          )
-                        //),
-                      ),
-                    ),
-                    // clear
-                    IconButton(
-                      key: SHOWCASE_DRAWING[2].key,
-                      icon: Icon(Icons.clear),
-                      onPressed: () async {
-                        if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
-                          snappableKey.currentState.snap(
-                            await canvas.getRGBAListFromCanvas(),
-                            canvasSize.floor(), canvasSize.floor()
-                          );
-                          setState(() {
-                            GetIt.I<DrawingInterpreter>().clearPredictions(); 
-                          });
-                          
-                          await Future.delayed(Duration(milliseconds: 50));
-                          GetIt.I<Strokes>().deleteAllStrokes();
-                        }
-                      }
-                    ), 
-                  ]
-                ),
-              ),
-              // prediction buttons
-              Container(
-                key: SHOWCASE_DRAWING[3].key,
-                width: canvasSize,
-                // approximated button height (width/5) * numRows + padding  
-                height: (canvasSize / 5.0) * 2.0 + 10, 
-                child: GridView.count(
-                  physics: new NeverScrollableScrollPhysics(),
-                  crossAxisCount: 5,
-                  children: List.generate(10, (i) {
-                    Widget widget = PredictionButton(
-                      GetIt.I<DrawingInterpreter>().predictions[i]
-                    );
-                    // instantiate short/long press showcase button
-                    if(i == 0){
-                      widget = Container(
-                        key: SHOWCASE_DRAWING[4].key,
-                        child: widget 
-                      );
                     }
-                    return Hero(
-                      tag: "webviewHero_" + 
-                        (GetIt.I<DrawingInterpreter>().predictions[i] == " "
-                        ? i.toString()
-                        : GetIt.I<DrawingInterpreter>().predictions[i]),
-                      child: widget,
-                    );
-                  },
-                  )
-                )
+                  ), 
+                ]
               ),
-              Spacer(),
-            ],
-          ),
+            ),
+            // prediction buttons
+            Container(
+              key: SHOWCASE_DRAWING[3].key,
+              width: canvasSize,
+              // approximated button height (width/5) * numRows + padding  
+              height: (canvasSize / 5.0) * 2.0 + 10, 
+              child: GridView.count(
+                physics: new NeverScrollableScrollPhysics(),
+                crossAxisCount: 5,
+                children: List.generate(10, (i) {
+                  Widget widget = PredictionButton(
+                    GetIt.I<DrawingInterpreter>().predictions[i]
+                  );
+                  // instantiate short/long press showcase button
+                  if(i == 0){
+                    widget = Container(
+                      key: SHOWCASE_DRAWING[4].key,
+                      child: widget 
+                    );
+                  }
+                  return Hero(
+                    tag: "webviewHero_" + 
+                      (GetIt.I<DrawingInterpreter>().predictions[i] == " "
+                      ? i.toString()
+                      : GetIt.I<DrawingInterpreter>().predictions[i]),
+                    child: widget,
+                  );
+                },
+                )
+              )
+            ),
+            Spacer(),
+          ],
         ),
-      )
+      ),
     );
   }
 }
