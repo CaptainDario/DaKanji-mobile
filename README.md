@@ -23,7 +23,7 @@ For more details about the features take a look at the [usage section](#usage).
 ## Getting started
 **Currently only android is supported** </br>
 The easiest way is to download the app for android from the PlayStore.
-You can also [setup a development environment](#development) and build the app on your own.
+You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](#development) and build the app on your own.
 
 ## Usage
 In this section the features of the app are explained in more detail.
