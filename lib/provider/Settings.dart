@@ -144,6 +144,7 @@ class Settings with ChangeNotifier {
 
     // a different version than last time is being used
     //VERSION = "0.0.0";
+    //SHOW_SHOWCASE_DRAWING = true;
     if(versionUsed != VERSION){
 
       // show the changelog
