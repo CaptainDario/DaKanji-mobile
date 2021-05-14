@@ -23,6 +23,10 @@ class DrawScreen extends StatefulWidget {
 
   // init the tutorial of the draw screen
   final showcase = DrawScreenShowcase();
+  /// was this page opened by clicking on the tab in the drawer
+  final bool openedByDrawer;
+
+  DrawScreen(this.openedByDrawer);
 
   @override
   _DrawScreenState createState() => _DrawScreenState();
@@ -93,6 +97,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     return Scaffold(
       key: DRAWER_KEY,
       body: DaKanjiDrawer(
+        currentScreen: Screens.drawing,
+        animationAtStart: !widget.openedByDrawer,
         child: Center(
           child: Column( 
             children: [

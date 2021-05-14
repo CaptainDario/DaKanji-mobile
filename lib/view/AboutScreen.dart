@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
@@ -13,11 +14,18 @@ import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 /// 
 /// Shows the *about.md* and a link to the "changelog"-screen 
 class AboutScreen extends StatelessWidget {
+
+  /// was this page opened by clicking on the tab in the drawer
+  final bool openedByDrawer;
+
+  AboutScreen(this.openedByDrawer);
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: DaKanjiDrawer(
+        currentScreen: Screens.about,
+        animationAtStart: !this.openedByDrawer,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_it/get_it.dart';
 
+import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/globals.dart';
@@ -12,6 +13,12 @@ import 'package:da_kanji_mobile/globals.dart';
 /// 
 /// Here all settings of the app can be managed.
 class SettingsScreen extends StatefulWidget {
+
+  /// was this page opened by clicking on the tab in the drawer
+  final bool openedByDrawer;
+
+  SettingsScreen(this.openedByDrawer);
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -23,6 +30,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DaKanjiDrawer(
+        currentScreen: Screens.settings,
+        animationAtStart: !widget.openedByDrawer,
         // ListView of all available settings
         child: ListView(
           padding: EdgeInsets.zero,
