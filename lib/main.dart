@@ -1,4 +1,3 @@
-import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,12 +8,14 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:da_kanji_mobile/model/core/DarkTheme.dart';
 import 'package:da_kanji_mobile/model/core/LightTheme.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
+import 'package:da_kanji_mobile/model/core/SettingsArguments.dart';
 import 'package:da_kanji_mobile/model/services/DeepLinks.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
+import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:da_kanji_mobile/view/HomeScreen.dart';
 import 'package:da_kanji_mobile/view/Settingsscreen.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
@@ -94,6 +95,39 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
     ]);
 
     return MaterialApp(
+      onGenerateRoute: (settings) {
+        PageRouteBuilder switchScreen (Widget screen) =>
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => screen,
+            settings: settings,
+            transitionsBuilder: (_, a, __, c) =>
+              FadeTransition(opacity: a, child: c)
+          );
+
+        // check type and extract arguments
+        SettingsArguments args;
+        if((settings.arguments is SettingsArguments))
+          args = settings.arguments as SettingsArguments;
+        else
+          args = SettingsArguments(false);
+
+        switch(settings.name){
+          case "/home":
+            return switchScreen(HomeScreen());
+          case "/drawing":
+            return switchScreen(DrawScreen(args.navigatedByDrawer));
+          case "/settings":
+            return switchScreen(SettingsScreen(args.navigatedByDrawer));
+          case "/about":
+            return switchScreen(AboutScreen(args.navigatedByDrawer));
+          case "/changelog":
+            return switchScreen(ChangelogScreen());
+          case "/testScreen":
+            return switchScreen(TestScreen());
+        }
+        throw UnsupportedError("Unknown route: ${settings.name}");
+      },
+
       title: APP_TITLE,
 
       // themes
@@ -102,15 +136,7 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
       themeMode: GetIt.I<Settings>().selectedThemeMode(),
 
       //screens
-      initialRoute: "/home", // "/testScreen",//
-      routes: <String, WidgetBuilder>{
-        "/home": (BuildContext context) => HomeScreen(),
-        "/drawing": (BuildContext context) => DrawScreen(),
-        "/settings": (BuildContext context) => SettingsScreen(),
-        "/about": (BuildContext context) => AboutScreen(),
-        "/changelog": (BuildContext context) => ChangelogScreen(),
-        "/testScreen": (BuildContext context) => TestScreen(),
-      },
+      home: HomeScreen(),
     );
   }
 }
