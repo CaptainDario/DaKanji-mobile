@@ -1,10 +1,15 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:da_kanji_mobile/model/core/Screens.dart';
-import 'package:da_kanji_mobile/model/core/SettingsArguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+
+import 'package:get_it/get_it.dart';
+
+import 'package:da_kanji_mobile/model/core/Screens.dart';
+import 'package:da_kanji_mobile/model/core/SettingsArguments.dart';
+import 'package:da_kanji_mobile/provider/DrawerListener.dart';
+import 'package:da_kanji_mobile/globals.dart';
 
 
 /// Da Kanji's drawer.
@@ -30,10 +35,10 @@ class DaKanjiDrawer extends StatefulWidget{
   );
 
   @override
-  _DaKanjiDrawerState createState() => _DaKanjiDrawerState();
+  DaKanjiDrawerState createState() => DaKanjiDrawerState();
 }
 
-class _DaKanjiDrawerState extends State<DaKanjiDrawer> 
+class DaKanjiDrawerState extends State<DaKanjiDrawer> 
   with SingleTickerProviderStateMixin{
 
   /// The controller for the drawer animation
@@ -46,7 +51,10 @@ class _DaKanjiDrawerState extends State<DaKanjiDrawer>
   double _screenWidth;
   /// the height of the screen
   double _screenHeight;
-
+  /// function to open/close the drawer (invoked when DrawerListener changed)
+  Function _handleDrawer; 
+  
+  
   @override
   void initState() { 
     super.initState();
@@ -65,12 +73,24 @@ class _DaKanjiDrawerState extends State<DaKanjiDrawer>
 
     if(!widget.animationAtStart)
       _drawerController.value = 1.0;
+
+    // add a listener to animate the drawer when it should be opened/closed 
+    _handleDrawer = ()  {
+      setState(() {
+        if(GetIt.I<DrawerListener>().playForward)
+          _drawerController.forward();
+        else
+          _drawerController.reverse();
+      });
+    };
+    GetIt.I<DrawerListener>().addListener(_handleDrawer);
   }
 
   @override
   void dispose() { 
     _drawerController.dispose();
     super.dispose();
+    GetIt.I<DrawerListener>().removeListener(_handleDrawer);
   }
 
   @override
@@ -111,37 +131,31 @@ class _DaKanjiDrawerState extends State<DaKanjiDrawer>
                 ..setEntry(3, 2, 0.001)
                 ..translate(_moveDrawer.value * _screenWidth/2)
                 ..rotateY(pi/4 * _moveDrawer.value),
-              child: SafeArea(
-                child: Stack(
-                  children: [
-                    // the current screen
-                    child,
-                    Align(
-                    alignment: Alignment.bottomLeft,
-                      child: Material(
-                        color: Theme.of(context).accentColor,
-                        child: InkWell(
-                          onTap: () => _drawerController.forward(from: 0.0),
-                          child: Ink(
-                            child: Container(
-                              width: 50, height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(75)
-                                ), 
-                              ),
-                              child: Icon(
-                                Icons.menu,
-                                color: Theme.of(context).primaryTextTheme.button.color
-                              ),
-                            ),
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text(
+                    ModalRoute.of(context).settings.name.replaceAll("/", " ")
+                  ),
+                  leading: Transform.scale(
+                    scale: 0.75,
+                    child: Image.asset("media/icon.png")
+                  ),
+                  actions: [
+                    InkWell(
+                      onTap: () => _drawerController.forward(from: 0.0),
+                      child: Ink(
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            child: Icon(Icons.menu),
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-              )
+                body: SafeArea(child: child)
+              ),
             ),
             // overlay area which should close the drawer when tapped
             if(_drawerController.status != AnimationStatus.dismissed)
@@ -156,7 +170,7 @@ class _DaKanjiDrawerState extends State<DaKanjiDrawer>
                   child: Opacity(
                     opacity: _moveDrawer.value,
                     child: Container(
-                      color: Colors.grey[850].withAlpha(150),
+                      color: Colors.grey[900].withAlpha(150),
                       width: _screenWidth,
                       height: _screenHeight,
                     ),
@@ -206,23 +220,18 @@ class _DaKanjiDrawerState extends State<DaKanjiDrawer>
                     physics: NeverScrollableScrollPhysics(),
                     padding: EdgeInsets.zero,
                     children: <Widget>[
-                      SizedBox(
-                        height: MediaQuery.of(context).padding.top + 64 + 20,
-                        child: DrawerHeader(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              Image(
-                                height: 84,
-                                image: AssetImage("media/banner.png"),
-                              ),
-                            ]
-                          ),
-                          margin: EdgeInsets.all(0),
-                          padding: EdgeInsets.all(0),
+                      // DaKanji Logo at the top
+                      SafeArea(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:[
+                            Image(
+                              height: 84,
+                              image: AssetImage("media/banner.png"),
+                            ),
+                          ]
                         ),
                       ),
-
                       // Drawer entry to go to the Kanji drawing screen
                       Material(
                         child: ListTile(
@@ -242,11 +251,10 @@ class _DaKanjiDrawerState extends State<DaKanjiDrawer>
                           },
                         ),
                       ),
-
                       // Drawer entry to go to the settings screen
                       Material(
                         child: ListTile(
-                          //key: SHOWCASE_DRAWING[12].key,
+                          key: SHOW_SHOWCASE_DRAWING ? SHOWCASE_DRAWING[12].key : null,
                           selected: widget.currentScreen == Screens.settings,
                           leading: Icon(Icons.settings_applications),
                           title: Text("Settings"),
