@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
 
+import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
@@ -44,7 +45,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   // the ID of the pointer which is currently drawing
   int pointerID;
 
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +55,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     // always rebuild the ui when the kanji buffer changed
     GetIt.I<KanjiBuffer>().addListener(() {
       GetIt.I<KanjiBuffer>().runAnimation = true;
-      setState(() { });
     });
 
     // initialize the drawing interpreter
@@ -63,7 +62,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     super.dispose();
   }
 
