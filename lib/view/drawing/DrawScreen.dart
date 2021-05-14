@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
 
+import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
@@ -23,6 +24,10 @@ class DrawScreen extends StatefulWidget {
 
   // init the tutorial of the draw screen
   final showcase = DrawScreenShowcase();
+  /// was this page opened by clicking on the tab in the drawer
+  final bool openedByDrawer;
+
+  DrawScreen(this.openedByDrawer);
 
   @override
   _DrawScreenState createState() => _DrawScreenState();
@@ -40,7 +45,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   // the ID of the pointer which is currently drawing
   int pointerID;
 
-
   @override
   void initState() {
     super.initState();
@@ -51,7 +55,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     // always rebuild the ui when the kanji buffer changed
     GetIt.I<KanjiBuffer>().addListener(() {
       GetIt.I<KanjiBuffer>().runAnimation = true;
-      setState(() { });
     });
 
     // initialize the drawing interpreter
@@ -59,7 +62,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     super.dispose();
   }
 
@@ -92,12 +95,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
 
     return Scaffold(
       key: DRAWER_KEY,
-      appBar: AppBar(
-        title: Text("Drawing"),
-      ),
-      drawer: DaKanjiDrawer(),
-      body:
-      Center(
+      body: DaKanjiDrawer(
+        currentScreen: Screens.drawing,
+        animationAtStart: !widget.openedByDrawer,
+        child: Center(
           child: Column( 
             children: [
               // the canvas to draw on
@@ -266,10 +267,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
               Spacer(),
             ],
           ),
+        ),
       )
     );
   }
-  
-
-
 }

@@ -34,10 +34,11 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
   Alignment _dragAlignment = Alignment.center;
   bool deletedWithSwipe = false;
 
+  // animation to make the kanjibuffer "jump back" when released
   Animation<Alignment> _springAnimation;
   
   // animation and controller for the delete-chars-rotation of the kanji buffer
-  int _rotationXDuration = 1000;
+  int _rotationXDuration = 250;
   AnimationController _rotationXController;
   Animation<double> _rotationXAnimation;
 
@@ -46,11 +47,13 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
   AnimationController _scaleInNewCharController;
   Animation<double> _scaleInNewCharAnimation;
 
-  // size of the kanji buffer
+  /// size of the kanji buffer
   double width;
-
+  /// how many characters do fit in this box
   int charactersFit = 0;
-  
+  /// callback when the kanjibuffer changed
+  Function kanjiBufferChanged;
+
   
 
   /// Calculates and runs a [SpringSimulation].
@@ -81,7 +84,11 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
 
   @override
   void initState() {
+    kanjiBufferChanged = () {setState(() {});};
+    
     super.initState();
+    GetIt.I<KanjiBuffer>().addListener(kanjiBufferChanged);
+
     
     // controller / animation of swipe left gesture
     _springController = AnimationController(vsync: this);
@@ -98,7 +105,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
     );
     _rotationXAnimation = CurvedAnimation(
       parent: _rotationXController,
-      curve: Curves.elasticOut
+      curve: Curves.linear
     );
     
     // controller / animation of the character added animation
@@ -113,6 +120,8 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
       parent: _scaleInNewCharController,
       curve: Curves.easeOut,
     ));
+    // make sure all characters are show even if page changed
+    _scaleInNewCharController.value = 1.0;
   
     // set width of the kanjibuffer
     width = () {
@@ -145,6 +154,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
     _rotationXController.dispose();
     _scaleInNewCharController.dispose();
     super.dispose();
+    GetIt.I<KanjiBuffer>().removeListener(kanjiBufferChanged);
   }
 
   @override
@@ -200,7 +210,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
           _rotationXController.forward(from: 0.0);
 
           //delete the characters after the animation
-          Future.delayed(Duration(milliseconds: (_rotationXDuration/8).round()), (){
+          Future.delayed(Duration(milliseconds: (_rotationXDuration/4).round()), (){
             setState(() {
                GetIt.I<KanjiBuffer>().kanjiBuffer = "";           
             });

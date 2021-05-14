@@ -25,13 +25,13 @@ class FoldingWidget extends StatefulWidget {
   /// Inner widget in unfolded cell
   final Widget innerWidget;
   
-  //
+  // the global key of this widget
   final GlobalKey foldingKey;
-
+  // the color when the widget folds
   final Color foldingColor;
-
+  // the width of the widget to fold
   final double width;
-
+  // the height of the widget to fold
   final double height;
 
   /// If true cell will be unfolded when created, if false cell will be folded when created
