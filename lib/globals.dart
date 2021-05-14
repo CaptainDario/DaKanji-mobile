@@ -1,8 +1,5 @@
 library my_prj.globals;
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 import 'model/core/ShowcaseTuple.dart';
 
 
@@ -19,9 +16,6 @@ String VERSION;
 // ignore: non_constant_identifier_names
 List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
 
-// the global key for the drawer
-// ignore: non_constant_identifier_names
-final GlobalKey<ScaffoldState> DRAWER_KEY = GlobalKey();
 
 // showcase view keys
 // ignore: non_constant_identifier_names
