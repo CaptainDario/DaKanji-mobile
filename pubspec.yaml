@@ -19,13 +19,14 @@ dependencies:
   tutorial_coach_mark: ^1.0.0
   flutter_phoenix: ^0.1.0
   package_info: ^2.0.0
-  tflite_flutter: ^0.6.0
+  tflite_flutter: ^0.8.0
   #  path: ../tflite_flutter_plugin
   image: ^2.1.19
   flutter_markdown: ^0.5.0
   flutter_appavailability: ^0.0.21
   uni_links: ^0.4.0
-  get_it: ^6.1.1
+  get_it: ^7.1.1
+  get_it_mixin: ^3.1.1
   provider: ^5.0.0
 
 
