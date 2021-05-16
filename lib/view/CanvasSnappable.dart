@@ -42,7 +42,7 @@ class CanvasSnappable extends StatefulWidget {
     @required this.snapColor,
     this.offset = const Offset(16, -16),
     this.duration = const Duration(milliseconds: 500),
-    this.randomDislocationOffset = const Offset(16, 16),
+    this.randomDislocationOffset = const Offset(8, 8),
     this.numberOfBuckets = 8,
     this.onSnapped,
   }) : super(key: key);
@@ -116,7 +116,7 @@ class CanvasSnappableState extends State<CanvasSnappable>
       );
   }
 
-  /// I am... INEVITABLE      ~Thanos
+  /// dissolve the canvas 
   Future<void> snap(Uint8List canvas, int width, int height) async {
 
     this.width = width;
@@ -167,7 +167,7 @@ class CanvasSnappableState extends State<CanvasSnappable>
     _animationController.forward();
   }
 
-  /// I am... IRON MAN   ~Tony Stark
+  /// reset the snap to the original image 
   void reset() {
     setState(() {
       _layers = null;
@@ -175,6 +175,7 @@ class CanvasSnappableState extends State<CanvasSnappable>
     });
   }
 
+  /// Turn the given [layer] image to a Widget.
   Widget _imageToWidget(Uint8List layer) {
     //get layer's index in the list
     int index = _layers.indexOf(layer);
