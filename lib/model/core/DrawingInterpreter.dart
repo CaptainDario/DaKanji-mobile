@@ -208,7 +208,6 @@ class DrawingInterpreter with ChangeNotifier{
       interpreter = await _cpuInterpreter();
     }
 
-    print(usedBackend);
     return interpreter;
   }
 
@@ -251,7 +250,9 @@ class DrawingInterpreter with ChangeNotifier{
   /// Initializes the interpreter with CPU mode set.
   Future<Interpreter> _cpuInterpreter() async {
     usedBackend = "CPU";
-    return await Interpreter.fromAsset(_assetPath);
+    final options = InterpreterOptions()
+      ..threads = Platform.numberOfProcessors - 1;
+    return await Interpreter.fromAsset(_assetPath, options: options);
   }
 
   /// Initializes the TFLite interpreter on iOS.
