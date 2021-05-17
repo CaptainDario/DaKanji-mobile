@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:get_it_mixin/get_it_mixin.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
@@ -20,7 +21,8 @@ import 'package:da_kanji_mobile/globals.dart';
 /// 
 /// Lets the user draw a kanji and than shows the most likely predictions.
 /// Those can than be copied / opened in dictionaries by buttons.
-class DrawScreen extends StatefulWidget {
+class DrawScreen extends StatefulWidget
+  with GetItStatefulWidgetMixin {
 
   // init the tutorial of the draw screen
   final showcase = DrawScreenShowcase();
@@ -33,7 +35,8 @@ class DrawScreen extends StatefulWidget {
   _DrawScreenState createState() => _DrawScreenState();
 }
 
-class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
+class _DrawScreenState extends State<DrawScreen>
+  with TickerProviderStateMixin, GetItStateMixin{
   /// the DrawingPainter instance which defines the canvas to drawn on.
   DrawingPainter _canvas;
   /// the size of the canvas widget
@@ -42,8 +45,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   GlobalKey<CanvasSnappableState> _snappableKey;
   /// the ID of the pointer which is currently drawing
   int _pointerID;
-  ///
-  AnimationController _canvasController;
+  /// Keep track of if the pointer moved
+  bool pointerMoved = false;
+  /// Animation controller of the delete stroke animation
+  AnimationController _deleteStrokeController;
 
   @override
   void initState() {
@@ -52,22 +57,26 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     // initialize the global keys
     _snappableKey = GlobalKey<CanvasSnappableState>();
 
-    // always rebuild the ui when the kanji buffer changed
-    GetIt.I<KanjiBuffer>().addListener(() {
-      GetIt.I<KanjiBuffer>().runAnimation = true;
-    });
     // initialize the drawing interpreter
     GetIt.I<DrawingInterpreter>().init();
 
-    _canvasController = AnimationController(
+    // delete last stroke animation
+    _deleteStrokeController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 200)
     );
-    _canvasController.value = 1.0;
-    _canvasController.addStatusListener((status) {
+    _deleteStrokeController.value = 1.0;
+    _deleteStrokeController.addStatusListener((status) async {
+      // when the last stroke delete animation finished 
       if(status == AnimationStatus.dismissed){
+        _deleteStrokeController.value = 1.0;
         GetIt.I<Strokes>().removeLastStroke();
-        _canvasController.value = 1.0;
+        if(GetIt.I<Strokes>().strokeCount > 0)
+          GetIt.I<DrawingInterpreter>().runInference(
+            await _canvas.getPNGListFromCanvas()
+          );
+        else
+          GetIt.I<DrawingInterpreter>().clearPredictions();
       }
     });
   }
@@ -75,7 +84,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
   @override
   void dispose() {
     super.dispose();
-    GetIt.I<DrawingInterpreter>().free();
   }
 
   @override
@@ -100,6 +108,13 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
     }
     route.animation.addStatusListener(handler);
 
+    // GetItMixin watchers
+    List<String> predictions =
+      watchOnly((DrawingInterpreter d) => d.predictions);
+    Path strokes = watchOnly((Strokes s) => s.path);
+    String kanjiBuffer = watchOnly((KanjiBuffer k) => k.kanjiBuffer);
+
+
     return DaKanjiDrawer(
       currentScreen: Screens.drawing,
       animationAtStart: !widget.openedByDrawer,
@@ -115,18 +130,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                 0, 0),
               child: Listener(
                 key: SHOWCASE_DRAWING[0].key,
-                // drawing pointer moved
-                onPointerMove: (details) {
-                  // allow only one pointer at a time
-                  if(_pointerID == details.pointer){
-                    setState(() {
-                      RenderBox renderBox = context.findRenderObject();
-                      Offset point =
-                        renderBox.globalToLocal(details.localPosition);
-                      GetIt.I<Strokes>().path.lineTo(point.dx, point.dy);
-                    });
-                  }
-                },
                 // started drawing
                 onPointerDown: (details) {
                   // allow only one pointer at a time
@@ -140,18 +143,35 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       RenderBox renderBox = context.findRenderObject();
                       Offset point =
                         renderBox.globalToLocal(details.localPosition);
-                      GetIt.I<Strokes>().path.moveTo(point.dx, point.dy);
+                      strokes.moveTo(point.dx, point.dy);
                     });
+                  }
+                },
+                // drawing pointer moved
+                onPointerMove: (details) {
+                  // allow only one pointer at a time
+                  if(_pointerID == details.pointer){
+                    setState(() {
+                      RenderBox renderBox = context.findRenderObject();
+                      Offset point =
+                        renderBox.globalToLocal(details.localPosition);
+                      strokes.lineTo(point.dx, point.dy);
+                    });
+                    pointerMoved = true;
                   }
                 },
                 // finished drawing a stroke
                 onPointerUp: (details) async {
-                  GetIt.I<DrawingInterpreter>().runInference(
-                    await _canvas.getPNGListFromCanvas()
-                  );
+                  if(pointerMoved){
+                    get<DrawingInterpreter>().runInference(
+                      await _canvas.getPNGListFromCanvas()
+                    );
+                    pointerMoved = false;
+                    get<Strokes>().incrementStrokeCount();
+                    setState(() { });
+                  }
                   // mark this pointer as removed
                   _pointerID = null;
-                  setState(() {});
                 },
                 child: Stack(
                   children: [
@@ -164,12 +184,11 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                       key: _snappableKey,
                       duration: Duration(milliseconds: 500),
                       child: AnimatedBuilder(
-                        animation: _canvasController,
+                        animation: _deleteStrokeController,
                         builder: (BuildContext context, Widget child){
                           _canvas = DrawingPainter(
-                            GetIt.I<Strokes>().path, darkMode, 
-                            Size(_canvasSize, _canvasSize),
-                            _canvasController.value
+                            strokes, darkMode, Size(_canvasSize, _canvasSize),
+                            _deleteStrokeController.value
                           );
                           return CustomPaint(
                             size: Size(_canvasSize, _canvasSize),
@@ -200,39 +219,26 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     key: SHOWCASE_DRAWING[1].key,
                     icon: Icon(Icons.undo),
                     onPressed: () async {
-                      int strokes = GetIt.I<Strokes>().path.computeMetrics().length;
-
                       // if animation is already running stop it
                       // and delete old stroke before deleting this stroke
-                      if(_canvasController.status == AnimationStatus.reverse){
-                        GetIt.I<Strokes>().removeLastStroke();
-                        _canvasController.value = 1.0;
+                      if(_deleteStrokeController.status == AnimationStatus.reverse){
+                        get<Strokes>().removeLastStroke();
+                        _deleteStrokeController.value = 1.0;
                       } 
-
-                      //only run inference if canvas still has strokes
-                      if(strokes >= 1){
-                         _canvasController.reverse(from: 1.0);
-                        GetIt.I<DrawingInterpreter>().runInference(
-                          await _canvas.getPNGListFromCanvas()
-                        ); 
-                      }
-                      if(strokes == 0){
-                        GetIt.I<DrawingInterpreter>().clearPredictions(); 
-                      }
-                      setState(() {});
+                      //only delete strokes if there are some left
+                      if(get<Strokes>().strokeCount > 0)
+                        _deleteStrokeController.reverse(from: 1.0);
                     }
                   ),
                   // multi character search input
                     Expanded(
                     child: Hero(
                       tag: "webviewHero_b_" + 
-                          (GetIt.I<KanjiBuffer>().kanjiBuffer == "" ? 
-                          "Buffer" : GetIt.I<KanjiBuffer>().kanjiBuffer),
-                        child: Center(
-                          key: SHOWCASE_DRAWING[6].key,
-                          child: KanjiBufferWidget(_canvasSize)
-                        )
-                      //),
+                        (kanjiBuffer == "" ? "Buffer" : kanjiBuffer),
+                      child: Center(
+                        key: SHOWCASE_DRAWING[6].key,
+                        child: KanjiBufferWidget(_canvasSize)
+                      )
                     ),
                   ),
                   // clear
@@ -240,17 +246,16 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                     key: SHOWCASE_DRAWING[2].key,
                     icon: Icon(Icons.clear),
                     onPressed: () async {
-                      if(GetIt.I<Strokes>().path.computeMetrics().isNotEmpty){
+                      if(strokes.computeMetrics().isNotEmpty){
                         _snappableKey.currentState.snap(
                           await _canvas.getRGBAListFromCanvas(),
                           _canvasSize.floor(), _canvasSize.floor()
                         );
-                        setState(() {
-                          GetIt.I<DrawingInterpreter>().clearPredictions(); 
-                        });
-                        
+
+                        // wait before deleting the strokes to prevent stutter 
                         await Future.delayed(Duration(milliseconds: 50));
-                        GetIt.I<Strokes>().deleteAllStrokes();
+                        get<Strokes>().deleteAllStrokes();
+                        get<DrawingInterpreter>().clearPredictions();
                       }
                     }
                   ), 
@@ -267,9 +272,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                 physics: new NeverScrollableScrollPhysics(),
                 crossAxisCount: 5,
                 children: List.generate(10, (i) {
-                  Widget widget = PredictionButton(
-                    GetIt.I<DrawingInterpreter>().predictions[i]
-                  );
+                  Widget widget = PredictionButton(predictions[i]);
                   // instantiate short/long press showcase button
                   if(i == 0){
                     widget = Container(
@@ -279,9 +282,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin{
                   }
                   return Hero(
                     tag: "webviewHero_" + 
-                      (GetIt.I<DrawingInterpreter>().predictions[i] == " "
-                      ? i.toString()
-                      : GetIt.I<DrawingInterpreter>().predictions[i]),
+                      (predictions[i] == " " ? i.toString() : predictions[i]),
                     child: widget,
                   );
                 },

@@ -84,11 +84,8 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
 
   @override
   void initState() {
-    kanjiBufferChanged = () {setState(() {});};
     
     super.initState();
-    GetIt.I<KanjiBuffer>().addListener(kanjiBufferChanged);
-
     
     // controller / animation of swipe left gesture
     _springController = AnimationController(vsync: this);
@@ -154,7 +151,6 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
     _rotationXController.dispose();
     _scaleInNewCharController.dispose();
     super.dispose();
-    GetIt.I<KanjiBuffer>().removeListener(kanjiBufferChanged);
   }
 
   @override
@@ -212,7 +208,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
           //delete the characters after the animation
           Future.delayed(Duration(milliseconds: (_rotationXDuration/4).round()), (){
             setState(() {
-               GetIt.I<KanjiBuffer>().kanjiBuffer = "";           
+               GetIt.I<KanjiBuffer>().clearKanjiBuffer();           
             });
           });
         }

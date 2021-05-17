@@ -19,9 +19,16 @@ class KanjiBuffer with ChangeNotifier{
     return _value;
   }
 
-  /// set the current value to [value] and notify listeners
-  set kanjiBuffer(String value){
-    _value = value;
+  /// Append [value] at the end of the kanjiBuffer. If value has more than one 
+  /// character only the first one will be used
+  void addToKanjiBuffer(String value){
+    _value += value[0];
+    runAnimation = true;
+    notifyListeners();
+  }
+
+  void clearKanjiBuffer(){
+    _value = "";
     notifyListeners();
   }
 
