@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
+import 'package:device_info/device_info.dart';
 import 'package:image/image.dart' as image;
 
 import 'package:tflite_flutter/tflite_flutter.dart';
@@ -12,7 +13,7 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 /// The tf lite interpreter to recognize the hand drawn kanji characters.
 /// 
-/// Updates listeners when the predictions changed.
+/// Notifies listeners when the predictions changed.
 class DrawingInterpreter with ChangeNotifier{
   
   /// the tf lite interpreter to recognize kanjis
@@ -42,7 +43,7 @@ class DrawingInterpreter with ChangeNotifier{
   /// width of the input image
   int width;
 
-  /// the prediciton the CNN made
+  /// the prediction the CNN made
   List<String> _predictions;
 
   /// The [_noPredictions] most likely predictions will used
@@ -121,6 +122,7 @@ class DrawingInterpreter with ChangeNotifier{
   /// Clear all predictions by setting them to " "
   void clearPredictions(){
     _setPredictions(List.generate(_noPredictions, (index) => " "));
+    notifyListeners();
   }
 
   /// Create predictions based on the drawing by running inference on the CNN
@@ -143,17 +145,23 @@ class DrawingInterpreter with ChangeNotifier{
         resizedImage.getBytes(format: image.Format.luminance);
 
     // convert image for inference into shape [1, 64, 64, 1]
+    // also apply thresholding and normalization [0, 1]
     for (int x = 0; x < 64; x++) {
       for (int y = 0; y < 64; y++) {
         double val = resizedBytes[(x * 64) + y].toDouble();
+        
         if(val > 50){
+          // apply thresholding
           val = 255;
+          // normalize images
+          val = (val / 255).toDouble();
         }
-        val = (val / 255).toDouble();
+        else
+          val = 0;
+        
         _input[0][x][y][0] = val;
       }
     }
-
     // run inference
     _interpreter.run(_input, _output);
 
@@ -166,6 +174,8 @@ class DrawingInterpreter with ChangeNotifier{
       predictions[c] = _labels[index];
       _output[0][index] = 0.0;
     }
+    
+    notifyListeners();
   }
 
   /// Initializes the TFLite interpreter on android.
@@ -181,12 +191,10 @@ class DrawingInterpreter with ChangeNotifier{
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
-    // if the application is running not in an emulator
-    if (androidInfo.isPhysicalDevice) {
-
+    try{
       // use NNAPI on android if android API >= 27
-      if (androidInfo.version.sdkInt >= 27) {
-        usedBackend = "Android NNAPI Delegate";
+      // do not use because of delay at first inference
+      if (androidInfo.version.sdkInt < 0) {       //>= 27) {
         interpreter = await _nnapiInterpreter();
       }
       // otherwise fallback to GPU delegate
@@ -196,11 +204,11 @@ class DrawingInterpreter with ChangeNotifier{
       }
     }
     // use CPU inference on emulators
-    else{
-      usedBackend = "CPU";
+    catch (e){
       interpreter = await _cpuInterpreter();
     }
 
+    print(usedBackend);
     return interpreter;
   }
 
@@ -208,20 +216,26 @@ class DrawingInterpreter with ChangeNotifier{
   /// Initializes the interpreter with NPU acceleration for Android.
   Future<Interpreter> _nnapiInterpreter() async {
     final options = InterpreterOptions()..useNnApiForAndroid = true;
-    return await Interpreter.fromAsset(_assetPath, options: options);
+    Interpreter i = await Interpreter.fromAsset(_assetPath, options: options);
+    usedBackend = "Android NNAPI Delegate";
+    return i; 
   }
 
   /// Initializes the interpreter with GPU acceleration for Android.
   Future<Interpreter> _gpuInterpreterAndroid() async {
     final gpuDelegateV2 = GpuDelegateV2(
-        options: GpuDelegateOptionsV2(
-            false,
-            TfLiteGpuInferenceUsage.preferenceSustainSpeed,
-            TfLiteGpuInferencePriority.minLatency,
-            TfLiteGpuInferencePriority.auto,
-            TfLiteGpuInferencePriority.auto));
+      options: GpuDelegateOptionsV2(
+        false,
+        TfLiteGpuInferenceUsage.fastSingleAnswer,
+        TfLiteGpuInferencePriority.minLatency,
+        TfLiteGpuInferencePriority.auto,
+        TfLiteGpuInferencePriority.auto
+      )
+    );
     final options = InterpreterOptions()..addDelegate(gpuDelegateV2);
-    return await Interpreter.fromAsset(_assetPath, options: options);
+    Interpreter i = await Interpreter.fromAsset(_assetPath, options: options);
+
+    return i;
   }
 
   /// Initializes the interpreter with GPU acceleration for iOS.
@@ -236,6 +250,7 @@ class DrawingInterpreter with ChangeNotifier{
 
   /// Initializes the interpreter with CPU mode set.
   Future<Interpreter> _cpuInterpreter() async {
+    usedBackend = "CPU";
     return await Interpreter.fromAsset(_assetPath);
   }
 
