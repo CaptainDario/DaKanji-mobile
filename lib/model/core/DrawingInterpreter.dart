@@ -69,13 +69,20 @@ class DrawingInterpreter with ChangeNotifier{
   /// Caution: This method needs to be called before using the interpreter.
   void init() async {
 
-    if (Platform.isAndroid) 
-      _interpreter = await _cpuInterpreter();
+    if(_wasInitialized){
+      print("Drawing interpreter already initialized. Skipping init");
+      return;
+    }
+
+    if (Platform.isAndroid)
+      _interpreter = await _initInterpreterAndroid();
     else if (Platform.isIOS) 
       _interpreter = await _initInterpreterIOS();
     else
       throw PlatformException(code: "Platform not supported.");
-  
+
+    print(usedBackend);
+
     var l = await rootBundle.loadString("assets/labels_CNN_kanji_only.txt");
     _labels = l.split("");
     
