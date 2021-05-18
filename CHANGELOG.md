@@ -4,6 +4,7 @@
 ## v 1.2.0 - アニメ
 new Features:
 - *extremely* fast startup
+- inference in separate thread therefore no UI jank on low end devices
 - [deep linking 'dakanji://dakanji/'](https://github.com/CaptainDario/DaKanji-Mobile#deep-linking)
 - animated:
   - double tap on prediction / kanji box
