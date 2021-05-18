@@ -146,14 +146,16 @@ class Settings with ChangeNotifier {
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
-    invertShortLongPress = await loadBool('invertShortLongPress');
-    emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
-    useDefaultBrowser = await loadBool('useDefaultBrowser');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    customURL = await loadString('customURL') ?? '';
-    _selectedTheme = await loadString('selectedTheme') ?? themes[2];
-    versionUsed = await loadString('versionUsed') ?? '';
-    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
+    invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
+    emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
+    useDefaultBrowser = prefs.getBool('useDefaultBrowser') ?? true;
+
+    customURL = prefs.getString('customURL') ?? '';
+    _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
+    versionUsed = prefs.getString('versionUsed') ?? '';
+    selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
 
     // a different version than last time is being used
     //VERSION = "0.0.0";
@@ -167,26 +169,6 @@ class Settings with ChangeNotifier {
         SHOW_SHOWCASE_DRAWING = true;
       }
     }
-  }
-
-  /// Loads a bool from shared preferences.
-  ///
-  /// @returns The bool's loaded value if found, otherwise false
-  Future<bool> loadBool(String boolName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool(boolName) ?? false;
-
-    return loaded;
-  }
-
-  /// Loads a string value from the shared preferences.
-  ///
-  /// @returns The string value if found, null otherwise
-  Future<String> loadString(String stringName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loaded = prefs.getString(stringName);
-
-    return loaded;
   }
 }
 
