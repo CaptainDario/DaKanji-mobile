@@ -162,7 +162,7 @@ class _DrawingCanvasState extends State<DrawingCanvas>
                 _canvas = DrawingPainter(
                   widget.strokes.path, 
                   darkMode, Size(widget.width, widget.height),
-                  _canvasController.value
+                  widget.strokes.deletingLastStroke ? _canvasController.value : 1
                 );
                 Widget canvas = CustomPaint(
                     size: Size(widget.width, widget.height),
