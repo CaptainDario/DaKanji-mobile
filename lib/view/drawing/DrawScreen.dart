@@ -9,11 +9,10 @@ import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreenShowcase.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
-import 'package:da_kanji_mobile/view/canvasSnappable.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
-import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
 import 'package:da_kanji_mobile/view/drawing//PredictionButton.dart';
 import 'package:da_kanji_mobile/view/drawing/KanjiBufferWidget.dart';
+import 'package:da_kanji_mobile/view/drawing/DrawingCanvas.dart';
 import 'package:da_kanji_mobile/globals.dart';
 
 
@@ -37,48 +36,16 @@ class DrawScreen extends StatefulWidget
 
 class _DrawScreenState extends State<DrawScreen>
   with TickerProviderStateMixin, GetItStateMixin{
-  /// the DrawingPainter instance which defines the canvas to drawn on.
-  DrawingPainter _canvas;
   /// the size of the canvas widget
   double _canvasSize;
-  /// global keys for running animations
-  GlobalKey<CanvasSnappableState> _snappableKey;
-  /// the ID of the pointer which is currently drawing
-  int _pointerID;
-  /// Keep track of if the pointer moved
-  bool pointerMoved = false;
-  /// Animation controller of the delete stroke animation
-  AnimationController _deleteStrokeController;
 
   @override
   void initState() {
     super.initState();
 
-    // initialize the global keys
-    _snappableKey = GlobalKey<CanvasSnappableState>();
-
     // initialize the drawing interpreter
     GetIt.I<DrawingInterpreter>().init();
 
-    // delete last stroke animation
-    _deleteStrokeController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 200)
-    );
-    _deleteStrokeController.value = 1.0;
-    _deleteStrokeController.addStatusListener((status) async {
-      // when the last stroke delete animation finished 
-      if(status == AnimationStatus.dismissed){
-        _deleteStrokeController.value = 1.0;
-        GetIt.I<Strokes>().removeLastStroke();
-        if(GetIt.I<Strokes>().strokeCount > 0)
-          GetIt.I<DrawingInterpreter>().runInference(
-            await _canvas.getPNGListFromCanvas()
-          );
-        else
-          GetIt.I<DrawingInterpreter>().clearPredictions();
-      }
-    });
   }
 
   @override
@@ -109,10 +76,10 @@ class _DrawScreenState extends State<DrawScreen>
     route.animation.addStatusListener(handler);
 
     // GetItMixin watchers
-    List<String> predictions =
+    final List<String> predictions =
       watchOnly((DrawingInterpreter d) => d.predictions);
-    Path strokes = watchOnly((Strokes s) => s.path);
-    String kanjiBuffer = watchOnly((KanjiBuffer k) => k.kanjiBuffer);
+    final Strokes strokes = watchOnly((Strokes s) => s);
+    final String kanjiBuffer = watchOnly((KanjiBuffer k) => k.kanjiBuffer);
 
 
     return DaKanjiDrawer(
@@ -122,91 +89,14 @@ class _DrawScreenState extends State<DrawScreen>
         child: Column( 
           children: [
             // the canvas to draw on
-            Container(
-              width: _canvasSize,
+            DrawingCanvas(
+              width: _canvasSize, 
               height: _canvasSize,
               margin: EdgeInsets.fromLTRB(0, 
                 (MediaQuery.of(context).size.width - _canvasSize) / 2, 
                 0, 0),
-              child: Listener(
-                key: SHOWCASE_DRAWING[0].key,
-                // started drawing
-                onPointerDown: (details) {
-                  // allow only one pointer at a time
-                  if(_pointerID == null){
-                    _pointerID = details.pointer;
-                    setState(() {
-                      // end the snapping animation when user starts drawing
-                      if(_snappableKey.currentState.snapIsRunning())
-                        _snappableKey.currentState.reset();
-
-                      RenderBox renderBox = context.findRenderObject();
-                      Offset point =
-                        renderBox.globalToLocal(details.localPosition);
-                      strokes.moveTo(point.dx, point.dy);
-                    });
-                  }
-                },
-                // drawing pointer moved
-                onPointerMove: (details) {
-                  // allow only one pointer at a time
-                  if(_pointerID == details.pointer){
-                    setState(() {
-                      RenderBox renderBox = context.findRenderObject();
-                      Offset point =
-                        renderBox.globalToLocal(details.localPosition);
-                      strokes.lineTo(point.dx, point.dy);
-                    });
-                    pointerMoved = true;
-                  }
-                },
-                // finished drawing a stroke
-                onPointerUp: (details) async {
-                  if(pointerMoved){
-                    get<DrawingInterpreter>().runInference(
-                      await _canvas.getPNGListFromCanvas()
-                    );
-                    pointerMoved = false;
-                    get<Strokes>().incrementStrokeCount();
-                    setState(() { });
-                  }
-                  // mark this pointer as removed
-                  _pointerID = null;
-                },
-                child: Stack(
-                  children: [
-                    Image(image: 
-                      AssetImage(darkMode
-                        ? "assets/kanji_drawing_aid_w.png"
-                        : "assets/kanji_drawing_aid_b.png")
-                    ),
-                    CanvasSnappable(
-                      key: _snappableKey,
-                      duration: Duration(milliseconds: 500),
-                      child: AnimatedBuilder(
-                        animation: _deleteStrokeController,
-                        builder: (BuildContext context, Widget child){
-                          _canvas = DrawingPainter(
-                            strokes, darkMode, Size(_canvasSize, _canvasSize),
-                            _deleteStrokeController.value
-                          );
-                          return CustomPaint(
-                            size: Size(_canvasSize, _canvasSize),
-                            painter: _canvas,
-                          );
-                        }
-                      ),
-                      snapColor:
-                        Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black,
-                      onSnapped: () {
-                        _snappableKey.currentState.reset();
-                      },
-                    )
-                  ],
-                )
-              )
+              key: SHOWCASE_DRAWING[0].key,
+              strokes: strokes,
             ),
             Spacer(),
             // undo/clear button and kanjiBuffer,
@@ -218,16 +108,9 @@ class _DrawScreenState extends State<DrawScreen>
                   IconButton(
                     key: SHOWCASE_DRAWING[1].key,
                     icon: Icon(Icons.undo),
-                    onPressed: () async {
-                      // if animation is already running stop it
-                      // and delete old stroke before deleting this stroke
-                      if(_deleteStrokeController.status == AnimationStatus.reverse){
-                        get<Strokes>().removeLastStroke();
-                        _deleteStrokeController.value = 1.0;
-                      } 
-                      //only delete strokes if there are some left
-                      if(get<Strokes>().strokeCount > 0)
-                        _deleteStrokeController.reverse(from: 1.0);
+                    onPressed: () {
+                      strokes.deleteLastStrokeAnimation();
+                      setState(() {});
                     }
                   ),
                   // multi character search input
@@ -245,18 +128,9 @@ class _DrawScreenState extends State<DrawScreen>
                   IconButton(
                     key: SHOWCASE_DRAWING[2].key,
                     icon: Icon(Icons.clear),
-                    onPressed: () async {
-                      if(strokes.computeMetrics().isNotEmpty){
-                        _snappableKey.currentState.snap(
-                          await _canvas.getRGBAListFromCanvas(),
-                          _canvasSize.floor(), _canvasSize.floor()
-                        );
-
-                        // wait before deleting the strokes to prevent stutter 
-                        await Future.delayed(Duration(milliseconds: 50));
-                        get<Strokes>().deleteAllStrokes();
-                        get<DrawingInterpreter>().clearPredictions();
-                      }
+                    onPressed: () {
+                      strokes.deleteAllStrokesAnimation();
+                      setState((){});
                     }
                   ), 
                 ]
