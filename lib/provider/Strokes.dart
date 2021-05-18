@@ -24,6 +24,16 @@ class Strokes with ChangeNotifier{
 
     notifyListeners();
   }
+
+  void moveTo(double x, double y){
+    _path.moveTo(x, y);
+    notifyListeners();
+  }
+
+  void lineTo(double x, double y){
+    _path.lineTo(x, y);
+    notifyListeners();
+  }
   
   get strokeCount {
     return _strokeCount;
@@ -64,27 +74,29 @@ class Strokes with ChangeNotifier{
 
   /// Deletes the last stroke of all drawn strokes.
   void deleteLastStroke(){
-    
-    // get all strokes except for the last one
-    var p = _path.computeMetrics().take(_path.computeMetrics().length - 1);
-    var newPath = Path();
-    // copy the strokes to a new Path
-    p.forEach((element) {
-      newPath.addPath(element.extractPath(0, double.infinity), Offset.zero);
-    });
-    _path = newPath;
 
-    decrementStrokeCount();
+    if(strokeCount > 0){
+      // get all strokes except for the last one
+      var p = _path.computeMetrics().take(_path.computeMetrics().length - 1);
+      var newPath = Path();
+      // copy the strokes to a new Path
+      p.forEach((element) {
+        newPath.addPath(element.extractPath(0, double.infinity), Offset.zero);
+      });
+      _path = newPath;
 
-    _deletingLastStroke = false;
+      decrementStrokeCount();
 
-    notifyListeners();
+      _deletingLastStroke = false;
+
+      notifyListeners();
+    }
   }
 
   /// Run the delete last strokes animation and delete the last stroke
   /// at the end.
   void deleteLastStrokeAnimation() {
-    if(!deletingAllStrokes){
+    if(!_deletingAllStrokes){
       _deletingLastStroke = true;
       notifyListeners();
     }

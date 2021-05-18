@@ -1,8 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
+import 'package:provider/provider.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
@@ -20,8 +21,7 @@ import 'package:da_kanji_mobile/globals.dart';
 /// 
 /// Lets the user draw a kanji and than shows the most likely predictions.
 /// Those can than be copied / opened in dictionaries by buttons.
-class DrawScreen extends StatefulWidget
-  with GetItStatefulWidgetMixin {
+class DrawScreen extends StatefulWidget {
 
   // init the tutorial of the draw screen
   final showcase = DrawScreenShowcase();
@@ -34,8 +34,7 @@ class DrawScreen extends StatefulWidget
   _DrawScreenState createState() => _DrawScreenState();
 }
 
-class _DrawScreenState extends State<DrawScreen>
-  with TickerProviderStateMixin, GetItStateMixin{
+class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
   /// the size of the canvas widget
   double _canvasSize;
 
@@ -55,7 +54,6 @@ class _DrawScreenState extends State<DrawScreen>
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = (Theme.of(context).brightness == Brightness.dark);
     // init size of canvas and assure that it is min. 20 smaller than screen width
     _canvasSize = MediaQuery.of(context).size.height * 3/6;
     if(_canvasSize >= MediaQuery.of(context).size.width - 20)
@@ -75,96 +73,124 @@ class _DrawScreenState extends State<DrawScreen>
     }
     route.animation.addStatusListener(handler);
 
-    // GetItMixin watchers
-    final List<String> predictions =
-      watchOnly((DrawingInterpreter d) => d.predictions);
-    final Strokes strokes = watchOnly((Strokes s) => s);
-    final String kanjiBuffer = watchOnly((KanjiBuffer k) => k.kanjiBuffer);
-
 
     return DaKanjiDrawer(
       currentScreen: Screens.drawing,
       animationAtStart: !widget.openedByDrawer,
       child: Center(
-        child: Column( 
-          children: [
-            // the canvas to draw on
-            DrawingCanvas(
-              width: _canvasSize, 
-              height: _canvasSize,
-              margin: EdgeInsets.fromLTRB(0, 
-                (MediaQuery.of(context).size.width - _canvasSize) / 2, 
-                0, 0),
-              key: SHOWCASE_DRAWING[0].key,
-              strokes: strokes,
-            ),
-            Spacer(),
-            // undo/clear button and kanjiBuffer,
-            Container(
-              width: _canvasSize,
-              child: Row(
-                children: [
-                  // undo
-                  IconButton(
-                    key: SHOWCASE_DRAWING[1].key,
-                    icon: Icon(Icons.undo),
-                    onPressed: () {
-                      strokes.deleteLastStrokeAnimation();
-                      setState(() {});
-                    }
-                  ),
-                  // multi character search input
-                    Expanded(
-                    child: Hero(
-                      tag: "webviewHero_b_" + 
-                        (kanjiBuffer == "" ? "Buffer" : kanjiBuffer),
-                      child: Center(
-                        key: SHOWCASE_DRAWING[6].key,
-                        child: KanjiBufferWidget(_canvasSize)
-                      )
-                    ),
-                  ),
-                  // clear
-                  IconButton(
-                    key: SHOWCASE_DRAWING[2].key,
-                    icon: Icon(Icons.clear),
-                    onPressed: () {
-                      strokes.deleteAllStrokesAnimation();
-                      setState((){});
-                    }
-                  ), 
-                ]
-              ),
-            ),
-            // prediction buttons
-            Container(
-              key: SHOWCASE_DRAWING[3].key,
-              width: _canvasSize,
-              // approximated button height (width/5) * numRows + padding  
-              height: (_canvasSize / 5.0) * 2.0 + 10, 
-              child: GridView.count(
-                physics: new NeverScrollableScrollPhysics(),
-                crossAxisCount: 5,
-                children: List.generate(10, (i) {
-                  Widget widget = PredictionButton(predictions[i]);
-                  // instantiate short/long press showcase button
-                  if(i == 0){
-                    widget = Container(
-                      key: SHOWCASE_DRAWING[4].key,
-                      child: widget 
-                    );
-                  }
-                  return Hero(
-                    tag: "webviewHero_" + 
-                      (predictions[i] == " " ? i.toString() : predictions[i]),
-                    child: widget,
+        child: ChangeNotifierProvider.value(
+          value: GetIt.I<Strokes>(),
+          child: Column( 
+            children: [
+              // the canvas to draw on
+              Consumer<Strokes>(
+                builder: (context, strokes, child){
+                  return DrawingCanvas(
+                    width: _canvasSize, 
+                    height: _canvasSize,
+                    margin: EdgeInsets.fromLTRB(0, 
+                      (MediaQuery.of(context).size.width - _canvasSize) / 2, 
+                      0, 0),
+                    key: SHOWCASE_DRAWING[0].key,
+                    strokes: strokes,
+                    onFinishedDrawing: (Uint8List image) {
+                      GetIt.I<DrawingInterpreter>().runInference(image);
+                    },
+                    onDeletedLastStroke: (Uint8List image) {
+                      if(strokes.strokeCount > 0)
+                        GetIt.I<DrawingInterpreter>().runInference(image);
+                      else
+                        GetIt.I<DrawingInterpreter>().clearPredictions();
+                    },
+                    onDeletedAllStrokes: (Uint8List image) {
+                      GetIt.I<DrawingInterpreter>().clearPredictions();
+                    },
                   );
-                },
+                }
+              ),
+              Spacer(),
+              // undo/clear button and kanjiBuffer,
+              Container(
+                width: _canvasSize,
+                child: Row(
+                  children: [
+                    // undo
+                    IconButton(
+                      key: SHOWCASE_DRAWING[1].key,
+                      icon: Icon(Icons.undo),
+                      onPressed: () {
+                        GetIt.I<Strokes>().deleteLastStrokeAnimation();
+                      }
+                    ),
+                    // multi character search input
+                    ChangeNotifierProvider.value(
+                      value: GetIt.I<KanjiBuffer>(),
+                      child: Expanded(
+                        child: Consumer<KanjiBuffer>(
+                          builder: (context, kanjiBuffer, child){
+                            return Hero(
+                            tag: "webviewHero_b_" + 
+                              (kanjiBuffer.kanjiBuffer == "" 
+                                ? "Buffer" : kanjiBuffer.kanjiBuffer),
+                              child: Center(
+                                key: SHOWCASE_DRAWING[6].key,
+                                child: KanjiBufferWidget(_canvasSize)
+                              )
+                            );
+                          }
+                        ),
+                      ),
+                    ),
+                    // clear
+                    IconButton(
+                      key: SHOWCASE_DRAWING[2].key,
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        GetIt.I<Strokes>().deleteAllStrokesAnimation();
+                      }
+                    ), 
+                  ]
+                ),
+              ),
+              // prediction buttons
+              Container(
+                key: SHOWCASE_DRAWING[3].key,
+                width: _canvasSize,
+                // approximated button height (width/5) * numRows + padding  
+                height: (_canvasSize / 5.0) * 2.0 + 10, 
+                child: ChangeNotifierProvider.value(
+                  value: GetIt.I<DrawingInterpreter>(),
+                  child: Consumer<DrawingInterpreter>(
+                    builder: (context, interpreter, child){
+                      return GridView.count(
+                        physics: new NeverScrollableScrollPhysics(),
+                        crossAxisCount: 5,
+                        children: List.generate(10, (i) {
+                          Widget widget =
+                            PredictionButton(interpreter.predictions[i]);
+                          // instantiate short/long press showcase button
+                          if(i == 0){
+                            widget = Container(
+                              key: SHOWCASE_DRAWING[4].key,
+                              child: widget 
+                            );
+                          }
+                          return Hero(
+                            tag: "webviewHero_" + 
+                              (interpreter.predictions[i] == " " 
+                                ? i.toString() : interpreter.predictions[i]),
+                            child: widget,
+                          );
+                        },
+                        )
+                      );
+                    }
+                  ),
                 )
-              )
-            ),
-            Spacer(),
-          ],
+              ),
+              Spacer(),
+            ],
+          ),
         ),
       ),
     );

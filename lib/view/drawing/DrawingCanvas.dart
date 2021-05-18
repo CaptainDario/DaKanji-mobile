@@ -1,16 +1,14 @@
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:get_it/get_it.dart';
-
-import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawingPainter.dart';
-import 'package:get_it_mixin/get_it_mixin.dart';
 
 
 
-class DrawingCanvas extends StatefulWidget 
-  with GetItStatefulWidgetMixin {
+class DrawingCanvas extends StatefulWidget {
 
   /// the width of the DrawingCanvas 
   final double width;
@@ -20,12 +18,18 @@ class DrawingCanvas extends StatefulWidget
   final EdgeInsets margin;
   /// the Strokes which should be drawn on the canvas
   final Strokes strokes;
-
-  final VoidCallback finishedDrawing;
-
-  final VoidCallback deletedLastStroke;
-
-  final VoidCallback deletedAllStrokes;
+  /// is invoked once a stroke was drawn (pointerUp)
+  /// 
+  /// Provides the current image of the canvas as parameter
+  final void Function(Uint8List image) onFinishedDrawing;
+  /// is invoked when the delete last stroke animation finished
+  /// 
+  /// Provides the current image of the canvas as parameter
+  final void Function(Uint8List image) onDeletedLastStroke;
+  /// is invoked when the delete all strokes animation finished
+  /// 
+  /// Provides the current image of the canvas as parameter
+  final void Function(Uint8List image) onDeletedAllStrokes;
 
 
   DrawingCanvas({
@@ -34,17 +38,17 @@ class DrawingCanvas extends StatefulWidget
     @required this.strokes,
     this.margin,
     Key key,
-    this.finishedDrawing,
-    this.deletedLastStroke,
-    this.deletedAllStrokes
+    this.onFinishedDrawing,
+    this.onDeletedLastStroke,
+    this.onDeletedAllStrokes
   }) : super(key: key);
 
   @override
   _DrawingCanvasState createState() => _DrawingCanvasState();
 }
 
-class _DrawingCanvasState extends State<DrawingCanvas>
-  with TickerProviderStateMixin, GetItStateMixin {
+class _DrawingCanvasState extends State<DrawingCanvas> 
+  with TickerProviderStateMixin {
   
   /// the DrawingPainter instance which defines the canvas to drawn on.
   DrawingPainter _canvas;
@@ -54,8 +58,8 @@ class _DrawingCanvasState extends State<DrawingCanvas>
   bool pointerMoved = false;
   /// Animation controller of the delete stroke animation
   AnimationController _canvasController;
-
-  bool darkMode = false;
+  /// should the app run in dark mode.
+  bool darkMode;
     
 
 
@@ -72,19 +76,21 @@ class _DrawingCanvasState extends State<DrawingCanvas>
       // when the animation finished 
       if(status == AnimationStatus.dismissed){
         
+        _canvasController.value = 1.0;
         // if all strokes should be deleted
         if(widget.strokes.deletingAllStrokes){
           widget.strokes.deleteAllStrokes();
-          if(widget.deletedAllStrokes != null)
-            widget.deletedAllStrokes();
+
+          if(widget.onDeletedAllStrokes != null)
+            widget.onDeletedAllStrokes(await getPNGImage());
         }
         // or only the last one
         else{
           widget.strokes.deleteLastStroke();
-          if(widget.deletedLastStroke != null)
-            widget.deletedLastStroke();
+
+          if(widget.onDeletedLastStroke != null)
+            widget.onDeletedLastStroke(await getPNGImage());
         }
-        _canvasController.value = 1.0;
       }
     });
   
@@ -105,6 +111,8 @@ class _DrawingCanvasState extends State<DrawingCanvas>
       _canvasController.reverse(from: 1.0);
     }
 
+    darkMode = (Theme.of(context).brightness == Brightness.dark);
+
     return Container(
       height: widget.height,
       width: widget.width,
@@ -115,33 +123,28 @@ class _DrawingCanvasState extends State<DrawingCanvas>
           // allow only one pointer at a time
           if(_pointerID == null){
             _pointerID = details.pointer;
-            setState(() {
-              Offset point = details.localPosition;
-              widget.strokes.path.moveTo(point.dx, point.dy);
-            });
+            Offset point = details.localPosition;
+            widget.strokes.moveTo(point.dx, point.dy);
           }
         },
         // drawing pointer moved
         onPointerMove: (details) {
           // allow only one pointer at a time
           if(_pointerID == details.pointer){
-            setState(() {
-              Offset point = details.localPosition;
-              widget.strokes.path.lineTo(point.dx, point.dy);
-            });
+            Offset point = details.localPosition;
+            widget.strokes.lineTo(point.dx, point.dy);
             pointerMoved = true;
           }
         },
         // finished drawing a stroke
         onPointerUp: (details) async {
           if(pointerMoved){
-            if(widget.finishedDrawing != null)
-              widget.finishedDrawing();
             pointerMoved = false;
             widget.strokes.incrementStrokeCount();
 
-            if(widget.finishedDrawing != null)
-              widget.finishedDrawing();
+            if(widget.onFinishedDrawing != null){
+              widget.onFinishedDrawing(await getPNGImage());
+            }
           }
           // mark this pointer as removed
           _pointerID = null;
@@ -180,4 +183,15 @@ class _DrawingCanvasState extends State<DrawingCanvas>
       ),
     );
   }
+
+  /// convenience wrapper for getting a PNG-image as list of the current canvas.
+  Future<Uint8List> getPNGImage() async {
+    return _canvas.getPNGListFromCanvas();
+  } 
+  
+  /// convenience wrapper for getting a RGBA-list of the current canvas.
+  Future<Uint8List> getRGBAImage() async {
+    return _canvas.getRGBAListFromCanvas();
+  } 
+
 }
