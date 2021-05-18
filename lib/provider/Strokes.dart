@@ -8,7 +8,11 @@ class Strokes with ChangeNotifier{
   /// The path object of all strokes
   Path _path;
   /// How many strokes are there
-  int _strokeCount; 
+  int _strokeCount;
+  /// Is the animation to delete the last stroke currently running
+  bool _deletingLastStroke;
+  /// Is the animation to delete all strokes currently running
+  bool _deletingAllStrokes;
 
 
   get path {
@@ -25,6 +29,14 @@ class Strokes with ChangeNotifier{
     return _strokeCount;
   }
 
+  get deletingLastStroke{
+    return _deletingLastStroke;
+  }
+
+  get deletingAllStrokes{
+    return _deletingAllStrokes;
+  }
+
   void incrementStrokeCount(){
     _strokeCount++;
   }
@@ -36,6 +48,8 @@ class Strokes with ChangeNotifier{
   Strokes() {
     _path = Path();
     _strokeCount = 0;
+    _deletingLastStroke = false;
+    _deletingAllStrokes = false;
   }
 
   /// Deletes all drawn strokes.
@@ -43,11 +57,13 @@ class Strokes with ChangeNotifier{
     _path.reset();
     _strokeCount = 0;
 
+    _deletingAllStrokes = false;
+
     notifyListeners();
   }
 
   /// Deletes the last stroke of all drawn strokes.
-  void removeLastStroke(){
+  void deleteLastStroke(){
     
     // get all strokes except for the last one
     var p = _path.computeMetrics().take(_path.computeMetrics().length - 1);
@@ -60,6 +76,24 @@ class Strokes with ChangeNotifier{
 
     decrementStrokeCount();
 
+    _deletingLastStroke = false;
+
+    notifyListeners();
+  }
+
+  /// Run the delete last strokes animation and delete the last stroke
+  /// at the end.
+  void deleteLastStrokeAnimation() {
+    if(!deletingAllStrokes){
+      _deletingLastStroke = true;
+      notifyListeners();
+    }
+  }
+
+  /// Run the delete all strokes animation and delete all strokes at the end.
+  void deleteAllStrokesAnimation() {
+    _deletingLastStroke = false;
+    _deletingAllStrokes = true;
     notifyListeners();
   }
 
