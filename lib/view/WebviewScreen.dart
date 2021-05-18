@@ -1,11 +1,11 @@
 import 'dart:math';
-import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:flutter/material.dart';
 
-import 'package:get_it/get_it.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:get_it/get_it.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
+
+import 'package:da_kanji_mobile/provider/Lookup.dart';
 
 
 
@@ -64,6 +64,7 @@ class _WebviewScreenState extends State<WebviewScreen>
   void dispose() { 
     super.dispose();
     _controller.dispose();
+    WebView.platform = SurfaceAndroidWebView();
   }
 
   @override
