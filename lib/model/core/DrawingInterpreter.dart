@@ -89,7 +89,7 @@ class DrawingInterpreter with ChangeNotifier{
     
     _wasInitialized = true;
   
-    // allocate memory for inference
+    // allocate memory for inference in / output
     _input = List<List<double>>.generate(
       64, (i) => List.generate(64, (j) => 0.0)).
       reshape<double>([1, 64, 64, 1]);
@@ -192,18 +192,22 @@ class DrawingInterpreter with ChangeNotifier{
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
     try{
-      // use NNAPI on android if android API >= 27
-      // do not use because of delay at first inference
-      if (androidInfo.version.sdkInt < 0) {       //>= 27) {
-        interpreter = await _nnapiInterpreter();
+      if(androidInfo.isPhysicalDevice){
+        // use NNAPI on android if android API >= 27
+        if (androidInfo.version.sdkInt >= 27) {
+          interpreter = await _nnapiInterpreter();
+        }
+        // otherwise fallback to GPU delegate
+        else {
+          usedBackend = "Android GPU Delegate";
+          interpreter = await _gpuInterpreterAndroid();
+        }
       }
-      // otherwise fallback to GPU delegate
-      else {
-        usedBackend = "Android GPU Delegate";
-        interpreter = await _gpuInterpreterAndroid();
-      }
+      // use CPU inference on emulators
+      else 
+        interpreter = await _cpuInterpreter();
     }
-    // use CPU inference on emulators
+    // use CPU inference on exceptions
     catch (e){
       interpreter = await _cpuInterpreter();
     }
