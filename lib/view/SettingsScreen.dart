@@ -138,7 +138,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 });
               }
             ),
-            // 
+            // should a double tap on a prediction button empty the canvas
             CheckboxListTile(
               title: Text("Empty canvas after double tap"),
               value: GetIt.I<Settings>().emptyCanvasAfterDoubleTap, 
@@ -149,6 +149,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 });
               }
             ),
+            CheckboxListTile(
+              title: Text("Use default browser for online dictionaries"),
+              value: GetIt.I<Settings>().useDefaultBrowser, 
+              onChanged: (bool newValue){
+                setState(() {
+                  GetIt.I<Settings>().useDefaultBrowser = newValue;
+                  GetIt.I<Settings>().save();
+                });
+              }
+            ),
+
             Divider(),
             // setting for which theme to use
             ListTile(

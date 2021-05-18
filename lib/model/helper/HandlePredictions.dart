@@ -11,6 +11,7 @@ import 'package:da_kanji_mobile/provider/Lookup.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/DownloadAppDialogue.dart';
 import 'package:da_kanji_mobile/view/WebviewScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 /// A convenience class to handle long and short press for the predictions.
@@ -159,10 +160,16 @@ class HandlePrediction{
         }
       }
       else{
-        Navigator.push(
-          context, 
-          MaterialPageRoute(builder: (BuildContext context) => WebviewScreen())
-        );
+        // use the default browser
+        if(GetIt.I<Settings>().useDefaultBrowser)
+          launch(openWithSelectedDictionary(char));
+        else
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (BuildContext context) => WebviewScreen()
+            )
+          );
       }
     }
   }

@@ -26,7 +26,7 @@ class Settings with ChangeNotifier {
   /// The string representation of the dictionary which will be used (long press)
   String _selectedDictionary;
 
-  // the application version used when those settings were saved
+  // the application version used when this settings object was saved
   String versionUsed;
   
   /// The theme which the application will use.
@@ -44,6 +44,8 @@ class Settings with ChangeNotifier {
 
   /// Should the canvas be cleared when a prediction was copied to kanjibuffer
   bool _emptyCanvasAfterDoubleTap;
+
+  bool _useDefaultBrowser;
 
 
   Settings(){
@@ -70,6 +72,7 @@ class Settings with ChangeNotifier {
 
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;
+    useDefaultBrowser = true;
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
@@ -115,6 +118,15 @@ class Settings with ChangeNotifier {
     _emptyCanvasAfterDoubleTap = empty;
     notifyListeners();
   }
+  
+  bool get useDefaultBrowser{
+    return _useDefaultBrowser;
+  }
+  
+  set useDefaultBrowser(bool empty){
+    _useDefaultBrowser = empty;
+    notifyListeners();
+  }
 
   /// Saves all settings to the SharedPreferences.
   void save() async {
@@ -124,18 +136,19 @@ class Settings with ChangeNotifier {
     // set value in shared preferences
     prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
+    prefs.setBool('useDefaultBrowser', useDefaultBrowser);
     
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
-
   }
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
     invertShortLongPress = await loadBool('invertShortLongPress');
     emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
+    useDefaultBrowser = await loadBool('useDefaultBrowser');
 
     customURL = await loadString('customURL') ?? '';
     _selectedTheme = await loadString('selectedTheme') ?? themes[2];
@@ -144,7 +157,6 @@ class Settings with ChangeNotifier {
 
     // a different version than last time is being used
     //VERSION = "0.0.0";
-    //SHOW_SHOWCASE_DRAWING = true;
     if(versionUsed != VERSION){
 
       // show the changelog
@@ -159,7 +171,7 @@ class Settings with ChangeNotifier {
 
   /// Loads a bool from shared preferences.
   ///
-  /// @returns The bool's loaded value of found, otherwise false
+  /// @returns The bool's loaded value if found, otherwise false
   Future<bool> loadBool(String boolName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool loaded = prefs.getBool(boolName) ?? false;
