@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:da_kanji_mobile/model/core/DrawingIsolateUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -16,11 +17,15 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 /// Notifies listeners when the predictions changed.
 class DrawingInterpreter with ChangeNotifier{
   
+
+
   /// the tf lite interpreter to recognize kanjis
   Interpreter _interpreter;
 
+  DrawingIsolateUtils _isolateUtils;
+
   /// If the interpreter was initialized successfully
-  bool _wasInitialized;
+  bool wasInitialized;
 
   /// The path to the interpreter asset
   String _assetPath;
@@ -51,8 +56,28 @@ class DrawingInterpreter with ChangeNotifier{
 
 
 
-  DrawingInterpreter()
-  {
+  List<String> get predictions{
+    return _predictions;
+  }
+
+  void _setPredictions(List<String> predictions){
+    _predictions = predictions;
+  }
+
+  get labels {
+    return _labels;
+  }
+
+  get isolateUtils{
+    return _isolateUtils;
+  }
+
+  get interpreteraddress{
+    return _interpreter.address;
+  }
+
+
+  DrawingInterpreter() {
     _assetPath = "model_CNN_kanji_only.tflite"; 
 
     height = 64;
@@ -62,19 +87,21 @@ class DrawingInterpreter with ChangeNotifier{
 
     _setPredictions(List.generate(_noPredictions, (index) => " "));
 
-    _wasInitialized = false;
+    
+    wasInitialized = false;
   }
 
-  /// Initialize the interpreter
+  /// Initialize the interpreter in the main isolate (invoking it can lead to 
+  /// UI jank)
   /// 
   /// Caution: This method needs to be called before using the interpreter.
   void init() async {
 
-    if(_wasInitialized){
-      print("Drawing interpreter already initialized. Skipping init");
+    if(wasInitialized){
+      print("Drawing interpreter already initialized."
+      "Skipping init and returning existing interpreter.");
       return;
     }
-
     if (Platform.isAndroid)
       _interpreter = await _initInterpreterAndroid();
     else if (Platform.isIOS) 
@@ -87,8 +114,6 @@ class DrawingInterpreter with ChangeNotifier{
     var l = await rootBundle.loadString("assets/labels_CNN_kanji_only.txt");
     _labels = l.split("");
     
-    _wasInitialized = true;
-  
     // allocate memory for inference in / output
     _input = List<List<double>>.generate(
       64, (i) => List.generate(64, (j) => 0.0)).
@@ -96,14 +121,28 @@ class DrawingInterpreter with ChangeNotifier{
     this._output =
       List<List<double>>.generate(1, (i) => 
       List<double>.generate(_labels.length, (j) => 0.0));
+
+    _isolateUtils = DrawingIsolateUtils();
+    _isolateUtils.start();
+
+    wasInitialized = true;
   }
 
-  List<String> get predictions{
-    return _predictions;
-  }
+  /// Initialize the isolate in which the inference should be run.
+  void initIsolate(Interpreter interpreter, List<String> labels) async {
 
-  void _setPredictions(List<String> predictions){
-    _predictions = predictions;
+    _interpreter = interpreter;
+    _labels = labels;
+
+    // allocate memory for inference in / output
+    _input = List<List<double>>.generate(
+      64, (i) => List.generate(64, (j) => 0.0)).
+      reshape<double>([1, 64, 64, 1]);
+    this._output =
+      List<List<double>>.generate(1, (i) => 
+      List<double>.generate(_labels.length, (j) => 0.0));
+
+    wasInitialized = true;
   }
 
   /// Call this to free the memory of this interpreter
@@ -116,7 +155,7 @@ class DrawingInterpreter with ChangeNotifier{
     _input = null;
     _interpreter = null;
     clearPredictions();
-    _wasInitialized = false;
+    wasInitialized = false;
   }
 
   /// Clear all predictions by setting them to " "
@@ -129,50 +168,53 @@ class DrawingInterpreter with ChangeNotifier{
   ///
   /// After running the inference the 10 most likely predictions are
   /// returned ordered by how likely they are [likeliest, ..., unlikeliest].
-  void runInference(Uint8List inputImage) async {
+  void runInference(Uint8List inputImage, {bool runInIsolate = true}) async {
     
-    if(!_wasInitialized)
+    if(!wasInitialized)
       throw Exception(
         "You are trying to use the interpreter before it was initialized!\n" +
         "Execute init() first!"
       );
 
-    // take image from canvas and resize it
-    image.Image base = image.decodeImage(inputImage);
-    image.Image resizedImage = image.copyResize(base,
-      height: 64, width: 64, interpolation: image.Interpolation.cubic);
-    Uint8List resizedBytes =
-        resizedImage.getBytes(format: image.Format.luminance);
-
-    // convert image for inference into shape [1, 64, 64, 1]
-    // also apply thresholding and normalization [0, 1]
-    for (int x = 0; x < 64; x++) {
-      for (int y = 0; y < 64; y++) {
-        double val = resizedBytes[(x * 64) + y].toDouble();
-        
-        if(val > 50){
-          // apply thresholding
-          val = 255;
-          // normalize images
-          val = (val / 255).toDouble();
-        }
-        else
-          val = 0;
-        
-        _input[0][x][y][0] = val;
-      }
+    if(runInIsolate){
+      _predictions = await _isolateUtils.runInference(
+        inputImage,
+        _interpreter.address,
+        labels
+      );
     }
-    // run inference
-    _interpreter.run(_input, _output);
+    else{
+      // take image from canvas and resize it
+      image.Image base = image.decodeImage(inputImage);
+      image.Image resizedImage = image.copyResize(base,
+        height: 64, width: 64, interpolation: image.Interpolation.cubic);
+      Uint8List resizedBytes =
+          resizedImage.getBytes(format: image.Format.luminance);
 
-    // get the 10 most likely predictions
-    for (int c = 0; c < 10; c++) {
-      int index = 0;
-      for (int i = 0; i < _output[0].length; i++) {
-        if (_output[0][i] > _output[0][index]) index = i;
+      // convert image for inference into shape [1, 64, 64, 1]
+      // also apply thresholding and normalization [0, 1]
+      for (int x = 0; x < 64; x++) {
+        for (int y = 0; y < 64; y++) {
+          double val = resizedBytes[(x * 64) + y].toDouble();
+          
+          // apply thresholding and normalize image
+          val = val > 50 ? 1.0 : 0.0;
+          
+          _input[0][x][y][0] = val;
+        }
       }
-      predictions[c] = _labels[index];
-      _output[0][index] = 0.0;
+      // run inference
+      _interpreter.run(_input, _output);
+
+      // get the 10 most likely predictions
+      for (int c = 0; c < _noPredictions; c++) {
+        int index = 0;
+        for (int i = 0; i < _output[0].length; i++) {
+          if (_output[0][i] > _output[0][index]) index = i;
+        }
+        predictions[c] = _labels[index];
+        _output[0][index] = 0.0;
+      }
     }
     
     notifyListeners();
@@ -214,7 +256,30 @@ class DrawingInterpreter with ChangeNotifier{
 
     return interpreter;
   }
+  
+  /// Initializes the TFLite interpreter on iOS.
+  ///
+  /// Uses the metal delegate if running on an actual device.
+  /// Otherwise uses CPU mode.
+  Future<Interpreter> _initInterpreterIOS() async {
 
+    Interpreter interpreter;
+
+    // get platform information
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+    if (iosInfo.isPhysicalDevice) {
+      usedBackend = "IOS Metal Delegate";
+      interpreter = await _gpuInterpreterIOS();
+    } 
+    // use CPU inference on emulators
+    else 
+      interpreter = await _cpuInterpreter();
+    
+    return interpreter;
+
+  }
 
   /// Initializes the interpreter with NPU acceleration for Android.
   Future<Interpreter> _nnapiInterpreter() async {
@@ -257,29 +322,5 @@ class DrawingInterpreter with ChangeNotifier{
     final options = InterpreterOptions()
       ..threads = Platform.numberOfProcessors - 1;
     return await Interpreter.fromAsset(_assetPath, options: options);
-  }
-
-  /// Initializes the TFLite interpreter on iOS.
-  ///
-  /// Uses the metal delegate if running on an actual device.
-  /// Otherwise uses CPU mode.
-  Future<Interpreter> _initInterpreterIOS() async {
-
-    Interpreter interpreter;
-
-    // get platform information
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-
-    if (iosInfo.isPhysicalDevice) {
-      usedBackend = "IOS Metal Delegate";
-      interpreter = await _gpuInterpreterIOS();
-    } 
-    // use CPU inference on emulators
-    else 
-      interpreter = await _cpuInterpreter();
-    
-    return interpreter;
-
   }
 }

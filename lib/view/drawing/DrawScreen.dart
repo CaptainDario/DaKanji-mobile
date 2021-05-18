@@ -42,9 +42,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // initialize the drawing interpreter
-    GetIt.I<DrawingInterpreter>().init();
-
   }
 
   @override
@@ -68,6 +65,11 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
         if(SHOW_SHOWCASE_DRAWING){
           widget.showcase.init(context);
           widget.showcase.show();
+        }
+
+        if(!GetIt.I<DrawingInterpreter>().wasInitialized){
+          // initialize the drawing interpreter
+          GetIt.I<DrawingInterpreter>().init();
         }
       }
     }
@@ -93,9 +95,11 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       0, 0),
                     key: SHOWCASE_DRAWING[0].key,
                     strokes: strokes,
-                    onFinishedDrawing: (Uint8List image) {
+
+                    onFinishedDrawing: (Uint8List image) async {
                       GetIt.I<DrawingInterpreter>().runInference(image);
                     },
+
                     onDeletedLastStroke: (Uint8List image) {
                       if(strokes.strokeCount > 0)
                         GetIt.I<DrawingInterpreter>().runInference(image);
