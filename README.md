@@ -23,28 +23,58 @@ For more details about the features take a look at the [usage section](#usage).
 ## Getting started
 **Currently only android is supported** </br>
 The easiest way is to download the app for android from the PlayStore.
-You can also [setup a development environment](#development) and build the app on your own.
+You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](#development) and build the app on your own.
 
 ## Usage
 In this section the features of the app are explained in more detail.
 ### Handwritten kanji recognition
-The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. The used dictionary can be set in the settings.
-It is also possible to use a translation app of the used device.
-A custom website can also be used with an input field in the settings menu.</br>
+The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. A dictionary can be chosen in the settings.
+It is also possible to use a translation app or custom URL can be defined in the settings menu.</br>
 Currently around 3000 characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
+
+### Deep linking
+Other applications can link to DaKanji via deep linking.
+The base link is defined as `dakanji://dakanji`.
+Adding a dictionary to the link will result in predictions opening in this dictionary.<br/>
+Example:
+> Setting the link to <code>dakanji://dakanji/jisho</code> will open DaKanji.
+> All look ups made, will than use jisho.org. <br/>
+
+For web dictionaries which are currently not supported, you can use the <code>dakanji://dakanji/URL/YOUR_URL_HERE</code> link.
+Just replace `YOUR_URL_HERE` with the search url of your dictionary and put `%X%` as a placeholder for the character to search.<br/>
+Example:
+> If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
+> Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
+
+A table with all supported deep links can be found [here]().
+You can try them out directly in your browser.
+
+
+#### Android
+Currently supported links are:
+* `dakanji://dakanji/jisho` (web)
+* `dakanji://dakanji/wadoku` (web)
+* `dakanji://dakanji/weblio` (web)
+* `dakanji://dakanji/URL/YOUR_URL_HERE`
+* `dakanji://dakanji/akbei` (app)
+* `dakanji://dakanji/takoboto` (app)
+* `dakanji://dakanji/aedict` (app)
 
 ### Next steps and ideas
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 
 ## Development
-This app was developed using dart, the flutter framework and Tensorflow.
-Tensorflow was used for the machine learning part.
+This app was developed using dart, the flutter framework and Tensorflow (lite).
+Tensorflow (lite) was used for the machine learning part.
 This project can be found [here](https://github.com/CaptainDario/DaKanji-ML). </br>
 For developing new features this repository has to be downloaded and all necessary packages have to be installed with:
 
 ```{bash}
 flutter pub get
+
+# to get tensorflow lite dependencies use
+install.bat
 ```
 
 Additionally the tflite models need to be copied from the [Machine Learning](https://github.com/CaptainDario/DaKanji-ML) repo.
@@ -82,3 +112,4 @@ flutter pub run flutter_launcher_icons:main
 * design and UI: Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now.
 * icon/banner: 
   * Thanks "Buddha, with kudos to 2ch/fl/ and HatNyan" for helping with the icon design and making the banner. Also thank you [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the banner font.
+* Modified Packages: [bitmap](https://github.com/renancaraujo/bitmap), [snappable](https://github.com/MarcinusX/snappable) 

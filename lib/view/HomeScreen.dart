@@ -1,7 +1,12 @@
-import 'globals.dart';
+import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:get_it/get_it.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:da_kanji_mobile/provider/Settings.dart';
 
 
 
@@ -17,16 +22,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  ScrollController _scrollController;
+
   @override
   void initState() { 
     super.initState();
 
+    _scrollController = ScrollController();
+
     // after the page was build 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // if a new version was installed open the what's new pop up 
-      if(SHOW_CHANGELOG){
-        SHOW_CHANGELOG = false;
-    
+      if(GetIt.I<Changelog>().showChangelog){
+        GetIt.I<Changelog>().showChangelog = false;
+
+        // what's new dialogue 
         showDialog(
           context: context,
           builder: (BuildContext context){ 
@@ -38,7 +48,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        child: Markdown(data: NEW_CHANGELOG,),
+                        child: Scrollbar(
+                          isAlwaysShown: true,
+                          controller: _scrollController,
+                          child: Markdown(
+                            selectable: false,
+                            controller: _scrollController,
+                            data: GetIt.I<Changelog>().newestChangelog,
+                            onTapLink:
+                            (String text, String url, String title) async {
+                              if(await canLaunch(url))
+                                launch(url);
+                            },
+                          ),
+                        ),
                         width: MediaQuery.of(context).size.width * 3/4,
                         height: MediaQuery.of(context).size.height * 2/4,
                       ),
@@ -50,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                         ),
                         onPressed: () async {
-                          SETTINGS.save();
+                          GetIt.I<Settings>().save();
                           Navigator.pushNamedAndRemoveUntil(
                             context, "/home", (Route<dynamic> route) => false);
                         },
@@ -63,7 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         ).then((value) {
-          SETTINGS.save();
+          // save that the dialogue was shown and open the default screen
+          GetIt.I<Settings>().save();
           Navigator.pushNamedAndRemoveUntil(
             context, "/home", (Route<dynamic> route) => false);
         });

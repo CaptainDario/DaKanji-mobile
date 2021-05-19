@@ -3,7 +3,7 @@ description: A kanji recognizer app.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+10
+version: 1.2.0+14
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -13,16 +13,22 @@ dependencies:
     sdk: flutter
   shared_preferences: ^0.5.12+4
   url_launcher: ^5.7.10
+  webview_flutter: ^2.0.4
   device_info: ^1.0.0
   android_intent: ^2.0.0
-  tutorial_coach_mark: ^0.6.0+1
+  tutorial_coach_mark: ^1.0.0
   flutter_phoenix: ^0.1.0
-  package_info: ^2.0.0
-  tflite_flutter: ^0.6.0
-  #  path: ../tflite_flutter_plugin
+  package_info_plus:
+  tflite_flutter: ^0.8.0
   image: ^2.1.19
   flutter_markdown: ^0.5.0
   flutter_appavailability: ^0.0.21
+  uni_links: ^0.4.0
+  get_it: ^7.1.1
+  provider: ^5.0.0
+
+
+  # utility 
   flutter_launcher_icons: ^0.8.1
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,8 +56,12 @@ flutter:
   assets:
     - assets/model_CNN_kanji_only.tflite
     - assets/labels_CNN_kanji_only.txt
-    - CHANGELOG.md
     - assets/about.md
+    - assets/kanji_drawing_aid_b.png
+    - assets/kanji_drawing_aid_w.png
+
+    - CHANGELOG.md
+
     - media/icon.png
     - media/banner.png
 

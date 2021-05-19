@@ -1,8 +1,29 @@
 
 # Da Kanji - changelog
 
+## v 1.2.0 - アニメ
+new Features:
+- *extremely* fast startup
+- inference in separate thread therefore no UI jank on low end devices
+- [deep linking 'dakanji://dakanji/'](https://github.com/CaptainDario/DaKanji-Mobile#deep-linking)
+- animated:
+  - double tap on prediction / kanji box
+  - character added/deleted to/from kanji box
+  - opening a prediction in a web dictionary
+  - deleting stroke(s) from canvas
+  - drawer
+- splash screen
 
-## v 1.1.0
+Changes:
+- improved drawing experience
+- kanji box now shows the last added characters
+- use webview instead of default browser
+- drawer now indicates current location
+- color when pressing on kanji box
+
+-------------------------------------------------------------------------
+
+## v 1.1.0 - 熟語
 New Features:
 - multi character search
 - open prediction in akebi (app)
@@ -26,6 +47,7 @@ Fixes:
 - blurry buttons in light mode
 
 -------------------------------------------------------------------------
+
 ## v 1.0.4
 Fixes:
 - a localized link to the play store
@@ -44,7 +66,7 @@ changes:
 - use improved AI from DaKanjiRecognizer v1.1
 - better image processing before feeding images to CNN
 
-## v 1.0.0
+## v 1.0.0 - 初め
 
 features:
 - recognize ~3000 kanji characters

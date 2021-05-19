@@ -40,8 +40,8 @@ final ThemeData darkTheme = ThemeData(
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: ButtonStyle( 
-      foregroundColor:
-        MaterialStateProperty.all(Colors.white),
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      overlayColor: MaterialStateProperty.all(Color.fromARGB(255, 100, 100, 100))
     )
   ),
   toggleableActiveColor: Color( 0xff64ffda ),
