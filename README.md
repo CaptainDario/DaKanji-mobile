@@ -65,13 +65,16 @@ Currently supported links are:
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 
 ## Development
-This app was developed using dart, the flutter framework and Tensorflow.
-Tensorflow was used for the machine learning part.
+This app was developed using dart, the flutter framework and Tensorflow (lite).
+Tensorflow (lite) was used for the machine learning part.
 This project can be found [here](https://github.com/CaptainDario/DaKanji-ML). </br>
 For developing new features this repository has to be downloaded and all necessary packages have to be installed with:
 
 ```{bash}
 flutter pub get
+
+# to get tensorflow lite dependencies use
+install.bat
 ```
 
 Additionally the tflite models need to be copied from the [Machine Learning](https://github.com/CaptainDario/DaKanji-ML) repo.

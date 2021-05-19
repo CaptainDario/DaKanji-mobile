@@ -92,22 +92,27 @@ class DrawingPainter extends CustomPainter {
     else
       paint.color = Colors.black;
 
-    // paint the strokes
-    ui.PathMetrics metrics = _path.computeMetrics();
-    int metricsAmount = _path.computeMetrics().length;
-    int metricsCount = 0;
-    for (ui.PathMetric metric in metrics){
-      double percentage;
+    // animate deleting the last stroke only if the animation is running
+    if(_deleteProgress < 1){
+      ui.PathMetrics metrics = _path.computeMetrics();
+      int metricsAmount = _path.computeMetrics().length;
+      int metricsCount = 0;
+      for (ui.PathMetric metric in metrics){
+        double percentage;
 
-      // draw all paths except the last one at full length
-      if(metricsAmount > metricsCount+1)
-        percentage = metric.length;
-      else
-        percentage = metric.length * _deleteProgress;
-      Path extractPath = metric.extractPath(0.0, percentage);
-      canvas.drawPath(extractPath, paint);
-      metricsCount += 1;
+        // draw all paths except the last one at full length
+        if(metricsAmount > metricsCount+1)
+          percentage = metric.length;
+        else
+          percentage = metric.length * _deleteProgress;
+        Path extractPath = metric.extractPath(0.0, percentage);
+        canvas.drawPath(extractPath, paint);
+        metricsCount += 1;
+      }
     }
+    // otherwise just draw the whole path (improved drawing performance)
+    else
+      canvas.drawPath(_path, paint);
   }
 
   @override
@@ -116,5 +121,7 @@ class DrawingPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(DrawingPainter oldDelegate) => true;
+  bool shouldRepaint(DrawingPainter oldDelegate){
+    return true;
+  }
 }

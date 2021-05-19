@@ -26,7 +26,7 @@ class Settings with ChangeNotifier {
   /// The string representation of the dictionary which will be used (long press)
   String _selectedDictionary;
 
-  // the application version used when those settings were saved
+  // the application version used when this settings object was saved
   String versionUsed;
   
   /// The theme which the application will use.
@@ -44,6 +44,8 @@ class Settings with ChangeNotifier {
 
   /// Should the canvas be cleared when a prediction was copied to kanjibuffer
   bool _emptyCanvasAfterDoubleTap;
+
+  bool _useDefaultBrowser;
 
 
   Settings(){
@@ -70,6 +72,7 @@ class Settings with ChangeNotifier {
 
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;
+    useDefaultBrowser = true;
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
@@ -115,6 +118,15 @@ class Settings with ChangeNotifier {
     _emptyCanvasAfterDoubleTap = empty;
     notifyListeners();
   }
+  
+  bool get useDefaultBrowser{
+    return _useDefaultBrowser;
+  }
+  
+  set useDefaultBrowser(bool empty){
+    _useDefaultBrowser = empty;
+    notifyListeners();
+  }
 
   /// Saves all settings to the SharedPreferences.
   void save() async {
@@ -124,27 +136,29 @@ class Settings with ChangeNotifier {
     // set value in shared preferences
     prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
+    prefs.setBool('useDefaultBrowser', useDefaultBrowser);
     
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
     prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
-
   }
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
-    invertShortLongPress = await loadBool('invertShortLongPress');
-    emptyCanvasAfterDoubleTap = await loadBool('emptyCanvasAfterDoubleTap');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    customURL = await loadString('customURL') ?? '';
-    _selectedTheme = await loadString('selectedTheme') ?? themes[2];
-    versionUsed = await loadString('versionUsed') ?? '';
-    selectedDictionary = await loadString('selectedDictionary') ?? dictionaries[0];
+    invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
+    emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
+    useDefaultBrowser = prefs.getBool('useDefaultBrowser') ?? true;
+
+    customURL = prefs.getString('customURL') ?? '';
+    _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
+    versionUsed = prefs.getString('versionUsed') ?? '';
+    selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
 
     // a different version than last time is being used
     //VERSION = "0.0.0";
-    //SHOW_SHOWCASE_DRAWING = true;
     if(versionUsed != VERSION){
 
       // show the changelog
@@ -155,26 +169,6 @@ class Settings with ChangeNotifier {
         SHOW_SHOWCASE_DRAWING = true;
       }
     }
-  }
-
-  /// Loads a bool from shared preferences.
-  ///
-  /// @returns The bool's loaded value of found, otherwise false
-  Future<bool> loadBool(String boolName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool loaded = prefs.getBool(boolName) ?? false;
-
-    return loaded;
-  }
-
-  /// Loads a string value from the shared preferences.
-  ///
-  /// @returns The string value if found, null otherwise
-  Future<String> loadString(String stringName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String loaded = prefs.getString(stringName);
-
-    return loaded;
   }
 }
 

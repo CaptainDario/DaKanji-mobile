@@ -3,7 +3,7 @@ description: A kanji recognizer app.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.1.0+10
+version: 1.2.0+14
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -18,14 +18,13 @@ dependencies:
   android_intent: ^2.0.0
   tutorial_coach_mark: ^1.0.0
   flutter_phoenix: ^0.1.0
-  package_info: ^2.0.0
-  tflite_flutter: ^0.6.0
-  #  path: ../tflite_flutter_plugin
+  package_info_plus:
+  tflite_flutter: ^0.8.0
   image: ^2.1.19
   flutter_markdown: ^0.5.0
   flutter_appavailability: ^0.0.21
   uni_links: ^0.4.0
-  get_it: ^6.1.1
+  get_it: ^7.1.1
   provider: ^5.0.0
 
 
