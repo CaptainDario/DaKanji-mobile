@@ -1,7 +1,12 @@
 
 # Da Kanji - changelog
 
+## v 1.2.1
+Fixed:
+- stroke delete animations sometimes disabling drawing
+
 ## v 1.2.0 - アニメ
+
 new Features:
 - *extremely* fast startup
 - inference in separate thread therefore no UI jank on low end devices
