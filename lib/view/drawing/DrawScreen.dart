@@ -38,6 +38,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
   /// the size of the canvas widget
   double _canvasSize;
 
+
   @override
   void initState() {
     super.initState();
@@ -80,13 +81,14 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
       currentScreen: Screens.drawing,
       animationAtStart: !widget.openedByDrawer,
       child: Center(
-        child: ChangeNotifierProvider.value(
-          value: GetIt.I<Strokes>(),
+        child: ChangeNotifierProvider(
+          create: (context) => Strokes(),
           child: Column( 
             children: [
               // the canvas to draw on
               Consumer<Strokes>(
-                builder: (context, strokes, child){
+                builder: (context, strokes, __){
+
                   return DrawingCanvas(
                     width: _canvasSize, 
                     height: _canvasSize,
@@ -99,7 +101,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                     onFinishedDrawing: (Uint8List image) async {
                       GetIt.I<DrawingInterpreter>().runInference(image);
                     },
-
                     onDeletedLastStroke: (Uint8List image) {
                       if(strokes.strokeCount > 0)
                         GetIt.I<DrawingInterpreter>().runInference(image);
@@ -110,7 +111,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       GetIt.I<DrawingInterpreter>().clearPredictions();
                     },
                   );
-                }
+                },
               ),
               Spacer(),
               // undo/clear button and kanjiBuffer,
@@ -119,11 +120,15 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                 child: Row(
                   children: [
                     // undo
-                    IconButton(
-                      key: SHOWCASE_DRAWING[1].key,
-                      icon: Icon(Icons.undo),
-                      onPressed: () {
-                        GetIt.I<Strokes>().deleteLastStrokeAnimation();
+                    Consumer<Strokes>(
+                      builder: (context, strokes, __) {
+                        return IconButton(
+                          key: SHOWCASE_DRAWING[1].key,
+                          icon: Icon(Icons.undo),
+                          onPressed: () {
+                            strokes.playDeleteLastStrokeAnimation = true;
+                          }
+                        );
                       }
                     ),
                     // multi character search input
@@ -146,11 +151,15 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       ),
                     ),
                     // clear
-                    IconButton(
-                      key: SHOWCASE_DRAWING[2].key,
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        GetIt.I<Strokes>().deleteAllStrokesAnimation();
+                    Consumer<Strokes>(
+                      builder: (contxt, strokes, _) {
+                        return  IconButton(
+                          key: SHOWCASE_DRAWING[2].key,
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            strokes.playDeleteAllStrokesAnimation = true;
+                          }
+                        );
                       }
                     ), 
                   ]

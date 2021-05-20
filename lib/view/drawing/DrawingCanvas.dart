@@ -45,6 +45,7 @@ class DrawingCanvas extends StatefulWidget {
 
   @override
   _DrawingCanvasState createState() => _DrawingCanvasState();
+    
 }
 
 class _DrawingCanvasState extends State<DrawingCanvas> 
@@ -60,6 +61,9 @@ class _DrawingCanvasState extends State<DrawingCanvas>
   AnimationController _canvasController;
   /// should the app run in dark mode.
   bool darkMode;
+
+  bool deletingLastStroke = false;
+  bool deletingAllStrokes = false;
     
 
 
@@ -69,49 +73,47 @@ class _DrawingCanvasState extends State<DrawingCanvas>
     // delete last stroke / clear canvas animation
     _canvasController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 200)
+      duration: Duration(milliseconds: 2000)
     );
     _canvasController.value = 1.0;
+    
     _canvasController.addStatusListener((status) async {
       // when the animation finished 
       if(status == AnimationStatus.dismissed){
-        
-        _canvasController.value = 1.0;
-        // if all strokes should be deleted
-        if(widget.strokes.deletingAllStrokes){
-          widget.strokes.deleteAllStrokes();
-
-          if(widget.onDeletedAllStrokes != null)
-            widget.onDeletedAllStrokes(await getPNGImage());
+        if(deletingLastStroke){
+          widget.strokes.removeLastStroke();
+          deletingLastStroke = false;
+          _canvasController.value = 1.0;
         }
-        // or only the last one
-        else{
-          widget.strokes.deleteLastStroke();
 
-          if(widget.onDeletedLastStroke != null)
-            widget.onDeletedLastStroke(await getPNGImage());
+        if(deletingAllStrokes){
+          widget.strokes.removeAllStrokes();
+          deletingAllStrokes = false;
+          _canvasController.value = 1.0;
         }
       }
     });
-  
+
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // animate deleting the last stroke
-    if(widget.strokes.deletingLastStroke){
-      if(_canvasController.isAnimating)
-        widget.strokes.deleteLastStroke();
-
-      _canvasController.reverse(from: 1.0);
-    }
-    //
-    if(widget.strokes.deletingAllStrokes && !_canvasController.isAnimating){
-      _canvasController.reverse(from: 1.0);
-    }
-
+    // set dark / light mode
     darkMode = (Theme.of(context).brightness == Brightness.dark);
+    // progress of deleting last stroke when clearing the whole canvas called
+    double currentDeleteLastprogress = 1.0;
+
+    // handle all cases how the delete animations could be triggered
+    handleDeleteLastAnimation();
+    if(widget.strokes.playDeleteAllStrokesAnimation){
+      widget.strokes.playDeleteAllStrokesAnimation = false;
+
+      currentDeleteLastprogress = _canvasController.value;
+      _canvasController.reverse();
+
+      deletingAllStrokes = true;
+      deletingLastStroke = false;
+    }
 
     return Container(
       height: widget.height,
@@ -119,7 +121,19 @@ class _DrawingCanvasState extends State<DrawingCanvas>
       margin: widget.margin,
       child: Listener(
         // started drawing
-        onPointerDown: (details) {
+        onPointerDown: (details) async {
+          // finish deleting stroke(s) when user starts drawing
+          if(deletingLastStroke){
+            widget.strokes.removeLastStroke();
+            _canvasController.value = 1.0;
+            deletingLastStroke = false;
+          }
+          if(deletingAllStrokes){
+            widget.strokes.removeAllStrokes();
+            _canvasController.value = 1.0;
+            deletingAllStrokes = false;
+          }
+
           // allow only one pointer at a time
           if(_pointerID == null){
             _pointerID = details.pointer;
@@ -162,14 +176,15 @@ class _DrawingCanvasState extends State<DrawingCanvas>
                 _canvas = DrawingPainter(
                   widget.strokes.path, 
                   darkMode, Size(widget.width, widget.height),
-                  widget.strokes.deletingLastStroke ? _canvasController.value : 1
+                  deletingLastStroke ? 
+                    _canvasController.value : currentDeleteLastprogress
                 );
                 Widget canvas = CustomPaint(
                     size: Size(widget.width, widget.height),
                     painter: _canvas,
                 );
 
-                if(widget.strokes.deletingAllStrokes)
+                if(deletingAllStrokes)
                   return Opacity(
                     opacity: _canvasController.value,
                     child: canvas
@@ -193,5 +208,29 @@ class _DrawingCanvasState extends State<DrawingCanvas>
   Future<Uint8List> getRGBAImage() async {
     return _canvas.getRGBAListFromCanvas();
   } 
+
+  /// Handle all cases how the DeleteLastAnimation could be triggered
+  void handleDeleteLastAnimation() async {
+    if(widget.strokes.playDeleteLastStrokeAnimation && !deletingAllStrokes){
+      widget.strokes.playDeleteLastStrokeAnimation = false;
+      
+      // start deleting the last stroke if the animation is not already running
+      if(!deletingLastStroke){
+        _canvasController.reverse(from: 1.0); 
+        deletingLastStroke = true;
+      }
+      // if the animation is already running delete a stroke
+      else if(deletingLastStroke && widget.strokes.strokeCount > 0){
+        widget.strokes.removeLastStroke();
+        _canvasController.reverse(from: 1.0);
+        
+        // and stop the animation if it was the last stroke
+        if(widget.strokes.strokeCount == 0){
+          deletingLastStroke = false;
+          _canvasController.value = 1.0;
+        }
+      }
+    }
+  }
 
 }
