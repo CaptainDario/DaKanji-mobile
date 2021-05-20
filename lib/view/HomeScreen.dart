@@ -1,4 +1,4 @@
-import 'package:da_kanji_mobile/provider/Changelog.dart';
+import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -7,6 +7,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:da_kanji_mobile/provider/Settings.dart';
+import 'package:da_kanji_mobile/provider/Changelog.dart';
 
 
 
@@ -65,19 +66,37 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: MediaQuery.of(context).size.width * 3/4,
                         height: MediaQuery.of(context).size.height * 2/4,
                       ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: 
-                            MaterialStateProperty.all(
-                              Color.fromARGB(100, 150, 150, 150)
-                            )
-                        ),
-                        onPressed: () async {
-                          GetIt.I<Settings>().save();
-                          Navigator.pushNamedAndRemoveUntil(
-                            context, "/home", (Route<dynamic> route) => false);
-                        },
-                        child: Text("close")
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: 
+                                MaterialStateProperty.all(
+                                  Color.fromARGB(100, 150, 150, 150)
+                                )
+                            ),
+                            onPressed: () => Navigator.push(
+                              context, 
+                              MaterialPageRoute(builder: (context) => ChangelogScreen()),
+                            ),
+                            child: Text("Complete log")
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: 
+                                MaterialStateProperty.all(
+                                  Color.fromARGB(100, 150, 150, 150)
+                                )
+                            ),
+                            onPressed: () async {
+                              GetIt.I<Settings>().save();
+                              Navigator.pushNamedAndRemoveUntil(
+                                context, "/home", (Route<dynamic> route) => false);
+                            },
+                            child: Text("close")
+                          ),
+                        ],
                       )
                     ]
                   )
