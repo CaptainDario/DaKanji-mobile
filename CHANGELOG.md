@@ -1,7 +1,10 @@
 
 # Da Kanji - changelog
 
-## v 1.2.1
+## v 1.2.2 - アニメ
+Fixed:
+- double tap to clear canvas 
+## v 1.2.1 - アニメ
 Fixed:
 - deleting strokes sometimes disabled drawing
 
@@ -54,20 +57,19 @@ Fixes:
 -------------------------------------------------------------------------
 
 ## v 1.0.4
-Fixes:
+Fixed:
 - a localized link to the play store
 
 ## v 1.0.3
-Fixes:
+Fixed:
 - opening web dictionaries not working on most devices
 
 ## v 1.0.2
-Fixes:
+Fixed:
 - minor fixes to make app release ready
 
 ## v 1.0.1
 changes:
-
 - use improved AI from DaKanjiRecognizer v1.1
 - better image processing before feeding images to CNN
 
