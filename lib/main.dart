@@ -59,17 +59,23 @@ Future<void> init() async {
 
 
 void setupGetIt() {
-  GetIt.I.registerSingleton<Settings>(Settings());
-  GetIt.I<Settings>().load();
-  GetIt.I.registerSingleton<DrawingInterpreter>(DrawingInterpreter());
-  GetIt.I.registerSingleton<Strokes>(Strokes());
-  GetIt.I.registerSingleton<Lookup>(Lookup());
-  GetIt.I.registerSingleton<KanjiBuffer>(KanjiBuffer());
+  // services to load from disk
   GetIt.I.registerSingleton<About>(About());
   GetIt.I<About>().init();
   GetIt.I.registerSingleton<Changelog>(Changelog());
   GetIt.I<Changelog>().init();
+  GetIt.I.registerSingleton<Settings>(Settings());
+  GetIt.I<Settings>().load();
+  
+  // inference services
+  GetIt.I.registerSingleton<DrawingInterpreter>(DrawingInterpreter());
+
+  // draw screen services 
+  GetIt.I.registerSingleton<KanjiBuffer>(KanjiBuffer());
+  
+  // screen independent
   GetIt.I.registerSingleton(DrawerListener());
+  GetIt.I.registerSingleton<Lookup>(Lookup());
 }
 
 /// The starting widget of the app
