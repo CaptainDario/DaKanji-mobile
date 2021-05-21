@@ -72,6 +72,7 @@ void setupGetIt() {
 
   // draw screen services 
   GetIt.I.registerSingleton<KanjiBuffer>(KanjiBuffer());
+  GetIt.I.registerSingleton<Strokes>(Strokes());
   
   // screen independent
   GetIt.I.registerSingleton(DrawerListener());
