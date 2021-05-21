@@ -3,7 +3,7 @@
 
 ## v 1.2.1
 Fixed:
-- stroke delete animations sometimes disabling drawing
+- deleting strokes sometimes disabled drawing
 
 ## v 1.2.0 - アニメ
 
