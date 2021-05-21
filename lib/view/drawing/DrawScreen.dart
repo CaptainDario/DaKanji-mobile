@@ -81,8 +81,8 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
       currentScreen: Screens.drawing,
       animationAtStart: !widget.openedByDrawer,
       child: Center(
-        child: ChangeNotifierProvider(
-          create: (context) => Strokes(),
+        child: ChangeNotifierProvider.value(
+          value: GetIt.I<Strokes>(),
           child: Column( 
             children: [
               // the canvas to draw on
