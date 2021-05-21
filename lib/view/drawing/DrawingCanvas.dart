@@ -73,7 +73,7 @@ class _DrawingCanvasState extends State<DrawingCanvas>
     // delete last stroke / clear canvas animation
     _canvasController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 2000)
+      duration: Duration(milliseconds: 200)
     );
     _canvasController.value = 1.0;
     
