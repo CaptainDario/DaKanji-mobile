@@ -75,7 +75,7 @@ class _PredictionButtonState extends State<PredictionButton>
           onDoubleTap: () {
             controller.forward(from: 0.0);
             if(GetIt.I<Settings>().emptyCanvasAfterDoubleTap)
-              GetIt.I<Strokes>().deleteAllStrokes(); 
+              GetIt.I<Strokes>().playDeleteAllStrokesAnimation = true; 
             GetIt.I<KanjiBuffer>().addToKanjiBuffer(widget.char);
           },
 
