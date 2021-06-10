@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
   
+
+
 final ThemeData lightTheme = ThemeData(
+  fontFamily: "NotoSans",
   primarySwatch: Colors.blue,
   brightness: Brightness.light,
   primaryColor: Color( 0xff2196f3 ),

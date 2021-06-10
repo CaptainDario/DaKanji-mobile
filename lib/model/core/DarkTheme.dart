@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 
+
 final ThemeData darkTheme = ThemeData(
+  fontFamily: "NotoSans",
   primarySwatch: MaterialColor(4280361249,{
     50: Color( 0xfff2f2f2 )
   , 100: Color( 0xffe6e6e6 )
