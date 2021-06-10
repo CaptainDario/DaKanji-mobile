@@ -46,6 +46,22 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
+  
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: fonts/Noto_Sans_JP/NotoSansJP-Black.otf
+          weight: 900
+        - asset: fonts/Noto_Sans_JP/NotoSansJP-Bold.otf
+          weight: 700
+        - asset: fonts/Noto_Sans_JP/NotoSansJP-Light.otf
+          weight: 300
+        - asset: fonts/Noto_Sans_JP/NotoSansJP-Medium.otf
+          weight: 500
+        - asset: fonts/Noto_Sans_JP/NotoSansJP-Regular.otf
+          weight: 400
+        - asset: fonts/Noto_Sans_JP/NotoSansJP-Thin.otf
+          style: italic
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -64,4 +80,5 @@ flutter:
 
     - media/icon.png
     - media/banner.png
+
 
