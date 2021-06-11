@@ -1,7 +1,7 @@
 # DaKanji Mobile
-<img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
+[![Discord](https://img.shields.io/discord/852915748300783636.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/cYTcpFStbs)
 
-[![Discord](https://img.shields.io/discord/591914197219016707.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/cYTcpFStbs)
+<img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 
 <table>
   <tr>
