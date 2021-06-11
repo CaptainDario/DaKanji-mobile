@@ -61,9 +61,12 @@ class _DrawingCanvasState extends State<DrawingCanvas>
   AnimationController _canvasController;
   /// should the app run in dark mode.
   bool darkMode;
-
+  /// if the animation to delete the last stroke is currently running
   bool deletingLastStroke = false;
+  /// if the animation to delete all strokes is currently running
   bool deletingAllStrokes = false;
+
+  double deleteLastStrokeProgress = 1.0;
     
 
 
@@ -109,7 +112,7 @@ class _DrawingCanvasState extends State<DrawingCanvas>
       widget.strokes.playDeleteAllStrokesAnimation = false;
 
       currentDeleteLastprogress = _canvasController.value;
-      _canvasController.reverse();
+      _canvasController.reverse(from: 1.0);
 
       deletingAllStrokes = true;
       deletingLastStroke = false;
