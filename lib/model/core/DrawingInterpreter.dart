@@ -28,7 +28,10 @@ class DrawingInterpreter with ChangeNotifier{
   bool wasInitialized;
 
   /// The path to the interpreter asset
-  String _assetPath;
+  String _interpreterAssetPath;
+  
+  /// The path to the interpreter asset
+  String _labelAssetPath;
 
   /// the backend used for inference CPU/GPU
   String usedBackend;
@@ -78,7 +81,8 @@ class DrawingInterpreter with ChangeNotifier{
 
 
   DrawingInterpreter() {
-    _assetPath = "model_CNN_kanji_only.tflite"; 
+    _interpreterAssetPath = "model_CNN_kanji_only.tflite";
+    _labelAssetPath = "assets/labels_CNN_kanji_only.txt"; 
 
     height = 64;
     width = 64;
@@ -86,7 +90,6 @@ class DrawingInterpreter with ChangeNotifier{
     _noPredictions = 10;
 
     _setPredictions(List.generate(_noPredictions, (index) => " "));
-
     
     wasInitialized = false;
   }
@@ -111,7 +114,7 @@ class DrawingInterpreter with ChangeNotifier{
 
     print(usedBackend);
 
-    var l = await rootBundle.loadString("assets/labels_CNN_kanji_only.txt");
+    var l = await rootBundle.loadString(_labelAssetPath);
     _labels = l.split("");
     
     // allocate memory for inference in / output
@@ -193,6 +196,7 @@ class DrawingInterpreter with ChangeNotifier{
 
       // convert image for inference into shape [1, 64, 64, 1]
       // also apply thresholding and normalization [0, 1]
+      String tmp = "[ ";
       for (int x = 0; x < 64; x++) {
         for (int y = 0; y < 64; y++) {
           double val = resizedBytes[(x * 64) + y].toDouble();
@@ -201,8 +205,11 @@ class DrawingInterpreter with ChangeNotifier{
           val = val > 50 ? 1.0 : 0.0;
           
           _input[0][x][y][0] = val;
+          tmp += val.toString() + ", ";
         }
       }
+      tmp += " ]";
+
       // run inference
       _interpreter.run(_input, _output);
 
@@ -210,13 +217,16 @@ class DrawingInterpreter with ChangeNotifier{
       for (int c = 0; c < _noPredictions; c++) {
         int index = 0;
         for (int i = 0; i < _output[0].length; i++) {
-          if (_output[0][i] > _output[0][index]) index = i;
+          if (_output[0][i] > _output[0][index]){
+            index = i;
+          }
         }
         predictions[c] = _labels[index];
         _output[0][index] = 0.0;
       }
     }
     
+    print(predictions);
     notifyListeners();
   }
 
@@ -284,7 +294,7 @@ class DrawingInterpreter with ChangeNotifier{
   /// Initializes the interpreter with NPU acceleration for Android.
   Future<Interpreter> _nnapiInterpreter() async {
     final options = InterpreterOptions()..useNnApiForAndroid = true;
-    Interpreter i = await Interpreter.fromAsset(_assetPath, options: options);
+    Interpreter i = await Interpreter.fromAsset(_interpreterAssetPath, options: options);
     usedBackend = "Android NNAPI Delegate";
     return i; 
   }
@@ -301,7 +311,7 @@ class DrawingInterpreter with ChangeNotifier{
       )
     );
     final options = InterpreterOptions()..addDelegate(gpuDelegateV2);
-    Interpreter i = await Interpreter.fromAsset(_assetPath, options: options);
+    Interpreter i = await Interpreter.fromAsset(_interpreterAssetPath, options: options);
 
     return i;
   }
@@ -313,7 +323,7 @@ class DrawingInterpreter with ChangeNotifier{
       options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
     );
     var interpreterOptions = InterpreterOptions()..addDelegate(gpuDelegate);
-    return await Interpreter.fromAsset(_assetPath, options: interpreterOptions);
+    return await Interpreter.fromAsset(_interpreterAssetPath, options: interpreterOptions);
   }
 
   /// Initializes the interpreter with CPU mode set.
@@ -321,6 +331,6 @@ class DrawingInterpreter with ChangeNotifier{
     usedBackend = "CPU";
     final options = InterpreterOptions()
       ..threads = Platform.numberOfProcessors - 1;
-    return await Interpreter.fromAsset(_assetPath, options: options);
+    return await Interpreter.fromAsset(_interpreterAssetPath, options: options);
   }
 }
