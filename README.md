@@ -1,16 +1,32 @@
 # DaKanji Mobile
 [![Discord](https://img.shields.io/discord/852915748300783636.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/cYTcpFStbs)
 
-<img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
-
-<table>
+<table style="table-layout: fixed ; width: 100% ;">
   <tr>
-    <a href='https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' width="250"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'  width="20%"/></a>
-   <tr/>
-   <tr>
-
-   <tr/>
-<table/>
+    <td>
+      <img src="https://raw.githubusercontent.com/CaptainDario/DaKanji-Mobile/main/media/banner.png" style="display:block;margin-left:auto;margin-right:auto;"/>
+      </a>
+    </td>
+    <td\>
+    <td\>
+    <td\>
+    <td\>
+  </tr>
+    <td>
+      <a href='https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>
+      </a>
+    </td>
+    <td>
+      <a href='//www.microsoft.com/store/apps/9n08051t2xtv?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="75%"/></a>
+    </td>
+    <td>
+    </td>
+    <td>
+    </td>
+    <td>
+    </td>
+  </tr>
+</table>
 
 ## What is this
 This is the mobile version of DaKanji.
@@ -36,52 +52,10 @@ It is also possible to use a translation app or custom URL can be defined in the
 Currently around 3000 characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
-### Deep linking
-Other applications can link to DaKanji via deep linking.
-The base link is defined as `dakanji://dakanji`.
-Adding a dictionary to the link will result in predictions opening in this dictionary.<br/>
-Example:
-> Setting the link to <code>dakanji://dakanji/jisho</code> will open DaKanji.
-> All look ups made, will than use jisho.org. <br/>
-
-For web dictionaries which are currently not supported, you can use the <code>dakanji://dakanji/URL/YOUR_URL_HERE</code> link.
-Just replace `YOUR_URL_HERE` with the search url of your dictionary and put `%X%` as a placeholder for the character to search.<br/>
-Example:
-> If you want to link to japandict.com with the search url: <code>https://www.japandict.com/%X%</code>
-> Setting the link to <code>dakanji://dakanji/URL/https://www/japandict.com/%X%</code> is all one needs to do.
-
-A table with all supported deep links can be found [here]().
-You can try them out directly in your browser.
-
-
-#### Android
-Currently supported links are:
-* `dakanji://dakanji/jisho` (web)
-* `dakanji://dakanji/wadoku` (web)
-* `dakanji://dakanji/weblio` (web)
-* `dakanji://dakanji/URL/YOUR_URL_HERE`
-* `dakanji://dakanji/akbei` (app)
-* `dakanji://dakanji/takoboto` (app)
-* `dakanji://dakanji/aedict` (app)
-
 ### Next steps and ideas
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 
 ## Development
-This app was developed using dart, the flutter framework and Tensorflow (lite).
-Tensorflow (lite) was used for the machine learning part.
-This project can be found [here](https://github.com/CaptainDario/DaKanji-ML). </br>
-For developing new features this repository has to be downloaded and all necessary packages have to be installed with:
-
-```{bash}
-flutter pub get
-
-# to get tensorflow lite dependencies use
-install.bat
-```
-
-Additionally the tflite models need to be copied from the [Machine Learning](https://github.com/CaptainDario/DaKanji-ML) repo.
-Go to [the release page](https://github.com/CaptainDario/DaKanji-ML/releases) and download the models.
 
 ### building the app
 To build the app as app bundle just invoke
