@@ -22,7 +22,7 @@
 
 ## What is this
 DaKanji helps students of the Japanese language and people who use it.
-Currently it can recognize Japanese 'kanji' characters which the user draws by hand.
+Currently it can recognize 6500+ characters (Kanji, Hiragana, Katakana, Romaji, Arabic Numbers) which the user draws by hand.
 But the feature set will be vastly improved in the coming releases. <br/>
 For more details about the features take a look at the [usage section](#usage).
 </br></br>
@@ -38,13 +38,13 @@ You can also download the latest release from the [releases page](https://github
 In this section the features of the app are explained in more detail.
 ### Handwritten kanji recognition
 The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. A dictionary can be chosen in the settings.
-It is also possible to use a translation app or custom URL can be defined in the settings menu.</br>
-Currently around 3000 characters are supported. 
+Those dictionaries include translation apps, app dictionaries and web dictionaries.</br>
+Currently around 6500+ characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Contributing
 All contributions are welcome! <br/>
-If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and stated your ideas there. After dicussing it you can implement it and open a PR. <br/>
+If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After dicussing it, it would be if you would implement it and open a PR. <br/>
 You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). <br/>
 
 
