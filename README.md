@@ -21,11 +21,11 @@
 </table>
 
 ## What is this
-This app tries to help students and people which use the Japanese language.
-It can recognize Japanese 'kanji' characters which the user draws by hand.
-Those predictions can than be automatically opened in dictionaries.
+DaKanji helps students of the Japanese language and people who use it.
+Currently it can recognize Japanese 'kanji' characters which the user draws by hand.
+But the feature set will be vastly improved in the coming releases. <br/>
 For more details about the features take a look at the [usage section](#usage).
-</br>
+</br></br>
 <img src="./media/preview.gif" style="display:block;margin-left:auto;margin-right:auto;" width="20%"/>
 </br>
 
@@ -44,9 +44,8 @@ All supported characters can be found [here](https://github.com/CaptainDario/DaK
 
 ### Contributing
 All contributions are welcome! <br/>
-If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).<br/>
-You can also join the [discord server](https://discord.gg/cYTcpFStbs) and stated your ideas there.
-
+If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and stated your ideas there. After dicussing it you can implement it and open a PR. <br/>
+You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). <br/>
 
 
 ## Credits
