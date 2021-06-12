@@ -40,7 +40,7 @@ All supported characters can be found [here](https://github.com/CaptainDario/DaK
 <a href="https://discord.gg/cYTcpFStbs"><img src="https://discordapp.com/api/guilds/852915748300783636/widget.png?style=banner2" width="25%"></a>
 
 All contributions are welcome! <br/>
-If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After dicussing it, it would be if you would implement it and open a PR. <br/>
+If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After discussing it, PR's are much appreciated. <br/>
 You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). <br/>
 If you would like to help testing the app, please visit the [discord server](https://discord.gg/cYTcpFStbs) and ask there.
 
