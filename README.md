@@ -18,6 +18,11 @@ For more details about the features take a look at the [usage section](#usage).
 <img src="./media/preview.gif" style="display:block;margin-left:auto;margin-right:auto;" width="20%"/>
 </br>
 
+## What the users say:
+* "Your program is like magic! Thank you so much!" - saszai2
+* "Well thank you for this software! It seems to try and guess in a more "guess-y" way than jisho and even Google which is usually pretty good at guessing, and it just saved me today!" - princess_daphie
+* "Amazing. I can write kanji messier than a professor and it still picks it up. Very reliable." - Seth Kitchens
+
 ## Getting started
 **Currently only android is supported** </br>
 The easiest way is to download the app for android from the PlayStore.
