@@ -17,7 +17,7 @@ Changes:
 - much faster inference
 
 Fixed:
-- Chinese characters, not Japanese ones were shown
+- Chinese font was used
 - clearing canvas while deleting a stroke did not play an animation
 
 
