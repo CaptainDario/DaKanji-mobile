@@ -29,11 +29,11 @@ The easiest way is to download the app for android from the PlayStore.
 You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Setting-up-a-development-environment) and build the app on your own.
 
 ## Usage
-In this section the features of the app are explained in more detail. However the full users guide can be found in the [wiki]().
+In this section the features of the app are explained in more detail.
 ### Handwritten kanji recognition
 The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. A dictionary can be chosen in the settings.
 Those dictionaries include translation apps, app dictionaries and web dictionaries.</br>
-Currently around 6500+ characters are supported. 
+Currently 6500+ characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Contributing
