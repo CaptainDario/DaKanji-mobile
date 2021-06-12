@@ -57,26 +57,6 @@ If you think you have a good idea how to improve this app feel free [to open an 
 
 ## Development
 
-### building the app
-To build the app as app bundle just invoke
-```
-flutter build appbundle
-```
-
-To obfuscate, save the symbol files and build the app.
-```{bash}
-flutter build appbundle --obfuscate --split-debug-info=obfuscate_debug_info
-```
-
-To build an fat apk:
-```
-flutter build apk --obfuscate --split-debug-info=obfuscate_debug_info
-```
-
-and platform dependent, smaller apk's:
-```
-flutter build apk --split-per-abi --obfuscate --split-debug-info=obfuscate_debug_info
-```
 
 #### Updating the icons
 For updating the icons the [flutter_launcher_icons package](https://pub.dev/packages/flutter_launcher_icons/versions/0.8.1) was used.
