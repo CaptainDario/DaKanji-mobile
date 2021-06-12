@@ -1,24 +1,15 @@
 # DaKanji
 [![Discord](https://img.shields.io/discord/852915748300783636.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/cYTcpFStbs)
 
+<img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
   <tr>
-    <td colspan="1">
-      <img src="https://raw.githubusercontent.com/CaptainDario/DaKanji-Mobile/main/media/banner.png" width="50%" />
-      </a>
-    </td>
-  </tr>
-    <td>
-      <a href='https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="33%"/>
-      </a>
-    </td>
-    <td>
-      <a href='//www.microsoft.com/store/apps/9n08051t2xtv?cid=storebadge&ocid=badge'><img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="33%"/></a>
-    </td>
+    <a href='https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' width="250"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'  width="20%"/></a>
+   <tr/>
+  <tr>
 
-  <!-- Android - Google Play badge -->
-  </tr>
-</table>
+   <tr/>
+<table/>
 
 ## What is this
 DaKanji helps students of the Japanese language and people who use it.
@@ -46,6 +37,7 @@ All supported characters can be found [here](https://github.com/CaptainDario/DaK
 All contributions are welcome! <br/>
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After dicussing it, it would be if you would implement it and open a PR. <br/>
 You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). <br/>
+If you would like to help testing the app, please visit the [discord server](https://discord.gg/cYTcpFStbs) and ask there.
 
 
 ## Credits
