@@ -1,6 +1,28 @@
 
 # Da Kanji - changelog
 
+
+## v 1.3.0 - 漢字検定
+
+new Features:
+- recognize:
+  - all 漢字 from 漢字検定
+  - ひらがな (also historical ones: ゑ, etc.)
+  - カタカナ (also historical ones: ヱ, etc.)
+  - arabic numbers
+  - romaji
+
+Changes:
+- model size 8x smaller
+- much faster inference
+
+Fixed:
+- Chinese characters, not Japanese ones were shown
+- clearing canvas while deleting a stroke did not play an animation
+
+
+-------------------------------------------------------------------------
+
 ## v 1.2.2 - アニメ
 Fixed:
 - double tap to clear canvas 
