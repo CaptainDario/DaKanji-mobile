@@ -1,6 +1,4 @@
 # DaKanji
-[![Discord](https://img.shields.io/discord/852915748300783636.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/cYTcpFStbs)
-
 <img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
   <tr>
@@ -34,6 +32,8 @@ Currently around 6500+ characters are supported.
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Contributing
+<a href="https://discord.gg/cYTcpFStbs"><img src="https://discordapp.com/api/guilds/852915748300783636/widget.png?style=banner2" width="25%"></a>
+
 All contributions are welcome! <br/>
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After dicussing it, it would be if you would implement it and open a PR. <br/>
 You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). <br/>
