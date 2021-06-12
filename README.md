@@ -34,7 +34,7 @@ For more details about the features take a look at the [usage section](#usage).
 ## Getting started
 **Currently only android is supported** </br>
 The easiest way is to download the app for android from the PlayStore.
-You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](#development) and build the app on your own.
+You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Setting-up-a-development-environment) and build the app on your own.
 
 ## Usage
 In this section the features of the app are explained in more detail.
@@ -44,7 +44,8 @@ It is also possible to use a translation app or custom URL can be defined in the
 Currently around 3000 characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
-### Next steps and ideas
+### Contributing
+All contributions are welcome! <br/>
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).<br/>
 You can also join the [discord server](https://discord.gg/cYTcpFStbs) and stated your ideas there.
 
