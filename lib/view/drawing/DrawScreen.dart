@@ -107,7 +107,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       else
                         GetIt.I<DrawingInterpreter>().clearPredictions();
                     },
-                    onDeletedAllStrokes: (Uint8List image) {
+                    onDeletedAllStrokes: () {
                       GetIt.I<DrawingInterpreter>().clearPredictions();
                     },
                   );
