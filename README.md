@@ -37,7 +37,7 @@ Currently 6500+ characters are supported.
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Contributing
-<a href="https://discord.gg/cYTcpFStbs"><img src="https://discordapp.com/api/guilds/852915748300783636/widget.png?style=banner2" width="25%"></a>
+<a href="https://discord.gg/gdqaux3r4P"><img src="https://discordapp.com/api/guilds/852915748300783636/widget.png?style=banner2" width="25%"></a>
 
 All contributions are welcome! <br/>
 If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After discussing it, PR's are much appreciated. <br/>
