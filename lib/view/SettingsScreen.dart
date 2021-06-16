@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
@@ -92,37 +93,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         IconButton(
                           icon: Icon(Icons.info_outline),
                           onPressed: () {
-                            showDialog(
+                            AwesomeDialog(
                               context: context,
-                              builder: (BuildContext context){ 
-                                return SimpleDialog(
-                                  title: Text("Custom URL format"),
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "The app will replace a placeholder in the URL with the predicted character. " +
-                                            "This placeholder is: " + GetIt.I<Settings>().kanjiPlaceholder + 
-                                            "\n" +
-                                            "\n" +
-                                            "Example:" +
-                                            "\n" +
-                                            "The predicted character is: '口'" + 
-                                            " and you want to open it on 'jisho.org'. " +
-                                            "First you have to get the URL of the website for searching. " + 
-                                            "In this case: 'https://jisho.org/search/口'. " + 
-                                            "Now only the character in the URL has to be replaced with the placeholder. " + 
-                                            "This leads to 'https://jisho.org/search/" + GetIt.I<Settings>().kanjiPlaceholder + "'."
-                                            ),
-                                        ]
-                                      )
+                              animType: AnimType.SCALE,
+                              dialogType: DialogType.INFO,
+                              headerAnimationLoop: false,
+                              body: Column(
+                                children: [
+                                  Text(
+                                    "Custom URL format",
+                                    textScaleFactor: 2,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "The app will replace a placeholder in the URL with the predicted character. " +
+                                          "This placeholder is: " + GetIt.I<Settings>().kanjiPlaceholder + 
+                                          "\n" +
+                                          "\n" +
+                                          "Example:" +
+                                          "\n" +
+                                          "The predicted character is: '口'" + 
+                                          " and you want to open it on 'jisho.org'. " +
+                                          "First you have to get the URL of the website for searching. " + 
+                                          "In this case: 'https://jisho.org/search/口'. " + 
+                                          "Now only the character in the URL has to be replaced with the placeholder. " + 
+                                          "This leads to 'https://jisho.org/search/" + GetIt.I<Settings>().kanjiPlaceholder + "'."
+                                          ),
+                                      ]
                                     )
-                                  ],
-                                );
-                              }
-                            );
+                                  ),
+                                ],
+                              ),
+                            )..show();
                           }
                         )
                       ]

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -8,14 +10,16 @@ import 'package:url_launcher/url_launcher.dart';
   void showDownloadDialogue(
     BuildContext context, String title, String text, String url){
 
-    showDialog(
+    AwesomeDialog(
       context: context,
-      builder: (BuildContext context){ 
-        return SimpleDialog(
-          title: Center(child: Text(title)),
-          children: [
-            Center(child:
-            Container(
+      animType: AnimType.SCALE,
+      dialogType: DialogType.WARNING,
+      headerAnimationLoop: false,
+      body: Column(
+        children: [
+          Text(title, textScaleFactor: 2,),
+          Center( 
+            child: Container(
               padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -35,9 +39,9 @@ import 'package:url_launcher/url_launcher.dart';
                   ),
                 ]
               )
-            ))
-          ],
-        );
-      }
-    );
+            )
+          )
+        ]
+      )
+    )..show();
   }
