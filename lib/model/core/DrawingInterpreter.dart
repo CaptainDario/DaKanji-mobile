@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:da_kanji_mobile/model/core/DrawingIsolateUtils.dart';
@@ -9,6 +8,7 @@ import 'package:device_info/device_info.dart';
 import 'package:image/image.dart' as image;
 
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:universal_io/io.dart';
 
 
 
@@ -16,8 +16,6 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 /// 
 /// Notifies listeners when the predictions changed.
 class DrawingInterpreter with ChangeNotifier{
-  
-
 
   /// the tf lite interpreter to recognize kanjis
   Interpreter _interpreter;

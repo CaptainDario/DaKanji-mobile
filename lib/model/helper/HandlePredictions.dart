@@ -1,4 +1,3 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +11,7 @@ import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/DownloadAppDialogue.dart';
 import 'package:da_kanji_mobile/view/WebviewScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:universal_io/io.dart' show Platform;
 
 
 /// A convenience class to handle long and short press for the predictions.

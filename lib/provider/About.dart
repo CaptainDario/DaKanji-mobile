@@ -1,9 +1,9 @@
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:universal_io/io.dart';
 
 
 
