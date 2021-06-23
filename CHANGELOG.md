@@ -13,8 +13,8 @@ new Features:
   - romaji
 
 Changes:
-- model size 8x smaller
-- much faster inference
+- model smaller
+- faster inference
 
 Fixed:
 - Chinese font was used
