@@ -36,7 +36,6 @@ class AboutScreen extends StatelessWidget {
               child: MarkdownBody(
                 data: GetIt.I<About>().about,
                 onTapLink: (text, url, title) {
-                  print((text + " " + url + " " + title));
                   launch(url);
                 },
               ),
