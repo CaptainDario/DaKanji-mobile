@@ -97,6 +97,7 @@ class _PredictionButtonState extends State<PredictionButton>
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 60,
+                  fontFamily: "NotoSans"
                 ),
               )
             )
