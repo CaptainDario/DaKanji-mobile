@@ -43,6 +43,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
+    if(!GetIt.I<DrawingInterpreter>().wasInitialized){
+      // initialize the drawing interpreter
+      GetIt.I<DrawingInterpreter>().init();
+    }
   }
 
   @override
@@ -66,11 +70,6 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
         if(SHOW_SHOWCASE_DRAWING){
           widget.showcase.init(context);
           widget.showcase.show();
-        }
-
-        if(!GetIt.I<DrawingInterpreter>().wasInitialized){
-          // initialize the drawing interpreter
-          GetIt.I<DrawingInterpreter>().init();
         }
       }
     }
