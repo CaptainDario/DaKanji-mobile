@@ -24,7 +24,6 @@ class ChangelogScreen extends StatelessWidget {
         child: Center(
           child: 
             Container(
-              padding: EdgeInsets.all(10),
               child: Column(
                 children: [
                   Expanded(
