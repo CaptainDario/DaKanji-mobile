@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:get_it/get_it.dart';
 
 
 
@@ -63,7 +65,7 @@ class About with ChangeNotifier{
     _about = _about.replaceAll("RATE_ON_MOBILE_STORE", mobileStoreLink);
     _about = _about.replaceAll("DAAPPLAB_STORE_PAGE", daapplabStorePage);
 
-    _about = _about.replaceAll("VERSION", VERSION);
+    _about = _about.replaceAll("VERSION", "$VERSION#$BUILD_NR");
 
     _initialzied = true;
   }
