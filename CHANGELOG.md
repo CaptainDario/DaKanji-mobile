@@ -1,11 +1,12 @@
 
 # Da Kanji - changelog
 
-
 ## v 1.3.0 - 漢字検定
 
 new Features:
+
 - recognize:
+
   - all 漢字 from 漢字検定
   - ひらがな (also historical ones: ゑ, etc.)
   - カタカナ (also historical ones: ヱ, etc.)
@@ -13,26 +14,33 @@ new Features:
   - romaji
 
 Changes:
-- model smaller
+
+- smaller model
 - faster inference
 
 Fixed:
+
 - Chinese font was used
 - clearing canvas while deleting a stroke did not play an animation
-
 
 -------------------------------------------------------------------------
 
 ## v 1.2.2 - アニメ
+
 Fixed:
-- double tap to clear canvas 
+
+- double tap to clear canvas
+
 ## v 1.2.1 - アニメ
+
 Fixed:
+
 - deleting strokes sometimes disabled drawing
 
 ## v 1.2.0 - アニメ
 
 new Features:
+
 - *extremely* fast startup
 - inference in separate thread therefore no UI jank on low end devices
 - [deep linking 'dakanji://dakanji/'](https://github.com/CaptainDario/DaKanji-Mobile#deep-linking)
@@ -45,6 +53,7 @@ new Features:
 - splash screen
 
 Changes:
+
 - improved drawing experience
 - kanji box now shows the last added characters
 - use webview instead of default browser
@@ -54,7 +63,9 @@ Changes:
 -------------------------------------------------------------------------
 
 ## v 1.1.0 - 熟語
+
 New Features:
+
 - multi character search
 - open prediction in akebi (app)
 - open prediction in aedict (app)
@@ -63,6 +74,7 @@ New Features:
 - What's new message
 
 Changes:
+
 - beautiful new icon
 - updated themes
 - renamed to DaKanji
@@ -71,7 +83,8 @@ Changes:
 - added close button to app download dialogues
 
 Fixes:
-- "character copied" message on some devices not showing up 
+
+- "character copied" message on some devices not showing up
 - UI layout on certain aspect ratios
 - show tutorial **only** if there are new features
 - blurry buttons in light mode
@@ -79,23 +92,33 @@ Fixes:
 -------------------------------------------------------------------------
 
 ## v 1.0.4
+
 Fixed:
+
 - a localized link to the play store
 
 ## v 1.0.3
+
 Fixed:
+
 - opening web dictionaries not working on most devices
 
 ## v 1.0.2
+
 Fixed:
+
 - minor fixes to make app release ready
 
 ## v 1.0.1
+
 changes:
+
 - use improved AI from DaKanjiRecognizer v1.1
 - better image processing before feeding images to CNN
 
 ## v 1.0.0 - 初め
 
 features:
+
 - recognize ~3000 kanji characters
+  
