@@ -47,7 +47,7 @@ class AboutScreen extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
                   child: GestureDetector(
                     child: Text(
-                      "Show me the changelog.",
+                      "Show me the complete changelog.",
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.blue),
                     ),
