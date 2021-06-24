@@ -45,10 +45,10 @@ class DrawingInterpreter with ChangeNotifier{
   /// output of the CNN
   List<List<double>> _output;
 
-  /// height of the input image
+  /// height of the input image (image used for inference)
   int height;
 
-  /// width of the input image
+  /// width of the input image (image used for inference)
   int width;
 
   /// the prediction the CNN made
@@ -119,8 +119,8 @@ class DrawingInterpreter with ChangeNotifier{
     
     // allocate memory for inference in / output
     _input = List<List<double>>.generate(
-      64, (i) => List.generate(64, (j) => 0.0)).
-      reshape<double>([1, 64, 64, 1]);
+      height, (i) => List.generate(width, (j) => 0.0)).
+      reshape<double>([1, height, width, 1]);
     this._output =
       List<List<double>>.generate(1, (i) => 
       List<double>.generate(_labels.length, (j) => 0.0));
@@ -139,8 +139,8 @@ class DrawingInterpreter with ChangeNotifier{
 
     // allocate memory for inference in / output
     _input = List<List<double>>.generate(
-      64, (i) => List.generate(64, (j) => 0.0)).
-      reshape<double>([1, 64, 64, 1]);
+      height, (i) => List.generate(width, (j) => 0.0)).
+      reshape<double>([1, height, width, 1]);
     this._output =
       List<List<double>>.generate(1, (i) => 
       List<double>.generate(_labels.length, (j) => 0.0));
@@ -187,28 +187,26 @@ class DrawingInterpreter with ChangeNotifier{
       );
     }
     else{
+
       // take image from canvas and resize it
       image.Image base = image.decodeImage(inputImage);
       image.Image resizedImage = image.copyResize(base,
-        height: 64, width: 64, interpolation: image.Interpolation.cubic);
-      Uint8List resizedBytes =
-          resizedImage.getBytes(format: image.Format.luminance);
+        height: height, width: width, interpolation: image.Interpolation.cubic);
+      Uint8List resizedBytes = 
+        resizedImage.getBytes(format: image.Format.luminance);
 
-      // convert image for inference into shape [1, 64, 64, 1]
+      // convert image for inference into shape [1, height, width, 1]
       // also apply thresholding and normalization [0, 1]
-      String tmp = "[ ";
-      for (int x = 0; x < 64; x++) {
-        for (int y = 0; y < 64; y++) {
-          double val = resizedBytes[(x * 64) + y].toDouble();
+      for (int x = 0; x < height; x++) {
+        for (int y = 0; y < width; y++) {
+          double val = resizedBytes[(x * width) + y].toDouble();
           
           // apply thresholding and normalize image
-          val = val > 50 ? 1.0 : 0.0;
+          val = val > 50 ? 1.0 : 0;
           
           _input[0][x][y][0] = val;
-          tmp += val.toString() + ", ";
         }
       }
-      tmp += " ]";
 
       // run inference
       _interpreter.run(_input, _output);
@@ -225,8 +223,7 @@ class DrawingInterpreter with ChangeNotifier{
         _output[0][index] = 0.0;
       }
     }
-    
-    print(predictions);
+
     notifyListeners();
   }
 
