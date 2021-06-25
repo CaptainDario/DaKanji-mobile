@@ -7,7 +7,7 @@ Right now it can recognize handwritten characters:
 - arabic numbers
 - romaji
 
-But the feature set will be vastly improved in the coming releases. 
+But the feature set will be vastly improved in the coming releases.
 
 A desktop version is available [here.](GITHUB_DESKTOP_REPO)
 The app was developed using dart with the Flutter framework and is source available.
