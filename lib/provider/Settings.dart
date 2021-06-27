@@ -1,7 +1,4 @@
-import 'package:da_kanji_mobile/globals.dart';
-import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings with ChangeNotifier {
@@ -25,9 +22,6 @@ class Settings with ChangeNotifier {
 
   /// The string representation of the dictionary which will be used (long press)
   String _selectedDictionary;
-
-  // the application version used when this settings object was saved
-  String versionUsed;
   
   /// The theme which the application will use.
   /// System will match the settings of the system.
@@ -45,6 +39,7 @@ class Settings with ChangeNotifier {
   /// Should the canvas be cleared when a prediction was copied to kanjibuffer
   bool _emptyCanvasAfterDoubleTap;
 
+  /// should the default app browser be used for opening predictions
   bool _useDefaultBrowser;
 
 
@@ -77,6 +72,9 @@ class Settings with ChangeNotifier {
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
+
+    load();
+    save();
   }
 
   String get selectedDictionary{
@@ -140,7 +138,6 @@ class Settings with ChangeNotifier {
     
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
-    prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
   }
 
@@ -154,21 +151,7 @@ class Settings with ChangeNotifier {
 
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
-    versionUsed = prefs.getString('versionUsed') ?? '';
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
-
-    // a different version than last time is being used
-    //VERSION = "0.0.0";
-    if(versionUsed != VERSION){
-
-      // show the changelog
-      GetIt.I<Changelog>().showChangelog = true;
-
-      // this version has new features for drawing screen => show tutorial
-      if(DRAWING_SCREEN_NEW_FEATURES.contains(VERSION)){
-        SHOW_SHOWCASE_DRAWING = true;
-      }
-    }
   }
 }
 
