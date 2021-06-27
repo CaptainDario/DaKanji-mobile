@@ -1,3 +1,4 @@
+import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:easy_localization_loader/easy_localization_loader.dart';
 
 import 'package:da_kanji_mobile/model/core/DarkTheme.dart';
 import 'package:da_kanji_mobile/model/core/LightTheme.dart';
@@ -27,6 +27,7 @@ import 'package:da_kanji_mobile/view/TestScreen.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreen.dart';
 import 'package:da_kanji_mobile/view/AboutScreen.dart';
 import 'globals.dart';
+import 'package:da_kanji_mobile/locales_json.dart';
 
 
 Future<void> main() async {
@@ -44,7 +45,7 @@ Future<void> main() async {
         supportedLocales: [Locale('en')],
         path: 'assets/translations',
         fallbackLocale: Locale('en'),
-        assetLoader: JsonAssetLoader(),
+        assetLoader: CodegenLoader(),
         child: DaKanjiApp()
       ),
     )
@@ -79,6 +80,7 @@ void setupGetIt() {
   GetIt.I.registerSingleton<Settings>(Settings());
   GetIt.I<Settings>().load();
   GetIt.I<Settings>().save();
+  GetIt.I.registerSingleton<PlatformDependentVariables>(PlatformDependentVariables());
 
   // inference services
   GetIt.I.registerSingleton<DrawingInterpreter>(DrawingInterpreter());
@@ -117,6 +119,10 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
     ]);
 
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+
       onGenerateRoute: (settings) {
         PageRouteBuilder switchScreen (Widget screen) =>
           PageRouteBuilder(
