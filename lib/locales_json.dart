@@ -17,7 +17,7 @@ class CodegenLoader extends AssetLoader{
   static const Map<String,dynamic> en = {
   "HomeScreen": {
     "RatePopup": {
-      "text": "Do you like DaKanji?\nIf that is the case a rating would be awesome and help this project alot!",
+      "text": "Do you like DaKanji?\nIf that is the case a rating would be awesome and it would help this project alot!",
       "dont_ask_again": "Do not ask again",
       "rate": "Rate",
       "close": "close"
