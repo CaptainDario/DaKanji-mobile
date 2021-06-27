@@ -1,16 +1,14 @@
 
+import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:da_kanji_mobile/globals.dart';
-import 'package:universal_io/io.dart';
+import 'package:get_it/get_it.dart';
 
 
 
 class About with ChangeNotifier{
-
-  String _mobileStoreLink;
-  String _daapplabStorePage;
 
   String _about;
 
@@ -18,26 +16,10 @@ class About with ChangeNotifier{
 
 
   About (){
-    if(Platform.isAndroid){
-      _mobileStoreLink = PLAYSTORE_PAGE;
-      _daapplabStorePage = DAAPPLAB_PLAYSTORE_PAGE;
-    }
-    else if(Platform.isIOS){
-      _mobileStoreLink = APPSTORE_PAGE;
-      _daapplabStorePage = DAAPPLAB_APPSTORE_PAGE;
-    }
 
     _initialzied = false;
 
     init();
-  }
-
-  String get mobileStoreLink{
-    return _mobileStoreLink;
-  }
-  
-  String get daapplabStorePage{
-    return _daapplabStorePage;
   }
   
   String get about{
@@ -62,8 +44,10 @@ class About with ChangeNotifier{
     _about = _about.replaceAll("GITHUB_ISSUES", GITHUB_ISSUES);
     _about = _about.replaceAll("PRIVACY_POLICE", PRIVACY_POLICE);
 
-    _about = _about.replaceAll("RATE_ON_MOBILE_STORE", mobileStoreLink);
-    _about = _about.replaceAll("DAAPPLAB_STORE_PAGE", daapplabStorePage);
+    _about = _about.replaceAll("RATE_ON_MOBILE_STORE", 
+      GetIt.I<PlatformDependentVariables>().appStoreLink);
+    _about = _about.replaceAll("DAAPPLAB_STORE_PAGE", 
+      GetIt.I<PlatformDependentVariables>().daapplabStorePage);
 
     _about = _about.replaceAll("VERSION", "$VERSION#$BUILD_NR");
 
