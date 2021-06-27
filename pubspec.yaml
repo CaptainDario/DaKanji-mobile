@@ -29,7 +29,6 @@ dependencies:
   universal_io:
   awesome_dialog: ^2.1.0
   easy_localization: ^3.0.0
-  easy_localization_loader: ^1.0.0
 
   # utility 
   #flutter_launcher_icons: ^0.9.0
