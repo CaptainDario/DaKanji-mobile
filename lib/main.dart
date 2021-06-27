@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:easy_localization_loader/easy_localization_loader.dart';
 
 import 'package:da_kanji_mobile/model/core/DarkTheme.dart';
 import 'package:da_kanji_mobile/model/core/LightTheme.dart';
@@ -17,7 +19,8 @@ import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
 import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:da_kanji_mobile/provider/DrawerListener.dart';
-import 'package:da_kanji_mobile/view/HomeScreen.dart';
+import 'package:da_kanji_mobile/provider/UserData.dart';
+import 'package:da_kanji_mobile/view/home/HomeScreen.dart';
 import 'package:da_kanji_mobile/view/Settingsscreen.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 import 'package:da_kanji_mobile/view/TestScreen.dart';
@@ -32,9 +35,18 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
 
+  // wait for localization to be ready
+  await EasyLocalization.ensureInitialized();
+
   runApp(
     Phoenix(
-      child: DaKanjiApp(),
+      child: EasyLocalization(
+        supportedLocales: [Locale('en')],
+        path: 'assets/translations',
+        fallbackLocale: Locale('en'),
+        assetLoader: JsonAssetLoader(),
+        child: DaKanjiApp()
+      ),
     )
   );
 
@@ -62,12 +74,12 @@ Future<void> init() async {
 void setupGetIt() {
   // services to load from disk
   GetIt.I.registerSingleton<About>(About());
-  GetIt.I<About>().init();
   GetIt.I.registerSingleton<Changelog>(Changelog());
-  GetIt.I<Changelog>().init();
+  GetIt.I.registerSingleton<UserData>(UserData());
   GetIt.I.registerSingleton<Settings>(Settings());
   GetIt.I<Settings>().load();
-  
+  GetIt.I<Settings>().save();
+
   // inference services
   GetIt.I.registerSingleton<DrawingInterpreter>(DrawingInterpreter());
 
