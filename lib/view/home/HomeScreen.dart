@@ -1,4 +1,3 @@
-import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -9,6 +8,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/provider/Changelog.dart';
+import 'package:da_kanji_mobile/provider/UserData.dart';
+import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
+import 'package:da_kanji_mobile/view/home/RatePopup.dart';
 
 
 
@@ -34,8 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // after the page was build 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // if a new version was installed open the what's new pop up 
-      if(GetIt.I<Changelog>().showChangelog){
+
+      final appOpenedTimes = GetIt.I<UserData>().appOpenedTimes;
+      // show a rating dialogue WITHOUT "do not show again"-option
+      if(!GetIt.I<UserData>().doNotShowRateAgain){
+        if(appOpenedTimes < 31 ){//&& appOpenedTimes % 10 == 0){
+          showRatePopup(context, false);
+          print("SHOW RATE");
+        }
+        // show a rating dialogue WITH "do not show again"-option
+        else if(appOpenedTimes > 31 && appOpenedTimes % 10 == 0){
+          showRatePopup(context, true);
+        }
+      }
+
+      // if a newer version was installed open the what's new pop up 
+      else if(GetIt.I<Changelog>().showChangelog){
+
         GetIt.I<Changelog>().showChangelog = false;
 
         // what's new dialogue
@@ -120,8 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       // otherwise open the default screen
       else{
-        Navigator.
-          pushNamedAndRemoveUntil(context, "/drawing", (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, "/drawing", (route) => false);
       }
     });
   }
