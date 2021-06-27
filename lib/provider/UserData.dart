@@ -10,18 +10,18 @@ class UserData{
   int _appOpenedTimes;
 
   /// Did the user already chose to not the the rate dialogue again
-  bool _doNotShowRateAgain;
+  bool doNotShowRateAgain;
 
   /// The version of the app which was used last time
   String _versionUsed;
 
+  /// if the rate dialogue was already shown in this app life cycle
+  bool rateDialogueWasShown;
+
+
 
   get appOpenedTimes{
     return _appOpenedTimes;
-  }
-
-  get doNotShowRateAgain{
-    return _doNotShowRateAgain;
   }
 
   get versionUsed{
@@ -30,7 +30,8 @@ class UserData{
 
   UserData(){
     _appOpenedTimes = 0;
-    _doNotShowRateAgain = false;
+    doNotShowRateAgain = false;
+    rateDialogueWasShown = false;
 
     init();
   }
@@ -43,7 +44,7 @@ class UserData{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     _appOpenedTimes = (prefs.getInt('appOpenedTimes') ?? _appOpenedTimes) + 1;
-    _doNotShowRateAgain = prefs.getBool('doNotShowRateAgain') ?? false;
+    doNotShowRateAgain = prefs.getBool('doNotShowRateAgain') ?? false;
     _versionUsed = prefs.getString('versionUsed') ?? VERSION;
 
     print("The app was opened for the ${_appOpenedTimes.toString()} time");
@@ -70,7 +71,7 @@ class UserData{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setInt('appOpenedTimes', _appOpenedTimes);
-    prefs.setBool('doNotShowRateAgain', _doNotShowRateAgain);
+    prefs.setBool('doNotShowRateAgain', doNotShowRateAgain);
     prefs.setString('versionUsed', versionUsed);
   }
 
