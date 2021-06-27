@@ -8,6 +8,7 @@ import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
+import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
 
 
 /// The "about"-screen
@@ -66,8 +67,8 @@ class AboutScreen extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
-                        if(await canLaunch(GetIt.I<About>().mobileStoreLink))
-                          launch(GetIt.I<About>().mobileStoreLink);
+                        if(await canLaunch(GetIt.I<PlatformDependentVariables>().appStoreLink))
+                          launch(GetIt.I<PlatformDependentVariables>().appStoreLink);
                       }, 
                       child: Text("Rate this app")
                     ),
