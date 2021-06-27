@@ -4,7 +4,7 @@ import 'package:da_kanji_mobile/model/core/DrawingIsolateUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:image/image.dart' as image;
 
 import 'package:tflite_flutter/tflite_flutter.dart';
