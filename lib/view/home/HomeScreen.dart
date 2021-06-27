@@ -39,15 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
       final appOpenedTimes = GetIt.I<UserData>().appOpenedTimes;
       // show a rating dialogue WITHOUT "do not show again"-option
-      if(!GetIt.I<UserData>().doNotShowRateAgain){
-        if(appOpenedTimes < 31 ){//&& appOpenedTimes % 10 == 0){
+      if(!GetIt.I<UserData>().doNotShowRateAgain && 
+        !GetIt.I<UserData>().rateDialogueWasShown){
+        if(appOpenedTimes < 31 && appOpenedTimes % 10 == 0)
           showRatePopup(context, false);
-          print("SHOW RATE");
-        }
+        
         // show a rating dialogue WITH "do not show again"-option
-        else if(appOpenedTimes > 31 && appOpenedTimes % 10 == 0){
+        else if(appOpenedTimes > 31 && appOpenedTimes % 10 == 0)
           showRatePopup(context, true);
-        }
       }
 
       // if a newer version was installed open the what's new pop up 
