@@ -28,6 +28,8 @@ class About with ChangeNotifier{
     }
 
     _initialzied = false;
+
+    init();
   }
 
   String get mobileStoreLink{
