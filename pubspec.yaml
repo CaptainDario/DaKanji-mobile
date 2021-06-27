@@ -11,23 +11,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^0.5.12+4
-  url_launcher: ^5.7.10
+  shared_preferences: ^2.0.0
+  url_launcher: ^6.0.7
   webview_flutter: ^2.0.4
-  device_info: ^1.0.0
-  android_intent: ^2.0.0
+  device_info_plus: ^2.0.1
+  android_intent_plus: ^1.0.2
   tutorial_coach_mark: ^1.0.0
   flutter_phoenix: ^0.1.0
-  package_info_plus:
+  package_info_plus: ^1.0.3
   tflite_flutter: ^0.8.0
   image: ^3.0.2
-  flutter_markdown: ^0.5.0
+  flutter_markdown: ^0.6.2
   flutter_appavailability: ^0.0.21
   uni_links: ^0.4.0
   get_it: ^7.1.1
   provider: ^5.0.0
   universal_io:
   awesome_dialog: ^2.1.0
+  easy_localization: ^3.0.0
+  easy_localization_loader: ^1.0.0
 
   # utility 
   #flutter_launcher_icons: ^0.9.0
@@ -83,4 +85,5 @@ flutter:
     - media/icon.png
     - media/banner.png
 
+    - assets/translations/
 
