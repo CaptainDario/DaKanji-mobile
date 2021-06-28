@@ -64,7 +64,7 @@ class HandlePrediction{
     // only open a page when there is a prediction
     if (char != " " && char != "") {
       // the prediction should be translated with system dialogue
-      if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){ 
+      if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3]){ 
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
             action: 'android.intent.action.TRANSLATE',
@@ -88,7 +88,7 @@ class HandlePrediction{
         }
       }
       // offline dictionary aedict3 (android)
-      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
+      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){
         if(Platform.isAndroid){
           try{
             // make sure the package is installed
@@ -116,7 +116,7 @@ class HandlePrediction{
         }
       }
       // offline dictionary akebi (android)
-      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
+      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
               package: AKEBI_ID,
@@ -139,7 +139,7 @@ class HandlePrediction{
         }
       }
       // offline dictionary takoboto (android)
-      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[7]){
+      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
         if(Platform.isAndroid){
           AndroidIntent intent = AndroidIntent(
               package: TAKOBOTO_ID,
