@@ -48,5 +48,12 @@
   "restarts_app": "startet app neu",
   "dark": "Dunkel",
   "light": "Hell",
-  "system": "System"
+  "system": "System",
+  "AboutScreen": {
+    "title": "Über die App",
+    "rate_this_app": "Bewerte die App!"
+  },
+  "ChangelogScreen": {
+    "title": "Änderungen"
+  }
 }

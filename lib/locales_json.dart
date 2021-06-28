@@ -64,7 +64,13 @@ class CodegenLoader extends AssetLoader{
   "restarts_app": "startet app neu",
   "dark": "Dunkel",
   "light": "Hell",
-  "system": "System"
+  "system": "System",
+  "AboutScreen": {
+    "title": "Über die Ap"
+  },
+  "ChangelogScreen": {
+    "title": "Änderungen"
+  }
 };
 static const Map<String,dynamic> en = {
   "HomeScreen": {
@@ -116,7 +122,13 @@ static const Map<String,dynamic> en = {
   "restarts_app": "restarts app",
   "dark": "dark",
   "light": "light",
-  "system": "system"
+  "system": "system",
+  "AboutScreen": {
+    "title": "about"
+  },
+  "ChangelogScreen": {
+    "title": "Changelog"
+  }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"de": de, "en": en};
 }

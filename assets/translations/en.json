@@ -48,5 +48,12 @@
   "restarts_app": "restarts app",
   "dark": "dark",
   "light": "light",
-  "system": "system"
+  "system": "system",
+  "AboutScreen": {
+    "title": "about",
+    "rate_this_app": "Rate this app!"
+  },
+  "ChangelogScreen": {
+    "title": "Changelog"
+  }
 }
