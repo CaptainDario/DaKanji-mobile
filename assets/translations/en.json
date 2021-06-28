@@ -10,20 +10,20 @@
   "DrawScreen": {
     "title": "Drawing",
     "tutorial": {
-      "clear_text": "Erases all strokes",
-      "drawing_text": "Draw a character here",
-      "undo_text": "Press to undo the last stroke",
-      "predictions_text": "The predicted characters will be shown here",
-      "short_press_prediction_text": "A short press copies the prediction",
-      "long_press_prediction_text": "A long press opens the prediction in a dictionary",
-      "multi_search_text": "Here you can search multiple characters at once",
-      "double_tap_prediction_text": "A Double Tap adds the character to the search box",
-      "multi_search_short_press_text": "A short press copies the characters to the clipboard",
+      "clear": "Erases all strokes",
+      "drawing": "Draw a character here",
+      "undo": "Press to undo the last stroke",
+      "predictions": "The predicted characters will be shown here",
+      "short_press_prediction": "A short press copies the prediction",
+      "long_press_prediction": "A long press opens the prediction in a dictionary",
+      "multi_search": "Here you can search multiple characters at once",
+      "double_tap_prediction": "A Double Tap adds the character to the search box",
+      "multi_search_short_press": "A short press copies the characters to the clipboard",
       "skip": "SKIP",
-      "multi_search_long_press_text": "A long press opens the characters in a dictionary",
-      "multi_search_double_tap_text": "A double tap empties the field",
-      "multi_search_swipe_left_text": "Swiping left on this field deletes the last character",
-      "dictionary_settings_text": "In the settings the translation service can be chosen"
+      "multi_search_long_press": "A long press opens the characters in a dictionary",
+      "multi_search_double_tap": "A double tap empties the field",
+      "multi_search_swipe_left": "Swiping left on this field deletes the last character",
+      "dictionary_settings": "In the settings the translation service can be chosen"
     }
   },
   "SettingsScreen": {
@@ -36,15 +36,17 @@
     "empty_canvas_after_double_tap": "Empty canvas after double tap",
     "use_default_browser_for_online_dictionaries": "Use OS's default browser for online dictionaries",
     "miscellaneous_title": "Miscellaneous",
-    "theme": "theme (restarts app)",
+    "theme": "theme (@:restarts_app)",
     "show_tutorial": "Reshow tutorial (restarts app)",
-    "themes_light": "light",
-    "themes_dark": "dark",
-    "themes_system": "system",
-    "dictionary_app": "app",
-    "dictionary_custom_url": "a custom URL",
-    "dictionary_web": "web",
     "title": "Settings",
-    "dictionary_system_translator": "OS integrated translator"
-  }
+    "dictionary_system_translator": "OS integrated translator",
+    "language": "Language"
+  },
+  "app": "app",
+  "web": "web",
+  "custom_url": "custom URL",
+  "restarts_app": "restarts app",
+  "dark": "dark",
+  "light": "light",
+  "system": "system"
 }
