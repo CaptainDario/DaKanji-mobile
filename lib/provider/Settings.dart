@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_io/io.dart';
+
+
 
 class Settings with ChangeNotifier {
   /// The placeholder in the URL's which will be replaced by the predicted kanji
@@ -43,22 +47,27 @@ class Settings with ChangeNotifier {
   bool _useDefaultBrowser;
 
 
-  Settings(){
+  Settings() {
     kanjiPlaceholder = "%X%";
-
+    
     dictionaries = [
-      "jisho (web)", 
+      "jisho (web)",
       "wadoku (web)",
       "weblio (web)",
-      "a custom URL",
-      "systemTranslator",
-      "aedict (app)",
-      "akebi (app)",
-      "takoboto (app)",
+      "url (web)"
     ];
+    if(Platform.isAndroid)
+      dictionaries.addAll([
+        "aedict (app)",
+        "akebi (app)",
+        "takoboto (app)", 
+      ]);
+    else if(Platform.isIOS)
+      dictionaries.addAll([
+        "imiwa (app)"
+      ]);
 
     themes = ["light", "dark", "system"];
-
     themesDict = {
       "light": ThemeMode.light,
       "dark": ThemeMode.dark,
@@ -68,6 +77,9 @@ class Settings with ChangeNotifier {
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;
     useDefaultBrowser = true;
+
+    _selectedDictionary = "";
+    selectedTheme = "";
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
@@ -144,6 +156,9 @@ class Settings with ChangeNotifier {
   /// Load all saved settings from SharedPreferences.
   void load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+    // clear the preferences
+    //prefs.clear();
 
     invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
     emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
