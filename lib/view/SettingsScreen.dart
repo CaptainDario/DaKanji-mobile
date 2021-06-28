@@ -4,11 +4,13 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
 
 
 /// The "settings"-screen.
@@ -45,22 +47,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   // different options for dictionary on long press
                   ListTile(
                     title: Text(
-                      "Drawing", 
+                      LocaleKeys.SettingsScreen_drawing_title.tr(), 
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18
                       ),
                     )
                   ),
+                  // dictionary selection
                   ListTile(
-                    title: Text("Long press opens"),
+                    title: Text(LocaleKeys.SettingsScreen_long_press_opens.tr()),
                     trailing: DropdownButton<String>(
                         value: GetIt.I<Settings>().selectedDictionary,
                         items: GetIt.I<Settings>().dictionaries 
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value)
+                            child: () {
+                              String text = value.replaceAll("url", LocaleKeys.custom_url.tr());
+                              text = text.replaceAll("app", LocaleKeys.app.tr());
+                              text = text.replaceAll("web", LocaleKeys.web.tr());
+                              
+                              return Text(text);
+                            } ()
                           );
                         }).toList(),
                         onChanged: (String newValue) {
@@ -82,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: GetIt.I<Settings>().customURL,
-                                hintText: "URL of your dictionary"), 
+                                hintText: LocaleKeys.SettingsScreen_custom_url_hint.tr()), 
                               onChanged: (value) {
                                 settings.customURL = value;
                                 settings.save();
@@ -101,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               body: Column(
                                 children: [
                                   Text(
-                                    "Custom URL format",
+                                    LocaleKeys.SettingsScreen_custom_url_format.tr(),
                                     textScaleFactor: 2,
                                   ),
                                   Container(
@@ -109,19 +118,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          "The app will replace a placeholder in the URL with the predicted character. " +
-                                          "This placeholder is: " + GetIt.I<Settings>().kanjiPlaceholder + 
-                                          "\n" +
-                                          "\n" +
-                                          "Example:" +
-                                          "\n" +
-                                          "The predicted character is: '口'" + 
-                                          " and you want to open it on 'jisho.org'. " +
-                                          "First you have to get the URL of the website for searching. " + 
-                                          "In this case: 'https://jisho.org/search/口'. " + 
-                                          "Now only the character in the URL has to be replaced with the placeholder. " + 
-                                          "This leads to 'https://jisho.org/search/" + GetIt.I<Settings>().kanjiPlaceholder + "'."
-                                          ),
+                                          LocaleKeys.SettingsScreen_custom_url_explanation.tr(
+                                            namedArgs: {'kanjiPlaceholder' : 
+                                              GetIt.I<Settings>().kanjiPlaceholder}
+                                          )
+                                        ),
                                       ]
                                     )
                                   ),
@@ -136,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   // invert if short press or long press opens dict / copies to clip
                   CheckboxListTile(
-                    title: Text("Invert long/short press"),
+                    title: Text(LocaleKeys.SettingsScreen_invert_short_long_press.tr()),
                     value: GetIt.I<Settings>().invertShortLongPress, 
                     onChanged: (bool newValue){
                       settings.invertShortLongPress = newValue;
@@ -145,7 +146,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   // should a double tap on a prediction button empty the canvas
                   CheckboxListTile(
-                    title: Text("Empty canvas after double tap"),
+                    title: Text(LocaleKeys.SettingsScreen_empty_canvas_after_double_tap.tr()),
                     value: GetIt.I<Settings>().emptyCanvasAfterDoubleTap, 
                     onChanged: (bool newValue){
                       settings.emptyCanvasAfterDoubleTap = newValue;
@@ -153,7 +154,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     }
                   ),
                   CheckboxListTile(
-                    title: Text("Use default browser for online dictionaries"),
+                    title: Text(LocaleKeys.SettingsScreen_use_default_browser_for_online_dictionaries.tr()),
                     value: GetIt.I<Settings>().useDefaultBrowser, 
                     onChanged: (bool newValue){
                       settings.useDefaultBrowser = newValue;
@@ -162,27 +163,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
 
                   Divider(),
-                  // setting for which theme to use
+                  // miscellaneous header
                   ListTile(
                     title: Text(
-                      "Miscellaneous",
+                      LocaleKeys.SettingsScreen_miscellaneous_title.tr(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 18
                       ),
                     ),
                   ),
+                  // setting for which theme to use
                   ListTile(
-                    title: Text("theme (restarts app)"),
+                    title: Text(LocaleKeys.SettingsScreen_theme.tr()),
                     trailing: DropdownButton<String>(
                       value: GetIt.I<Settings>().selectedTheme,
                       items: GetIt.I<Settings>().themes
-                          .map<DropdownMenuItem<String>>((String value) {
+                        .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value)
-                        );
-                      }).toList(),
+                          child: () {
+                            String text = value.replaceAll("light", LocaleKeys.light.tr());
+                            text = text.replaceAll("dark", LocaleKeys.dark.tr());
+                            text = text.replaceAll("system", LocaleKeys.system.tr());
+                            
+                            return Text(text);
+                          } ()
+                          );
+                        }
+                      ).toList(),
                       onChanged: (String newValue) {
                         settings.selectedTheme = newValue;
                         settings.save();
@@ -191,8 +200,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     onTap: () {}
                   ),
+                  // TODO :setting for which language to use
+
+                  // reshow tutorial
                   ListTile(
-                    title: Text("Show tutorial (restarts app)"),
+                    title: Text(LocaleKeys.SettingsScreen_show_tutorial.tr()),
                     trailing: IconButton(
                       icon: Icon(Icons.replay_outlined),
                       onPressed: () { 

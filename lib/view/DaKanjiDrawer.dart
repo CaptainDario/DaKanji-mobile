@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/SettingsArguments.dart';
 import 'package:da_kanji_mobile/provider/DrawerListener.dart';
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
 
 
 /// Da Kanji's drawer.
@@ -134,7 +136,27 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
               child: Scaffold(
                 appBar: AppBar(
                   title: Text(
-                    ModalRoute.of(context).settings.name.replaceAll("/", " ")
+                    (){
+                      String title;
+                      switch (widget.currentScreen){
+                        case Screens.about:
+                          title = LocaleKeys.AboutScreen_title.tr();
+                          break;
+                        case Screens.changelog:
+                          title = LocaleKeys.ChangelogScreen_title.tr();
+                          break;
+                        case Screens.drawing:
+                          title = LocaleKeys.DrawScreen_title.tr();
+                          break;
+                        case Screens.settings:
+                          title = LocaleKeys.SettingsScreen_title.tr();
+                          break;
+                        case Screens.webviewDrawing:
+                          title = "webview drawinga sdsa";
+                          break;
+                      }
+                      return title;
+                    } ()
                   ),
                   leading: Transform.scale(
                     scale: 0.75,
@@ -239,7 +261,7 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                         Material(
                           child: ListTile(
                             leading: Icon(Icons.brush_outlined),
-                            title: Text("Drawing"),
+                            title: Text(LocaleKeys.DrawScreen_title.tr()),
                             selected: widget.currentScreen == Screens.drawing,
                             onTap: () {
                               if(ModalRoute.of(context).settings.name != "/drawing"){
@@ -260,7 +282,7 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                             key: SHOW_SHOWCASE_DRAWING ? SHOWCASE_DRAWING[12].key : null,
                             selected: widget.currentScreen == Screens.settings,
                             leading: Icon(Icons.settings_applications),
-                            title: Text("Settings"),
+                            title: Text(LocaleKeys.SettingsScreen_title.tr()),
                             onTap: () {
                               if(ModalRoute.of(context).settings.name != "/settings"){
                                 Navigator.pushNamedAndRemoveUntil(
@@ -279,7 +301,7 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                           child: ListTile(
                             selected: widget.currentScreen == Screens.about,
                             leading: Icon(Icons.info_outline),
-                            title: Text("About",),
+                            title: Text(LocaleKeys.AboutScreen_title.tr()),
                             
                             onTap: () {
                               if(ModalRoute.of(context).settings.name != "/about"){
