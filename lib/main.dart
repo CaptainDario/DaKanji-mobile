@@ -26,7 +26,7 @@ import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 import 'package:da_kanji_mobile/view/TestScreen.dart';
 import 'package:da_kanji_mobile/view/drawing/DrawScreen.dart';
 import 'package:da_kanji_mobile/view/AboutScreen.dart';
-import 'globals.dart';
+import 'package:da_kanji_mobile/globals.dart';
 import 'package:da_kanji_mobile/locales_json.dart';
 
 
@@ -34,22 +34,27 @@ Future<void> main() async {
 
   // initialize the app
   WidgetsFlutterBinding.ensureInitialized();
-  await init();
-
   // wait for localization to be ready
   await EasyLocalization.ensureInitialized();
-
+  await init();
   runApp(
     Phoenix(
       child: EasyLocalization(
-        supportedLocales: [Locale('en')],
+        supportedLocales: [
+          Locale('en'),
+          Locale('de')
+        ],
         path: 'assets/translations',
         fallbackLocale: Locale('en'),
+        useFallbackTranslations: true,
+        useOnlyLangCode: true,
+        startLocale: Locale('de'),
         assetLoader: CodegenLoader(),
         child: DaKanjiApp()
       ),
     )
   );
+  //GetIt.I<Settings>().init();
 
 }
 
@@ -57,7 +62,7 @@ Future<void> main() async {
 /// Initializes the app.
 /// 
 /// This function initializes:
-/// * reads used version, CHANGELOG about from file
+/// * used version, CHANGELOG and about
 /// * loads the settings
 /// * initializes tensorflow lite and reads the labels from file 
 Future<void> init() async {
@@ -78,8 +83,6 @@ void setupGetIt() {
   GetIt.I.registerSingleton<Changelog>(Changelog());
   GetIt.I.registerSingleton<UserData>(UserData());
   GetIt.I.registerSingleton<Settings>(Settings());
-  GetIt.I<Settings>().load();
-  GetIt.I<Settings>().save();
   GetIt.I.registerSingleton<PlatformDependentVariables>(PlatformDependentVariables());
 
   // inference services
@@ -96,6 +99,7 @@ void setupGetIt() {
 
 /// The starting widget of the app
 class DaKanjiApp extends StatefulWidget {
+
 
   @override
   _DaKanjiAppState createState() => _DaKanjiAppState();
