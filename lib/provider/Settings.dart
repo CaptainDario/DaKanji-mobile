@@ -172,7 +172,8 @@ class Settings with ChangeNotifier {
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
-    selectedLocale = Locale(prefs.getString('selectedLocale') ?? "en");
+    var localeStr = prefs.getString('selectedLocale');
+    selectedLocale = localeStr == null ? null : Locale(localeStr);
   }
 }
 

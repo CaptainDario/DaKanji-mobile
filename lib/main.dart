@@ -47,7 +47,6 @@ Future<void> main() async {
         fallbackLocale: Locale('en'),
         useFallbackTranslations: true,
         useOnlyLangCode: true,
-        startLocale: GetIt.I<Settings>().selectedLocale,
         assetLoader: CodegenLoader(),
         child: DaKanjiApp()
       ),
@@ -121,7 +120,14 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      locale: context.locale,
+      locale: () {
+        // if there was no language set use the one from the os
+        if(GetIt.I<Settings>().selectedLocale == null){
+          GetIt.I<Settings>().selectedLocale = context.locale;
+          GetIt.I<Settings>().save();
+        }
+        return GetIt.I<Settings>().selectedLocale;
+      } (),
 
       onGenerateRoute: (settings) {
         PageRouteBuilder switchScreen (Widget screen) =>
