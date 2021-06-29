@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
-import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
+import 'package:da_kanji_mobile/globals.dart';
+
 
 
 /// The "about"-screen
@@ -18,6 +21,19 @@ class AboutScreen extends StatelessWidget {
 
   /// was this page opened by clicking on the tab in the drawer
   final bool openedByDrawer;
+
+  final String about = LocaleKeys.AboutScreen_about_text.tr()
+    .replaceAll("GITHUB_DESKTOP_REPO", GITHUB_DESKTOP_REPO)
+    .replaceAll("GITHUB_MOBILE_REPO", GITHUB_MOBILE_REPO)
+    .replaceAll("GITHUB_ML_REPO", GITHUB_ML_REPO)
+    .replaceAll("GITHUB_ISSUES", GITHUB_ISSUES)
+    .replaceAll("PRIVACY_POLICE", PRIVACY_POLICE)
+    .replaceAll("RATE_ON_MOBILE_STORE", 
+      GetIt.I<PlatformDependentVariables>().appStoreLink)
+    .replaceAll("DAAPPLAB_STORE_PAGE", 
+      GetIt.I<PlatformDependentVariables>().daapplabStorePage)
+    .replaceAll("VERSION", "$VERSION#$BUILD_NR")
+    .replaceAll("DISCORD_SERVER", DISCORD_INVITE);
 
   AboutScreen(this.openedByDrawer);
   
@@ -35,7 +51,7 @@ class AboutScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
               child: MarkdownBody(
-                data: GetIt.I<About>().about,
+                data: about,
                 onTapLink: (text, url, title) {
                   launch(url);
                 },
@@ -48,7 +64,7 @@ class AboutScreen extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
                   child: GestureDetector(
                     child: Text(
-                      "Show me the complete changelog.",
+                      LocaleKeys.AboutScreen_show_changelog.tr(),
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.blue),
                     ),
@@ -70,7 +86,7 @@ class AboutScreen extends StatelessWidget {
                         if(await canLaunch(GetIt.I<PlatformDependentVariables>().appStoreLink))
                           launch(GetIt.I<PlatformDependentVariables>().appStoreLink);
                       }, 
-                      child: Text("Rate this app")
+                      child: Text(LocaleKeys.AboutScreen_rate_this_app.tr())
                     ),
                   ),
                 ],

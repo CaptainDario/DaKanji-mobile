@@ -14,7 +14,6 @@ import 'package:da_kanji_mobile/model/services/DeepLinks.dart';
 import 'package:da_kanji_mobile/provider/KanjiBuffer.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/provider/Lookup.dart';
-import 'package:da_kanji_mobile/provider/About.dart';
 import 'package:da_kanji_mobile/provider/Strokes.dart';
 import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:da_kanji_mobile/provider/DrawerListener.dart';
@@ -80,7 +79,6 @@ Future<void> init() async {
 void setupGetIt() {
   // services to load from disk
   GetIt.I.registerSingleton<PlatformDependentVariables>(PlatformDependentVariables());
-  GetIt.I.registerSingleton<About>(About());
   GetIt.I.registerSingleton<Changelog>(Changelog());
   GetIt.I.registerSingleton<UserData>(UserData());
   GetIt.I.registerSingleton<Settings>(Settings());
