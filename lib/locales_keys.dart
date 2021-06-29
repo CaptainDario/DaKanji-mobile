@@ -47,6 +47,8 @@ abstract class  LocaleKeys {
   static const light = 'light';
   static const system = 'system';
   static const AboutScreen_title = 'AboutScreen.title';
+  static const AboutScreen_rate_this_app = 'AboutScreen.rate_this_app';
+  static const AboutScreen_about_text = 'AboutScreen.about_text';
   static const AboutScreen = 'AboutScreen';
   static const ChangelogScreen_title = 'ChangelogScreen.title';
   static const ChangelogScreen = 'ChangelogScreen';

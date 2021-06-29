@@ -1,6 +1,6 @@
 {
   "DrawScreen": {
-    "title": "Zeichnen",
+    "title": "",
     "tutorial": {
       "clear": "Lösche all Striche",
       "double_tap_prediction": "Tippe doppelt um das Zeichen der Suchbox hinzuzufügen",
@@ -51,7 +51,8 @@
   "system": "System",
   "AboutScreen": {
     "title": "Über die App",
-    "rate_this_app": "Bewerte die App!"
+    "rate_this_app": "Bewerte die App!",
+    "about_text": "DaKanji ist für Menschen die Japanisch lernen oder benutzen.\nEs kann "
   },
   "ChangelogScreen": {
     "title": "Änderungen"
