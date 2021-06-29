@@ -20,3 +20,4 @@ If you have problems using this app or suggestions how to improve it please repo
 The privacy police can be found [here](PRIVACY_POLICE)
 
 You are running DaKanji version: VERSION
+You are using BACKEND for inference.
