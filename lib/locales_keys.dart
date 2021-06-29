@@ -1,7 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
 abstract class  LocaleKeys {
-  static const DrawScreen_title = 'DrawScreen.title';
   static const DrawScreen_tutorial_clear = 'DrawScreen.tutorial.clear';
   static const DrawScreen_tutorial_double_tap_prediction = 'DrawScreen.tutorial.double_tap_prediction';
   static const DrawScreen_tutorial_drawing = 'DrawScreen.tutorial.drawing';
