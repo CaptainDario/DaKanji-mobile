@@ -33,6 +33,7 @@ const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanji-Mobile";
 const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanji-ML";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanji-Mobile/issues/new";
 
+const DISCORD_INVITE = "https://discord.com/invite/gdqaux3r4P";
 
 const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
