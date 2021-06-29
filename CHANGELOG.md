@@ -1,7 +1,37 @@
 
 # Da Kanji - changelog
 
-## v 1.3.0 - 漢字検定
+## v 1.3.0 - 現地化
+
+new Features:
+
+- localization:
+  - English
+  - German
+  - if you want to see DaKanji in more languages please [translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
+- iOS support
+  - supported app dictionaries:
+    - shirabe jisho
+    - Japanese - more than a dictionary
+    - imiha
+- ask for a rating from time to time
+
+Changes:
+
+- awesome new popup dialogues
+- new drawer open/close animation
+- use webview_x package
+- [?]improved tutorial
+- loading indicator for webview
+- show used inference backend in about
+
+Fixed:
+
+- show "what's new"-popup only when the app was installed
+
+-------------------------------------------------------------------------
+
+## v 1.4.0 - 漢字検定
 
 new Features:
 
