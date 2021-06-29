@@ -87,9 +87,7 @@ class _WebviewScreenState extends State<WebviewScreen>
     return Scaffold(
       appBar: AppBar(
         title: 
-        Text(GetIt.I<Settings>().selectedDictionary
-        + ": "
-        + GetIt.I<Lookup>().chars),
+        Text(GetIt.I<Lookup>().chars),
       ),
       body: WillPopScope(
         // when leaving this screen hide the webview and  
