@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/view/DaKanjiDrawer.dart';
 import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
@@ -33,7 +34,8 @@ class AboutScreen extends StatelessWidget {
     .replaceAll("DAAPPLAB_STORE_PAGE", 
       GetIt.I<PlatformDependentVariables>().daapplabStorePage)
     .replaceAll("VERSION", "$VERSION#$BUILD_NR")
-    .replaceAll("DISCORD_SERVER", DISCORD_INVITE);
+    .replaceAll("DISCORD_SERVER", DISCORD_INVITE)
+    .replaceAll("BACKEND", GetIt.I<DrawingInterpreter>().usedBackend);
 
   AboutScreen(this.openedByDrawer);
   
