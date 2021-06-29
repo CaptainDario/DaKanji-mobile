@@ -16,6 +16,7 @@ abstract class  LocaleKeys {
   static const DrawScreen_tutorial_undo = 'DrawScreen.tutorial.undo';
   static const DrawScreen_tutorial_dictionary_settings = 'DrawScreen.tutorial.dictionary_settings';
   static const DrawScreen_tutorial = 'DrawScreen.tutorial';
+  static const DrawScreen_title = 'DrawScreen.title';
   static const DrawScreen = 'DrawScreen';
   static const SettingsScreen_custom_url_hint = 'SettingsScreen.custom_url_hint';
   static const SettingsScreen_dictionary_system_translator = 'SettingsScreen.dictionary_system_translator';
@@ -48,6 +49,7 @@ abstract class  LocaleKeys {
   static const AboutScreen_title = 'AboutScreen.title';
   static const AboutScreen_rate_this_app = 'AboutScreen.rate_this_app';
   static const AboutScreen_about_text = 'AboutScreen.about_text';
+  static const AboutScreen_show_changelog = 'AboutScreen.show_changelog';
   static const AboutScreen = 'AboutScreen';
   static const ChangelogScreen_title = 'ChangelogScreen.title';
   static const ChangelogScreen = 'ChangelogScreen';

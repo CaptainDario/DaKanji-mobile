@@ -15,7 +15,8 @@
       "skip": "ÜBERSPRINGEN",
       "undo": "Macht den letzten Strich rückgängig",
       "dictionary_settings": "In den Einstellung kann die Methode zum übersetzen gewählt werden"
-    }
+    },
+    "title": "Zeichnen"
   },
   "SettingsScreen": {
     "custom_url_hint": "URL von dem Wörterbuch das benutzt werden soll",
@@ -50,8 +51,9 @@
   "system": "System",
   "AboutScreen": {
     "title": "Über die App",
-    "rate_this_app": "Bewerte die App!",
-    "about_text": "DaKanji ist für Menschen die Japanisch lernen oder benutzen.\nEs kann "
+    "rate_this_app": "Bewerte die App",
+    "about_text": "DaKanji ist für alle die Japanisch lernen oder benutzen.\nMit DaKanji kann man handgeschriebene Zeichen nachschlagen. Im Moment können:\n\n- alle 漢字 von 漢字検定\n- ひらがな (auch Historische: ゑ, etc.)\n- カタカナ (auch Historische: ヱ, etc.)\n- arabic Ziffern\n- romaji\n\nerkannt werden. \nIn der Zukunft wird der Funktionsumfang aber stark erweitert werden.\nEine Desktop version gibt es [hier.](GITHUB_DESKTOP_REPO)\nDaKanji wurde mit dart und dem Flutter framework entwickelt und steht unter einer \"source available\"-Lizenz.\nDas GitHub-repository kann [hier](GITHUB_MOBILE_REPO) gefunden werden.\nWenn du mehr über die machine learning Modelle efahren willst [schau hier.](GITHUB_ML_REPO)\n\nSchau dir auch meine [anderen apps](DAAPPLAB_STORE_PAGE) an. \nFalls du Probleme mit der App hast oder Verbesserungsvorschläge, bitte öffne einen [GitHub-issue](GITHUB_ISSUES) oder tritt dem [discord server](DISCORD_SERVER) bei.\n\nDie privacy police kann [hier](PRIVACY_POLICE) gefunden werden.\n\nDu benutzt DaKanji version: VERSION\n\nDu benutzt das BACKEND backend für Inferenz.",
+    "show_changelog": "Zeig mir alle Änderungen."
   },
   "ChangelogScreen": {
     "title": "Änderungen"

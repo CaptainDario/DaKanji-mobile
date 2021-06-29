@@ -31,7 +31,8 @@ class CodegenLoader extends AssetLoader{
       "skip": "ÜBERSPRINGEN",
       "undo": "Macht den letzten Strich rückgängig",
       "dictionary_settings": "In den Einstellung kann die Methode zum übersetzen gewählt werden"
-    }
+    },
+    "title": "Zeichnen"
   },
   "SettingsScreen": {
     "custom_url_hint": "URL von dem Wörterbuch das benutzt werden soll",
@@ -66,8 +67,9 @@ class CodegenLoader extends AssetLoader{
   "system": "System",
   "AboutScreen": {
     "title": "Über die App",
-    "rate_this_app": "Bewerte die App!",
-    "about_text": "DaKanji ist für Menschen die Japanisch lernen oder benutzen.\nEs kann "
+    "rate_this_app": "Bewerte die App",
+    "about_text": "DaKanji ist für alle die Japanisch lernen oder benutzen.\nMit DaKanji kann man handgeschriebene Zeichen nachschlagen. Im Moment können:\n\n- alle 漢字 von 漢字検定\n- ひらがな (auch Historische: ゑ, etc.)\n- カタカナ (auch Historische: ヱ, etc.)\n- arabic Ziffern\n- romaji\n\nerkannt werden. \nIn der Zukunft wird der Funktionsumfang aber stark erweitert werden.\nEine Desktop version gibt es [hier.](GITHUB_DESKTOP_REPO)\nDaKanji wurde mit dart und dem Flutter framework entwickelt und steht unter einer \"source available\"-Lizenz.\nDas GitHub-repository kann [hier](GITHUB_MOBILE_REPO) gefunden werden.\nWenn du mehr über die machine learning Modelle efahren willst [schau hier.](GITHUB_ML_REPO)\n\nSchau dir auch meine [anderen apps](DAAPPLAB_STORE_PAGE) an. \nFalls du Probleme mit der App hast oder Verbesserungsvorschläge, bitte öffne einen [GitHub-issue](GITHUB_ISSUES) oder tritt dem [discord server](DISCORD_SERVER) bei.\n\nDie privacy police kann [hier](PRIVACY_POLICE) gefunden werden.\n\nDu benutzt DaKanji version: VERSION\n\nDu benutzt das BACKEND backend für Inferenz.",
+    "show_changelog": "Zeig mir alle Änderungen."
   },
   "ChangelogScreen": {
     "title": "Änderungen"
@@ -126,8 +128,9 @@ static const Map<String,dynamic> en = {
   "system": "system",
   "AboutScreen": {
     "title": "about",
-    "rate_this_app": "Rate this app!",
-    "about_text": "DaKanji helps students of the Japanese language and people who use it.\nRight now it can recognize handwritten characters:\n\n- all 漢字 from 漢字検定\n- ひらがな (also historical ones: ゑ, etc.)\n- カタカナ (also historical ones: ヱ, etc.)\n- arabic numbers\n- romaji\n\nBut the feature set will be vastly improved in the coming releases.\n\nA desktop version is available [here.](GITHUB_DESKTOP_REPO)\nThe app was developed using dart with the Flutter framework and is source available.\nIf you want to learn more about the development of the app, [visit its GitHub repository.](GITHUB_MOBILE_REPO)\nIf you want to learn more about the machine learning models powering this app, [take a look here.](GITHUB_ML_REPO)\n\nAlso check out [my other apps.](DAAPPLAB_STORE_PAGE)\nIf you have problems using this app or suggestions how to improve it please report them [here](GITHUB_ISSUES) or join the [discord server.](https://discord.com/invite/gdqaux3r4P)\n\nThe privacy police can be found [here](PRIVACY_POLICE)\n\nYou are running DaKanji version: VERSION\nYou are using BACKEND for inference."
+    "rate_this_app": "Rate this app",
+    "about_text": "DaKanji helps students of the Japanese language and people who use it.\nRight now it can recognize handwritten characters:\n\n- all 漢字 from 漢字検定\n- ひらがな (also historical ones: ゑ, etc.)\n- カタカナ (also historical ones: ヱ, etc.)\n- arabic numbers\n- romaji\n\nBut the feature set will be vastly improved in the coming releases.\n\nA desktop version is available [here.](GITHUB_DESKTOP_REPO)\nThe app was developed using dart with the Flutter framework and is source available.\nIf you want to learn more about the development of the app, [visit its GitHub repository.](GITHUB_MOBILE_REPO)\nIf you want to learn more about the machine learning models powering this app, [take a look here.](GITHUB_ML_REPO)\n\nAlso check out [my other apps.](DAAPPLAB_STORE_PAGE)\nIf you have problems using this app or suggestions how to improve it please report them [here](GITHUB_ISSUES) or join the [discord server.](DISCORD_SERVER)\n\nThe privacy police can be found [here](PRIVACY_POLICE)\n\nYou are running DaKanji version: VERSION\n\nYou are using the BACKEND backend for inference.",
+    "show_changelog": "Show me the complete changelog."
   },
   "ChangelogScreen": {
     "title": "Changelog"
