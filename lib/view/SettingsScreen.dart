@@ -200,8 +200,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     onTap: () {}
                   ),
-                  // TODO :setting for which language to use
-
+                  // Setting for which language to use
+                  ListTile(
+                    title: Text(LocaleKeys.SettingsScreen_language.tr()),
+                    trailing: DropdownButton<String>(
+                      value: GetIt.I<Settings>().selectedLocale.toString(),
+                      items: context.supportedLocales
+                        .map<DropdownMenuItem<String>>((Locale value) {
+                          return DropdownMenuItem<String>(
+                            value: value.toString(),
+                            child: () {
+                              return Text(value.languageCode);
+                            } ()
+                          );
+                        }
+                      ).toList(),
+                      onChanged: (String newValue) {
+                        context.setLocale(Locale(newValue));
+                        settings.selectedLocale = Locale(newValue);
+                        settings.save();
+                      },
+                    ),
+                    onTap: () {}
+                  ),
                   // reshow tutorial
                   ListTile(
                     title: Text(LocaleKeys.SettingsScreen_show_tutorial.tr()),

@@ -47,14 +47,12 @@ Future<void> main() async {
         fallbackLocale: Locale('en'),
         useFallbackTranslations: true,
         useOnlyLangCode: true,
-        startLocale: Locale('de'),
+        startLocale: GetIt.I<Settings>().selectedLocale,
         assetLoader: CodegenLoader(),
         child: DaKanjiApp()
       ),
     )
   );
-  //GetIt.I<Settings>().init();
-
 }
 
 

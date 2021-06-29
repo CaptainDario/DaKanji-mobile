@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_io/io.dart';
@@ -45,6 +46,9 @@ class Settings with ChangeNotifier {
 
   /// should the default app browser be used for opening predictions
   bool _useDefaultBrowser;
+
+  /// the currently used locale
+  Locale selectedLocale;
 
 
   Settings() {
@@ -151,6 +155,7 @@ class Settings with ChangeNotifier {
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
     prefs.setString('selectedDictionary', selectedDictionary);
+    prefs.setString('selectedLocale', selectedLocale.toString());
   }
 
   /// Load all saved settings from SharedPreferences.
@@ -167,6 +172,7 @@ class Settings with ChangeNotifier {
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
+    selectedLocale = Locale(prefs.getString('selectedLocale') ?? "en");
   }
 }
 
