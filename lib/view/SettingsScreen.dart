@@ -155,9 +155,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   CheckboxListTile(
                     title: Text(LocaleKeys.SettingsScreen_use_default_browser_for_online_dictionaries.tr()),
-                    value: GetIt.I<Settings>().useDefaultBrowser, 
+                    value: settings.useWebview,
                     onChanged: (bool newValue){
-                      settings.useDefaultBrowser = newValue;
+                      settings.useWebview = newValue;
                       settings.save();
                     }
                   ),

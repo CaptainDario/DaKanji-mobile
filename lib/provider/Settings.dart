@@ -80,7 +80,7 @@ class Settings with ChangeNotifier {
 
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;
-    useDefaultBrowser = true;
+    useWebview = true;
 
     _selectedDictionary = "";
     selectedTheme = "";
@@ -133,11 +133,11 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
   
-  bool get useDefaultBrowser{
+  bool get useWebview{
     return _useDefaultBrowser;
   }
   
-  set useDefaultBrowser(bool empty){
+  set useWebview(bool empty){
     _useDefaultBrowser = empty;
     notifyListeners();
   }
@@ -150,7 +150,7 @@ class Settings with ChangeNotifier {
     // set value in shared preferences
     prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
-    prefs.setBool('useDefaultBrowser', useDefaultBrowser);
+    prefs.setBool('useWebview', useWebview);
     
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
@@ -162,12 +162,12 @@ class Settings with ChangeNotifier {
   void load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     
-    // clear the preferences
-    //prefs.clear();
+    // delete the saved preferences
+    // prefs.clear();
 
     invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
     emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
-    useDefaultBrowser = prefs.getBool('useDefaultBrowser') ?? true;
+    useWebview = prefs.getBool('useWebview') ?? false;
 
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
