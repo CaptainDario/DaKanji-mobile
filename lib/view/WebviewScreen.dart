@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webviewx/webviewx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:da_kanji_mobile/provider/Lookup.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
 
 
 
@@ -32,7 +35,8 @@ class _WebviewScreenState extends State<WebviewScreen>
   /// the animation to rotate the loading / webview
   Animation _rotationAnimation;
   /// the webview to show the dictionary search
-  WebView webview;
+  WebViewXController webviewController;
+
 
   @override
   void initState() { 
@@ -63,7 +67,6 @@ class _WebviewScreenState extends State<WebviewScreen>
   void dispose() { 
     super.dispose();
     _controller.dispose();
-    WebView.platform = SurfaceAndroidWebView();
   }
 
   @override
@@ -84,10 +87,7 @@ class _WebviewScreenState extends State<WebviewScreen>
     route.animation.addStatusListener(handler);
     
     return Scaffold(
-      appBar: AppBar(
-        title: 
-        Text(GetIt.I<Lookup>().chars),
-      ),
+      appBar: AppBar(title: Text(GetIt.I<Lookup>().chars)),
       body: WillPopScope(
         // when leaving this screen hide the webview and  
         onWillPop: () {
@@ -101,6 +101,7 @@ class _WebviewScreenState extends State<WebviewScreen>
           child: 
             Stack(
               children: [
+                // webview
                 Transform.translate(
                   offset: Offset(
                     (width) * (1 - _rotationAnimation.value), 
@@ -115,8 +116,9 @@ class _WebviewScreenState extends State<WebviewScreen>
                     alignment: Alignment.centerLeft,
                     child: () {
                         if(loadWebview){
-                          return WebView(
-                            initialUrl: GetIt.I<Lookup>().url,
+                          return WebViewX(
+                            initialContent:  GetIt.I<Lookup>().url,
+                            initialSourceType: SourceType.URL,
                             onPageFinished: (s) {
                               _controller.forward(from: 0.0);
                             }
@@ -147,15 +149,25 @@ class _WebviewScreenState extends State<WebviewScreen>
                         + GetIt.I<Lookup>().chars,
                       child: Container(
                         child: Center(
-                          child: Text(
-                            GetIt.I<Lookup>().chars,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.button.color,
-                              decoration: TextDecoration.none,
-                              fontSize: 60,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
+                          child: () {
+                            return DefaultTextStyle(
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.button.color,
+                                decoration: TextDecoration.none,
+                                fontSize: 50,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              child: AnimatedTextKit(
+                                pause: Duration(milliseconds: 500),
+                                animatedTexts: [
+                                  TyperAnimatedText(
+                                    "${LocaleKeys.WebviewScreen_loading.tr()}: ${GetIt.I<Lookup>().chars}",
+                                    speed: Duration(milliseconds: 200)
+                                  )
+                                ],
+                              ),
+                            );
+                          } (),
                         )
                       )
                     )
