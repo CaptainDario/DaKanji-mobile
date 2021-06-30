@@ -75,7 +75,7 @@ class CodegenLoader extends AssetLoader{
     "title": "Änderungen"
   },
   "WebviewScreen": {
-    "loading": "Suchen"
+    "loading": "Suche"
   }
 };
 static const Map<String,dynamic> en = {
