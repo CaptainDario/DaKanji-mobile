@@ -261,6 +261,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
                     } (),
                     textScaleFactor: 1.5,
                     softWrap: false,
+                    style: TextStyle(
+                      fontFamily: "NotoSans"
+                    ),
                   ),
                   ScaleTransition(
                     scale: _scaleInNewCharAnimation,
