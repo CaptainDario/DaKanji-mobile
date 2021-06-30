@@ -21,7 +21,7 @@ Changes:
 - awesome new popup dialogues
 - new drawer open/close animation
 - use webview_x package
-- [?]improved tutorial
+- [?]improved showing the tutorial
 - loading indicator for webview
 - show used inference backend in about
 
