@@ -10,8 +10,6 @@ new Features:
   - all 漢字 from 漢字検定
   - ひらがな (also historical ones: ゑ, etc.)
   - カタカナ (also historical ones: ヱ, etc.)
-  - arabic numbers
-  - romaji
 
 Changes:
 
