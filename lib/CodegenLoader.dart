@@ -73,6 +73,9 @@ class CodegenLoader extends AssetLoader{
   },
   "ChangelogScreen": {
     "title": "Änderungen"
+  },
+  "WebviewScreen": {
+    "loading": "Suchen"
   }
 };
 static const Map<String,dynamic> en = {
@@ -134,6 +137,9 @@ static const Map<String,dynamic> en = {
   },
   "ChangelogScreen": {
     "title": "Changelog"
+  },
+  "WebviewScreen": {
+    "loading": "Searching"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"de": de, "en": en};

@@ -57,5 +57,8 @@
   },
   "ChangelogScreen": {
     "title": "Änderungen"
+  },
+  "WebviewScreen": {
+    "loading": "Suchen"
   }
 }
