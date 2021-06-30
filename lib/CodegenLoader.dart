@@ -45,7 +45,7 @@ class CodegenLoader extends AssetLoader{
     "show_tutorial": "Zeige Tutorial erneut (startet app neu)",
     "theme": "Thema (@:restarts_app)",
     "title": "Einstellungen",
-    "use_default_browser_for_online_dictionaries": "Benutze den standard Webbrowser vom Betriebssystem",
+    "use_default_browser_for_online_dictionaries": "Benutze einen webview für web Wörterbücher",
     "custom_url_format": "Benutzerdefiniertes URL format",
     "custom_url_explanation": "Die App ersetzt einen Platzhalter in der gegbenen URL mit dem vorhergesagten Zeichen. Dieser Plathalter ist: {kanjiPlaceholder}\n\nBeispiel:\nDas vorhergesagte Zeichen ist: '口' und man wil es auf 'jisho.org' nachschlagen. Dafür muss als erste die URL der website, welche für das Suchen benutzt wird, herausgefunden werden. Für 'jisho.org' ist das: 'https://jisho.org/search/口'. Nun muss nur noch das Zeichen aus der URL mit dem Platzhalter ersetzt werden. Das führt zu 'https://jisho.org/search/{kanjiPlaceholder}'.",
     "language": "Sprache"
@@ -73,6 +73,9 @@ class CodegenLoader extends AssetLoader{
   },
   "ChangelogScreen": {
     "title": "Änderungen"
+  },
+  "WebviewScreen": {
+    "loading": "Suche"
   }
 };
 static const Map<String,dynamic> en = {
@@ -111,7 +114,7 @@ static const Map<String,dynamic> en = {
     "custom_url_explanation": "The app will replace a placeholder in the URL with the predicted character. This placeholder is: {kanjiPlaceholder}\n\nExample:\nThe predicted character is: '口' and you want to open it on 'jisho.org'. First you have to get the URL of the website for searching. In this case: 'https://jisho.org/search/口'. Now only the character in the URL has to be replaced with the placeholder. This leads to 'https://jisho.org/search/{kanjiPlaceholder}'.",
     "invert_short_long_press": "Invert long/short press",
     "empty_canvas_after_double_tap": "Empty canvas after double tap",
-    "use_default_browser_for_online_dictionaries": "Use OS's default browser for online dictionaries",
+    "use_default_browser_for_online_dictionaries": "Use a webview for web dictionaries",
     "miscellaneous_title": "Miscellaneous",
     "theme": "theme (@:restarts_app)",
     "show_tutorial": "Reshow tutorial (restarts app)",
@@ -134,6 +137,9 @@ static const Map<String,dynamic> en = {
   },
   "ChangelogScreen": {
     "title": "Changelog"
+  },
+  "WebviewScreen": {
+    "loading": "Searching"
   }
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"de": de, "en": en};

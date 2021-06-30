@@ -34,7 +34,7 @@
     "custom_url_explanation": "The app will replace a placeholder in the URL with the predicted character. This placeholder is: {kanjiPlaceholder}\n\nExample:\nThe predicted character is: '口' and you want to open it on 'jisho.org'. First you have to get the URL of the website for searching. In this case: 'https://jisho.org/search/口'. Now only the character in the URL has to be replaced with the placeholder. This leads to 'https://jisho.org/search/{kanjiPlaceholder}'.",
     "invert_short_long_press": "Invert long/short press",
     "empty_canvas_after_double_tap": "Empty canvas after double tap",
-    "use_default_browser_for_online_dictionaries": "Use OS's default browser for online dictionaries",
+    "use_default_browser_for_online_dictionaries": "Use a webview for web dictionaries",
     "miscellaneous_title": "Miscellaneous",
     "theme": "theme (@:restarts_app)",
     "show_tutorial": "Reshow tutorial (restarts app)",
@@ -57,5 +57,8 @@
   },
   "ChangelogScreen": {
     "title": "Changelog"
+  },
+  "WebviewScreen": {
+    "loading": "Searching"
   }
 }

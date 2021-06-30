@@ -296,15 +296,7 @@ class DrawingInterpreter with ChangeNotifier{
 
   /// Initializes the interpreter with GPU acceleration for Android.
   Future<Interpreter> _gpuInterpreterAndroid() async {
-    final gpuDelegateV2 = GpuDelegateV2(
-      options: GpuDelegateOptionsV2(
-        false,
-        TfLiteGpuInferenceUsage.fastSingleAnswer,
-        TfLiteGpuInferencePriority.minLatency,
-        TfLiteGpuInferencePriority.auto,
-        TfLiteGpuInferencePriority.auto
-      )
-    );
+    final gpuDelegateV2 = GpuDelegateV2();
     final options = InterpreterOptions()..addDelegate(gpuDelegateV2);
     Interpreter i = await Interpreter.fromAsset(_interpreterAssetPath, options: options);
 
@@ -314,9 +306,7 @@ class DrawingInterpreter with ChangeNotifier{
   /// Initializes the interpreter with GPU acceleration for iOS.
   Future<Interpreter> _gpuInterpreterIOS() async {
 
-    final gpuDelegate = GpuDelegate(
-      options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
-    );
+    final gpuDelegate = GpuDelegate();
     var interpreterOptions = InterpreterOptions()..addDelegate(gpuDelegate);
     return await Interpreter.fromAsset(_interpreterAssetPath, options: interpreterOptions);
   }

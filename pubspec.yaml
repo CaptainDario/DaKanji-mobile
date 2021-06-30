@@ -11,25 +11,33 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.0
+  
+  # all platforms supported
+  shared_preferences: ^2.0.6
   url_launcher: ^6.0.7
-  webview_flutter: ^2.0.4
   device_info_plus: ^2.0.1
-  android_intent_plus: ^1.0.2
   tutorial_coach_mark: ^1.0.0
-  flutter_phoenix: ^0.1.0
+  flutter_phoenix: ^1.0.0
   package_info_plus: ^1.0.3
-  tflite_flutter: ^0.8.0
   image: ^3.0.2
   flutter_markdown: ^0.6.2
-  flutter_appavailability: ^0.0.21
-  uni_links: ^0.4.0
-  get_it: ^7.1.1
+  get_it: ^7.1.3
   provider: ^5.0.0
-  universal_io:
+  universal_io: ^2.0.4
   awesome_dialog: ^2.1.0
   easy_localization: ^3.0.0
-  in_app_review: ^2.0.2
+  animated_text_kit: ^4.2.1
+
+  # do NOT support all target platforms
+  webviewx: ^0.1.0                 # android, iOS, web
+  in_app_review: ^2.0.2            # android, iOS, MacOS, windows (limited)
+  webview_flutter: ^2.0.9          # android, iOS
+  tflite_flutter: ^0.9.0           # android, iOS, Linux, MacOS, windows
+  flutter_appavailability: ^0.0.21 # android, iOS
+  uni_links: ^0.5.1                # android, iOS, web
+
+  # packages which should only target specific platforms
+  android_intent_plus: ^1.0.2      # android
 
   # utility 
   #flutter_launcher_icons: ^0.9.0

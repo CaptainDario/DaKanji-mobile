@@ -161,7 +161,7 @@ class HandlePrediction{
       }
       else{
         // use the default browser
-        if(GetIt.I<Settings>().useDefaultBrowser)
+        if(!GetIt.I<Settings>().useWebview)
           launch(openWithSelectedDictionary(char));
         else
           Navigator.push(

@@ -58,8 +58,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListTile(
                     title: Text(LocaleKeys.SettingsScreen_long_press_opens.tr()),
                     trailing: DropdownButton<String>(
-                        value: GetIt.I<Settings>().selectedDictionary,
-                        items: GetIt.I<Settings>().dictionaries 
+                        value: settings.selectedDictionary,
+                        items: settings.dictionaries 
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -87,10 +87,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Expanded(
                             child: TextField(
                               enabled:
-                                GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3],
+                                settings.selectedDictionary == settings.dictionaries[3],
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: GetIt.I<Settings>().customURL,
+                                labelText: settings.customURL,
                                 hintText: LocaleKeys.SettingsScreen_custom_url_hint.tr()), 
                               onChanged: (value) {
                                 settings.customURL = value;
@@ -120,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         Text(
                                           LocaleKeys.SettingsScreen_custom_url_explanation.tr(
                                             namedArgs: {'kanjiPlaceholder' : 
-                                              GetIt.I<Settings>().kanjiPlaceholder}
+                                              settings.kanjiPlaceholder}
                                           )
                                         ),
                                       ]
@@ -138,7 +138,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   // invert if short press or long press opens dict / copies to clip
                   CheckboxListTile(
                     title: Text(LocaleKeys.SettingsScreen_invert_short_long_press.tr()),
-                    value: GetIt.I<Settings>().invertShortLongPress, 
+                    value: settings.invertShortLongPress, 
                     onChanged: (bool newValue){
                       settings.invertShortLongPress = newValue;
                       settings.save();
@@ -147,7 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   // should a double tap on a prediction button empty the canvas
                   CheckboxListTile(
                     title: Text(LocaleKeys.SettingsScreen_empty_canvas_after_double_tap.tr()),
-                    value: GetIt.I<Settings>().emptyCanvasAfterDoubleTap, 
+                    value: settings.emptyCanvasAfterDoubleTap, 
                     onChanged: (bool newValue){
                       settings.emptyCanvasAfterDoubleTap = newValue;
                       settings.save();
@@ -155,9 +155,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   CheckboxListTile(
                     title: Text(LocaleKeys.SettingsScreen_use_default_browser_for_online_dictionaries.tr()),
-                    value: GetIt.I<Settings>().useDefaultBrowser, 
+                    value: settings.useWebview,
                     onChanged: (bool newValue){
-                      settings.useDefaultBrowser = newValue;
+                      settings.useWebview = newValue;
                       settings.save();
                     }
                   ),
@@ -177,8 +177,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListTile(
                     title: Text(LocaleKeys.SettingsScreen_theme.tr()),
                     trailing: DropdownButton<String>(
-                      value: GetIt.I<Settings>().selectedTheme,
-                      items: GetIt.I<Settings>().themes
+                      value: settings.selectedTheme,
+                      items: settings.themes
                         .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -204,7 +204,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ListTile(
                     title: Text(LocaleKeys.SettingsScreen_language.tr()),
                     trailing: DropdownButton<String>(
-                      value: GetIt.I<Settings>().selectedLocale.toString(),
+                      value: settings.selectedLocale.toString(),
                       items: context.supportedLocales
                         .map<DropdownMenuItem<String>>((Locale value) {
                           return DropdownMenuItem<String>(
@@ -230,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Icon(Icons.replay_outlined),
                       onPressed: () { 
                         SHOW_SHOWCASE_DRAWING = true;
-                        GetIt.I<Settings>().save();
+                        settings.save();
                         Phoenix.rebirth(context);
                       }
                     )
