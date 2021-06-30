@@ -15,7 +15,7 @@ Future<Null> initDeepLinksStream() async {
   // ... check initialUri
 
   // Attach a listener to the stream
-  linkSub = getLinksStream().listen((String link) {
+  linkSub = linkStream.listen((String link) {
 
     print("Stream: "+ (link ?? "none"));
     handleLink(link);

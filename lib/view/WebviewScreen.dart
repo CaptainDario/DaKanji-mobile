@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:da_kanji_mobile/provider/Settings.dart';
 
 import 'package:da_kanji_mobile/provider/Lookup.dart';
 
