@@ -1,14 +1,14 @@
 
 # Da Kanji - changelog
 
-## v 1.3.0 - 現地化
+## v 1.4.0 - 現地化
 
 new Features:
 
 - localization:
   - English
   - German
-  - if you want to see DaKanji in more languages please [translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
+  - if you want to see DaKanji in more languages please [help translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
 - iOS support
   - supported app dictionaries:
     - shirabe jisho
@@ -31,7 +31,7 @@ Fixed:
 
 -------------------------------------------------------------------------
 
-## v 1.4.0 - 漢字検定
+## v 1.3.0 - 漢字検定
 
 new Features:
 
