@@ -1,13 +1,13 @@
-import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
-import 'package:da_kanji_mobile/provider/UserData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:easy_localization/easy_localization.dart';
-
-import 'package:da_kanji_mobile/locales_keys.dart';
 import 'package:get_it/get_it.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:in_app_review/in_app_review.dart';
+
+import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
+import 'package:da_kanji_mobile/provider/UserData.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
 
 
 /// Shows a rate popup which lets the user rate the app on the platform specific
@@ -78,7 +78,18 @@ void showRatePopup(BuildContext context, bool hasDoNotShowOption){
                     )
                 ),
                 onPressed: () async {
-                  launch(GetIt.I<PlatformDependentVariables>().appStoreLink);
+                  final InAppReview inAppReview = InAppReview.instance;
+
+                  if (await inAppReview.isAvailable()) {
+                    inAppReview.requestReview();
+                  }
+                  else{
+                    // TODO: add store id's
+                    inAppReview.openStoreListing(
+                      appStoreId: '...', 
+                      microsoftStoreId: '...'
+                    );
+                  }
                 },
                 child: Text(LocaleKeys.HomeScreen_RatePopup_rate.tr())
               ),
