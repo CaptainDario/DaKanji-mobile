@@ -276,6 +276,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
                           return "";
                       } (),
                       textScaleFactor: 1.5,
+                      style: TextStyle(
+                        fontFamily: "NotoSans"
+                      ),
                     )
                   )
                 ]
