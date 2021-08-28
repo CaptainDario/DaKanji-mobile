@@ -216,81 +216,86 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                   ),
                   height: _screenHeight,
                   width: _drawerWidth,
-                  child: ListView(
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    children: <Widget>[
-                      // DaKanji Logo at the top
-                      SafeArea(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:[
-                            Image(
-                              height: 84,
-                              image: AssetImage("media/banner.png"),
-                            ),
-                          ]
+                  child: ListTileTheme(
+                    style: ListTileStyle.drawer,
+                    selectedColor: Theme.of(context).accentColor,
+                    child: ListView(
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      children: <Widget>[
+                        // DaKanji Logo at the top
+                        SafeArea(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[
+                              Image(
+                                height: 84,
+                                image: AssetImage("media/banner.png"),
+                              ),
+                            ]
+                          ),
                         ),
-                      ),
-                      // Drawer entry to go to the Kanji drawing screen
-                      Material(
-                        child: ListTile(
-                          leading: Icon(Icons.brush_outlined),
-                          title: Text("Drawing"),
-                          selected: widget.currentScreen == Screens.drawing,
-                          onTap: () {
-                            if(ModalRoute.of(context).settings.name != "/drawing"){
-                              Navigator.pushNamedAndRemoveUntil(
-                                context, "/drawing",
-                                (Route<dynamic> route) => false,
-                                arguments: SettingsArguments(true));
-                            }
-                            else{
-                              _drawerController.reverse();
-                            }
-                          },
+                        // Drawer entry to go to the Kanji drawing screen
+                        Material(
+                          child: ListTile(
+                            leading: Icon(Icons.brush_outlined),
+                            title: Text("Drawing"),
+                            selected: widget.currentScreen == Screens.drawing,
+                            onTap: () {
+                              if(ModalRoute.of(context).settings.name != "/drawing"){
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context, "/drawing",
+                                  (Route<dynamic> route) => false,
+                                  arguments: SettingsArguments(true));
+                              }
+                              else{
+                                _drawerController.reverse();
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                      // Drawer entry to go to the settings screen
-                      Material(
-                        child: ListTile(
-                          key: SHOW_SHOWCASE_DRAWING ? SHOWCASE_DRAWING[12].key : null,
-                          selected: widget.currentScreen == Screens.settings,
-                          leading: Icon(Icons.settings_applications),
-                          title: Text("Settings"),
-                          onTap: () {
-                            if(ModalRoute.of(context).settings.name != "/settings"){
-                              Navigator.pushNamedAndRemoveUntil(
-                                context, "/settings",
-                                (Route<dynamic> route) => false,
-                                arguments: SettingsArguments(true));
-                            }
-                            else{
-                              _drawerController.reverse();
-                            }
-                          },
+                        // Drawer entry to go to the settings screen
+                        Material(
+                          child: ListTile(
+                            key: SHOW_SHOWCASE_DRAWING ? SHOWCASE_DRAWING[12].key : null,
+                            selected: widget.currentScreen == Screens.settings,
+                            leading: Icon(Icons.settings_applications),
+                            title: Text("Settings"),
+                            onTap: () {
+                              if(ModalRoute.of(context).settings.name != "/settings"){
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context, "/settings",
+                                  (Route<dynamic> route) => false,
+                                  arguments: SettingsArguments(true));
+                              }
+                              else{
+                                _drawerController.reverse();
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                      // Drawer entry to go to the about screen
-                      Material(
-                        child: ListTile(
-                          selected: widget.currentScreen == Screens.about,
-                          leading: Icon(Icons.info_outline),
-                          title: Text("About"),
-                          onTap: () {
-                            if(ModalRoute.of(context).settings.name != "/about"){
-                              Navigator.pushNamedAndRemoveUntil(
-                                context, "/about",
-                                (Route<dynamic> route) => false,
-                                arguments: SettingsArguments(true));
-                            }
-                            else{
-                              _drawerController.reverse();
-                            }
-                          },
+                        // Drawer entry to go to the about screen
+                        Material(
+                          child: ListTile(
+                            selected: widget.currentScreen == Screens.about,
+                            leading: Icon(Icons.info_outline),
+                            title: Text("About",),
+                            
+                            onTap: () {
+                              if(ModalRoute.of(context).settings.name != "/about"){
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context, "/about",
+                                  (Route<dynamic> route) => false,
+                                  arguments: SettingsArguments(true));
+                              }
+                              else{
+                                _drawerController.reverse();
+                              }
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )
                 ),
               ),

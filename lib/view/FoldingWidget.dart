@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 
 /// Folding Cell Widget
+/// 
+/// A widget which can fold /unfold a widget to transition to a different widget.
 class FoldingWidget extends StatefulWidget {
   FoldingWidget(
       this.outerWidget,

@@ -50,6 +50,7 @@ Future<void> main() async {
 Future<void> init() async {
   // get the app's version 
   VERSION = (await PackageInfo.fromPlatform()).version;
+  BUILD_NR = (await PackageInfo.fromPlatform()).buildNumber;
   
   setupGetIt();
 

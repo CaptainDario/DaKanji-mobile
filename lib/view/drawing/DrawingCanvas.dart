@@ -27,9 +27,7 @@ class DrawingCanvas extends StatefulWidget {
   /// Provides the current image of the canvas as parameter
   final void Function(Uint8List image) onDeletedLastStroke;
   /// is invoked when the delete all strokes animation finished
-  /// 
-  /// Provides the current image of the canvas as parameter
-  final void Function(Uint8List image) onDeletedAllStrokes;
+  final void Function() onDeletedAllStrokes;
 
 
   DrawingCanvas({
@@ -61,8 +59,9 @@ class _DrawingCanvasState extends State<DrawingCanvas>
   AnimationController _canvasController;
   /// should the app run in dark mode.
   bool darkMode;
-
+  /// if the animation to delete the last stroke is currently running
   bool deletingLastStroke = false;
+  /// if the animation to delete all strokes is currently running
   bool deletingAllStrokes = false;
     
 
@@ -84,12 +83,29 @@ class _DrawingCanvasState extends State<DrawingCanvas>
           widget.strokes.removeLastStroke();
           deletingLastStroke = false;
           _canvasController.value = 1.0;
+
+          // execute the callback once the stroke was deleted
+          if(widget.onDeletedLastStroke != null){
+
+            _canvas = DrawingPainter(
+              widget.strokes.path, 
+              darkMode, Size(widget.width, widget.height),
+              1.0
+            );
+
+            widget.onDeletedLastStroke(await _canvas.getPNGListFromCanvas());
+          }
         }
 
         if(deletingAllStrokes){
           widget.strokes.removeAllStrokes();
           deletingAllStrokes = false;
           _canvasController.value = 1.0;
+          
+          // execute the callback once all strokes were deleted
+          if(widget.onDeletedAllStrokes != null){
+            widget.onDeletedAllStrokes();
+          }
         }
       }
     });
@@ -109,12 +125,11 @@ class _DrawingCanvasState extends State<DrawingCanvas>
       widget.strokes.playDeleteAllStrokesAnimation = false;
 
       currentDeleteLastprogress = _canvasController.value;
-      _canvasController.reverse();
+      _canvasController.reverse(from: 1.0);
 
       deletingAllStrokes = true;
       deletingLastStroke = false;
     }
-
     return Container(
       height: widget.height,
       width: widget.width,
@@ -172,7 +187,7 @@ class _DrawingCanvasState extends State<DrawingCanvas>
             ),
             AnimatedBuilder(
               animation: _canvasController,
-              builder: (BuildContext context, Widget child){
+              builder: (BuildContext context, Widget child) {
                 _canvas = DrawingPainter(
                   widget.strokes.path, 
                   darkMode, Size(widget.width, widget.height),
