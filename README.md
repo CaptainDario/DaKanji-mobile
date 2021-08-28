@@ -1,4 +1,5 @@
 # DaKanji
+
 <img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
   <tr>
@@ -10,6 +11,7 @@
 <table/>
 
 ## What is this
+
 DaKanji helps students of the Japanese language and people who use it.
 Currently it can recognize 6500+ characters (Kanji, Hiragana, Katakana, Romaji, Arabic Numbers) which the user draws by hand.
 But the feature set will be vastly improved in the coming releases. <br/>
@@ -18,35 +20,45 @@ For more details about the features take a look at the [usage section](#usage).
 <img src="./media/preview.gif" style="display:block;margin-left:auto;margin-right:auto;" width="20%"/>
 </br>
 
-## What the users say:
+## What the users say
+
 * "Your program is like magic! Thank you so much!" - saszai2
 * "Well thank you for this software! It seems to try and guess in a more "guess-y" way than jisho and even Google which is usually pretty good at guessing, and it just saved me today!" - princess_daphie
 * "Amazing. I can write kanji messier than a professor and it still picks it up. Very reliable." - Seth Kitchens
 
 ## Getting started
+
 **Currently only android is supported** </br>
 The easiest way is to download the app for android from the PlayStore.
 You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Setting-up-a-development-environment) and build the app on your own.
 
 ## Usage
+
 In this section the features of the app are explained in more detail.
+
 ### Handwritten kanji recognition
+
 The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. A dictionary can be chosen in the settings.
 Those dictionaries include translation apps, app dictionaries and web dictionaries.</br>
 Currently 6500+ characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ### Contributing
+
 <a href="https://discord.gg/gdqaux3r4P"><img src="https://discordapp.com/api/guilds/852915748300783636/widget.png?style=banner2" width="25%"></a>
 
 All contributions are welcome! <br/>
-If you would like to help test (beta) releases please join the [discord server](https://discord.gg/cYTcpFStbs) and ask in the "become a tester"-channel. All testing is much appreciated!
-If you think you have a good idea how to improve this app feel free [to open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). You can also join the [discord server](https://discord.gg/cYTcpFStbs) and state your ideas there. After discussing it, PR's are much appreciated. <br/>
-You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues). <br/>
+Here is a list of a few things which would help this project:
+* Testing (beta) releases please join the [discord server](https://discord.gg/cYTcpFStbs) and ask in the "become a tester"-channel. All testing is much appreciated!
+* DaKanji does not support your (native) language yet? Head over to the [wiki](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization) and learn how to add it to DaKanji
+* If you have ideas how to improve this app [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
+* You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues) too.
+* PR's for open issues are very welcome too
 
 
 ## Credits
+
 * design and UI: Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now.
-* icon/banner: 
+* icon/banner
   * Thanks "Buddha, with kudos to 2ch/fl/ and HatNyan" for helping with the icon design and making the banner. Also thank you [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the banner font.
-* Modified Packages: [bitmap](https://github.com/renancaraujo/bitmap), [snappable](https://github.com/MarcinusX/snappable) 
+* Modified Packages: [bitmap](https://github.com/renancaraujo/bitmap), [snappable](https://github.com/MarcinusX/snappable)
