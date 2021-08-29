@@ -68,7 +68,10 @@ class Settings with ChangeNotifier {
       ]);
     else if(Platform.isIOS)
       dictionaries.addAll([
-        "imiwa (app)"
+        "shirabe jisho (app)",
+        "imiwa? (app)",
+        "Japanese (app)",
+        "midori (app)",
       ]);
 
     themes = ["light", "dark", "system"];

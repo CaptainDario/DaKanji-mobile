@@ -63,103 +63,8 @@ class HandlePrediction{
 
     // only open a page when there is a prediction
     if (char != " " && char != "") {
-      // the prediction should be translated with system dialogue
-      if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3]){ 
-        if(Platform.isAndroid){
-          AndroidIntent intent = AndroidIntent(
-            action: 'android.intent.action.TRANSLATE',
-            arguments: <String, dynamic>{
-              "android.intent.extra.TEXT" : char
-            }
-          );
-          if(await intent.canResolveActivity())
-            await intent.launch();
-          else{
-            showDownloadDialogue(
-              context,
-              "No translator installed", 
-              "Download",
-              PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID
-            );
-          }
-        }
-        else if(Platform.isIOS){
-          print("iOS is not implemented for choosing translator");
-        }
-      }
-      // offline dictionary aedict3 (android)
-      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){
-        if(Platform.isAndroid){
-          try{
-            // make sure the package is installed
-            await AppAvailability.checkAvailability(AEDICT_ID);
-            
-            AndroidIntent intent = AndroidIntent(
-                package: AEDICT_ID,
-                type: "text/plain",
-                action: 'android.intent.action.SEND',
-                category: 'android.intent.category.DEFAULT',
-                arguments: <String, dynamic>{
-                  "android.intent.extra.TEXT": char,
-                }
-            );
-            if(await intent.canResolveActivity())
-              await intent.launch();
-          }
-          catch (e){
-            showDownloadDialogue(context,
-              "Aedict not installed", 
-              "Download", 
-              PLAYSTORE_BASE_URL + AEDICT_ID 
-            );
-          }
-        }
-      }
-      // offline dictionary akebi (android)
-      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
-        if(Platform.isAndroid){
-          AndroidIntent intent = AndroidIntent(
-              package: AKEBI_ID,
-              componentName: 
-                'com.craxic.akebifree.activities.search.SearchActivity',
-              type: "text/plain",
-              action: 'android.intent.action.SEND',
-              arguments: <String, dynamic>{
-                "android.intent.extra.TEXT": char,
-              }
-          );
-          if(await intent.canResolveActivity())
-            await intent.launch();
-          else
-            showDownloadDialogue(context,
-              "Akebi not installed", 
-              "Download", 
-              PLAYSTORE_BASE_URL + AKEBI_ID
-            );
-        }
-      }
-      // offline dictionary takoboto (android)
-      else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
-        if(Platform.isAndroid){
-          AndroidIntent intent = AndroidIntent(
-              package: TAKOBOTO_ID,
-              action: 'jp.takoboto.SEARCH',
-              arguments: <String, dynamic>{
-                "android.intent.extra.PROCESS_TEXT": char,
-              }
-          );
-          if(await intent.canResolveActivity())
-            await intent.launch();
-          else{
-            showDownloadDialogue(context,
-              "Takoboto not installed", 
-              "Download", 
-              PLAYSTORE_BASE_URL + TAKOBOTO_ID
-            );
-          }
-        }
-      }
-      else{
+      // url dict
+      if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3]){
         // use the default browser
         if(!GetIt.I<Settings>().useWebview)
           launch(openWithSelectedDictionary(char));
@@ -170,6 +75,121 @@ class HandlePrediction{
               builder: (BuildContext context) => WebviewScreen()
             )
           );
+      }
+      // handle dictionary opening on ANDROID
+      if(Platform.isAndroid){
+        // the prediction should be translated with system dialogue
+        if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3]){ 
+            AndroidIntent intent = AndroidIntent(
+              action: 'android.intent.action.TRANSLATE',
+              arguments: <String, dynamic>{
+                "android.intent.extra.TEXT" : char
+              }
+            );
+            if(await intent.canResolveActivity())
+              await intent.launch();
+            else{
+              showDownloadDialogue(
+                context,
+                "No translator installed", 
+                "Download",
+                PLAYSTORE_BASE_URL + GOOGLE_TRANSLATE_ID
+              );
+            }
+        }
+        // offline dictionary aedict3 (android)
+        else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){
+          if(Platform.isAndroid){
+            try{
+              // make sure the package is installed
+              await AppAvailability.checkAvailability(AEDICT_ID);
+              
+              AndroidIntent intent = AndroidIntent(
+                  package: AEDICT_ID,
+                  type: "text/plain",
+                  action: 'android.intent.action.SEND',
+                  category: 'android.intent.category.DEFAULT',
+                  arguments: <String, dynamic>{
+                    "android.intent.extra.TEXT": char,
+                  }
+              );
+              if(await intent.canResolveActivity())
+                await intent.launch();
+            }
+            catch (e){
+              showDownloadDialogue(context,
+                "Aedict not installed", 
+                "Download", 
+                PLAYSTORE_BASE_URL + AEDICT_ID 
+              );
+            }
+          }
+        }
+        // offline dictionary akebi (android)
+        else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
+          if(Platform.isAndroid){
+            AndroidIntent intent = AndroidIntent(
+                package: AKEBI_ID,
+                componentName: 
+                  'com.craxic.akebifree.activities.search.SearchActivity',
+                type: "text/plain",
+                action: 'android.intent.action.SEND',
+                arguments: <String, dynamic>{
+                  "android.intent.extra.TEXT": char,
+                }
+            );
+            if(await intent.canResolveActivity())
+              await intent.launch();
+            else
+              showDownloadDialogue(context,
+                "Akebi not installed", 
+                "Download", 
+                PLAYSTORE_BASE_URL + AKEBI_ID
+              );
+          }
+        }
+        // offline dictionary takoboto (android)
+        else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
+          if(Platform.isAndroid){
+            AndroidIntent intent = AndroidIntent(
+                package: TAKOBOTO_ID,
+                action: 'jp.takoboto.SEARCH',
+                arguments: <String, dynamic>{
+                  "android.intent.extra.PROCESS_TEXT": char,
+                }
+            );
+            if(await intent.canResolveActivity())
+              await intent.launch();
+            else{
+              showDownloadDialogue(context,
+                "Takoboto not installed", 
+                "Download", 
+                PLAYSTORE_BASE_URL + TAKOBOTO_ID
+              );
+            }
+          }
+        }
+      }
+      // iOS DICTIONARIES
+      // shirabe jisho
+      else if(Platform.isIOS){
+        // dictionary shirabe (iOS)
+        if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){
+          print("iOS shirabe");
+          launch("");
+        }
+        else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
+          print("iOS imiwa?");
+          launch("");
+        }
+        else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
+          print("iOS Japanese");
+          launch("");
+        }
+        else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[7]){
+          print("iOS midori");
+          launch("");
+        }
       }
     }
   }
