@@ -50,6 +50,13 @@ class Settings with ChangeNotifier {
   /// the currently used locale
   Locale selectedLocale;
 
+  /// The available backends for inference
+  List<String> inferenceBackends;
+
+  ///
+  String selectedInferenceBackend;
+
+
 
   Settings() {
     kanjiPlaceholder = "%X%";
@@ -80,6 +87,13 @@ class Settings with ChangeNotifier {
       "dark": ThemeMode.dark,
       "system": ThemeMode.system
     };
+
+    inferenceBackends = [
+      "CPU",
+      "GPU",
+      "NNAPI"
+    ];
+    selectedInferenceBackend = inferenceBackends[0];
 
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;

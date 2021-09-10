@@ -235,6 +235,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       }
                     )
                   ),
+                  // advanced settings
+                  ExpansionTile(
+                    title: Text(LocaleKeys.SettingsScreen_advanced_settings_title.tr()),
+                    children: [
+                      ListTile(
+                        title: Text(LocaleKeys.SettingsScreen_advanced_settings_drawing_inference_backend.tr()),
+                        trailing: DropdownButton<String>(
+                            value: settings.selectedInferenceBackend,
+                            items: settings.inferenceBackends 
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value)
+                              );
+                            }).toList(),
+                            onChanged: (String newValue) {
+                              settings.selectedDictionary = newValue;
+                              settings.save();
+                            },
+                          ),
+                        onTap: (){},
+                      ),
+                    ],
+                  )
                 ],
               );
             },

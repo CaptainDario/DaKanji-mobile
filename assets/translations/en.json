@@ -40,7 +40,11 @@
     "show_tutorial": "Reshow tutorial (restarts app)",
     "title": "Settings",
     "dictionary_system_translator": "OS integrated translator",
-    "language": "Language"
+    "language": "Language",
+    "advanced_settings": {
+      "drawing_inference_backend": "Inference backend",
+      "title": "Advanced settings"
+    }
   },
   "app": "app",
   "web": "web",

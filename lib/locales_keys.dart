@@ -32,6 +32,9 @@ abstract class  LocaleKeys {
   static const SettingsScreen_custom_url_format = 'SettingsScreen.custom_url_format';
   static const SettingsScreen_custom_url_explanation = 'SettingsScreen.custom_url_explanation';
   static const SettingsScreen_language = 'SettingsScreen.language';
+  static const SettingsScreen_advanced_settings_drawing_inference_backend = 'SettingsScreen.advanced_settings.drawing_inference_backend';
+  static const SettingsScreen_advanced_settings_title = 'SettingsScreen.advanced_settings.title';
+  static const SettingsScreen_advanced_settings = 'SettingsScreen.advanced_settings';
   static const SettingsScreen = 'SettingsScreen';
   static const HomeScreen_RatePopup_close = 'HomeScreen.RatePopup.close';
   static const HomeScreen_RatePopup_dont_ask_again = 'HomeScreen.RatePopup.dont_ask_again';

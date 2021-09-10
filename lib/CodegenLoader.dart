@@ -48,7 +48,11 @@ class CodegenLoader extends AssetLoader{
     "use_default_browser_for_online_dictionaries": "Benutze einen webview für web Wörterbücher",
     "custom_url_format": "Benutzerdefiniertes URL format",
     "custom_url_explanation": "Die App ersetzt einen Platzhalter in der gegbenen URL mit dem vorhergesagten Zeichen. Dieser Plathalter ist: {kanjiPlaceholder}\n\nBeispiel:\nDas vorhergesagte Zeichen ist: '口' und man wil es auf 'jisho.org' nachschlagen. Dafür muss als erste die URL der website, welche für das Suchen benutzt wird, herausgefunden werden. Für 'jisho.org' ist das: 'https://jisho.org/search/口'. Nun muss nur noch das Zeichen aus der URL mit dem Platzhalter ersetzt werden. Das führt zu 'https://jisho.org/search/{kanjiPlaceholder}'.",
-    "language": "Sprache"
+    "language": "Sprache",
+    "advanced_settings": {
+      "drawing_inference_backend": "Inferenz nutzt",
+      "title": "Erweiterte Einstellungen"
+    }
   },
   "HomeScreen": {
     "RatePopup": {
@@ -120,7 +124,11 @@ static const Map<String,dynamic> en = {
     "show_tutorial": "Reshow tutorial (restarts app)",
     "title": "Settings",
     "dictionary_system_translator": "OS integrated translator",
-    "language": "Language"
+    "language": "Language",
+    "advanced_settings": {
+      "drawing_inference_backend": "Inference backend",
+      "title": "Advanced settings"
+    }
   },
   "app": "app",
   "web": "web",
