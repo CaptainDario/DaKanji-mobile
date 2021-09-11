@@ -111,12 +111,6 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
   
   @override
   Widget build(BuildContext context) {
-    // fix orientation to portrait
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
