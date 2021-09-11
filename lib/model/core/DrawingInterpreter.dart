@@ -191,6 +191,7 @@ class DrawingInterpreter with ChangeNotifier{
         height: height, width: width, interpolation: image.Interpolation.cubic);
       Uint8List resizedBytes = 
         resizedImage.getBytes(format: image.Format.luminance);
+      //var imgStr = resizedBytes.toString();
 
       // convert image for inference into shape [1, height, width, 1]
       // also apply thresholding and normalization [0, 1]
