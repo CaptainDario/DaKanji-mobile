@@ -231,7 +231,6 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                     boxShadow: [
                       BoxShadow(
                         offset: Offset(10, 0),
-                        //color: Colors.grey[800],
                         blurRadius: 10,
                       )
                     ],

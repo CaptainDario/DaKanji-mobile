@@ -78,6 +78,24 @@ void handleLink(String link){
       GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[7];
     }
   }
+  else if(Platform.isIOS){
+    if(short.startsWith("shirabe")){
+      print("contains shirabe");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[5];
+    }
+    else if(short.startsWith("imiwa")){
+      print("contains imiwa");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[6];
+    }
+    else if(short.startsWith("japanese")){
+      print("contains japanese");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[7];
+    }
+    else if(short.startsWith("midori")){
+      print("contains midori");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[8];
+    }
+  }
   else{
     print("No matching dictionary found!");
   }
