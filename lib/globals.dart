@@ -30,7 +30,7 @@ bool SHOW_SHOWCASE_DRAWING = false;
 //about page
 const GITHUB_DESKTOP_REPO = "https://github.com/CaptainDario/DaKanji-Desktop";
 const GITHUB_MOBILE_REPO = "https://github.com/CaptainDario/DaKanji-Mobile";
-const GITHUB_ML_REPO = "https://github.com/CaptainDario/DaKanji-ML";
+const GITHUB_CNN_SINGLE_CHAR_REPO = "https://github.com/CaptainDario/DaKanji-Single-Kanji-Recognition";
 const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanji-Mobile/issues/new";
 
 const DISCORD_INVITE = "https://discord.com/invite/gdqaux3r4P";
@@ -54,7 +54,6 @@ const SHIRABE_ID = "id1005203380";
 const IMIWA_ID = "id288499125";
 const JAPANESE_ID = "id290664053";
 const MIDORI_ID = "id385231773";
-
 
 const GOOGLE_TRANSLATE_ID = "com.google.android.apps.translate";
 

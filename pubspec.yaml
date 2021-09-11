@@ -31,7 +31,6 @@ dependencies:
   # do NOT support all target platforms
   webviewx: ^0.1.0                 # android, iOS, web
   in_app_review: ^2.0.2            # android, iOS, MacOS, windows (limited)
-  webview_flutter: ^2.0.9          # android, iOS
   tflite_flutter: ^0.9.0           # android, iOS, Linux, MacOS, windows
   flutter_appavailability: ^0.0.21 # android, iOS
   uni_links: ^0.5.1                # android, iOS, web
