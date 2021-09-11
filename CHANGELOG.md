@@ -4,16 +4,16 @@
 ## v 1.4.0 - 現地化
 
 new Features:
-
-- localization:
-  - English
-  - German
-  - if you want to see DaKanji in more languages please [help translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
 - iOS support
   - supported app dictionaries:
     - shirabe jisho
     - Japanese - more than a dictionary
     - imiha
+- allow any screen orientation (try with a dictionary side by side!)
+- localization:
+  - English
+  - German
+  - if you want to see DaKanji in more languages please [help translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
 - ask for a rating from time to time
 
 Changes:
