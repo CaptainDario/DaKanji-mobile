@@ -77,10 +77,9 @@ class DrawingInterpreter with ChangeNotifier{
     return _interpreter.address;
   }
 
-
   DrawingInterpreter() {
-    _interpreterAssetPath = "model_CNN_kanji_only.tflite";
-    _labelAssetPath = "assets/labels_CNN_kanji_only.txt"; 
+    _interpreterAssetPath = "CNN_single_char.tflite";
+    _labelAssetPath = "assets/CNN_single_char_labels.txt";
 
     height = 64;
     width = 64;
