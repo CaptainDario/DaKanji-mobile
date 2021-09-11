@@ -240,7 +240,7 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                   width: _drawerWidth,
                   child: ListTileTheme(
                     style: ListTileStyle.drawer,
-                    selectedColor: Theme.of(context).accentColor,
+                    selectedColor: Theme.of(context).colorScheme.secondary,
                     child: ListView(
                       physics: NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.zero,
