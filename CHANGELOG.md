@@ -18,6 +18,7 @@ new Features:
 
 Changes:
 
+- updated to flutter 2.5.0
 - awesome new popup dialogues
 - new drawer open/close animation
 - use webview_x package
