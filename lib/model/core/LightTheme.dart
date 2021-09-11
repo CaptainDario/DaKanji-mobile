@@ -9,8 +9,6 @@ final ThemeData lightTheme = ThemeData(
   primaryColorBrightness: Brightness.dark,
   primaryColorLight: Color( 0xffbbdefb ),
   primaryColorDark: Color( 0xff1976d2 ),
-  accentColor: Color( 0xff2196f3 ),
-  accentColorBrightness: Brightness.dark,
   canvasColor: Color( 0xfffafafa ),
   scaffoldBackgroundColor: Color( 0xfffafafa ),
   bottomAppBarColor: Color( 0xffffffff ),
@@ -21,7 +19,6 @@ final ThemeData lightTheme = ThemeData(
   selectedRowColor: Color( 0xfff5f5f5 ),
   unselectedWidgetColor: Color( 0x8a000000 ),
   disabledColor: Color( 0x61000000 ),
-  buttonColor: Color( 0xffe0e0e0 ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: ButtonStyle( 
       foregroundColor:
@@ -90,26 +87,6 @@ final ThemeData lightTheme = ThemeData(
   ),
   primaryTextTheme: TextTheme(
 
-    caption: TextStyle(
-    color: Color( 0xb3ffffff ),
-    fontSize: null,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-  ),
-    button: TextStyle(
-    color: Color( 0xffffffff ),
-    fontSize: null,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-  ),
-    overline: TextStyle(
-    color: Color( 0xffffffff ),
-    fontSize: null,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-  ),
-  ),
-  accentTextTheme: TextTheme(
     caption: TextStyle(
     color: Color( 0xb3ffffff ),
     fontSize: null,
@@ -209,11 +186,6 @@ final ThemeData lightTheme = ThemeData(
     size: 24,
   ),
   primaryIconTheme: IconThemeData(
-    color: Color( 0xffffffff ),
-    opacity: 1,
-    size: 24,
-  ),
-  accentIconTheme: IconThemeData(
     color: Color( 0xffffffff ),
     opacity: 1,
     size: 24,

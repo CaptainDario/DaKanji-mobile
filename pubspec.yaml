@@ -83,7 +83,6 @@ flutter:
   assets:
     - assets/CNN_single_char.tflite
     - assets/CNN_single_char_labels.txt
-    - assets/about.md
     - assets/kanji_drawing_aid_b.png
     - assets/kanji_drawing_aid_w.png
 

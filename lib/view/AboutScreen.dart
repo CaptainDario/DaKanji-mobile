@@ -46,61 +46,63 @@ class AboutScreen extends StatelessWidget {
       body: DaKanjiDrawer(
         currentScreen: Screens.about,
         animationAtStart: !this.openedByDrawer,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image(image: AssetImage("media/banner.png"), width: 200,),
-            // show the about.md
-            Container(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
-              child: MarkdownBody(
-                data: about,
-                onTapLink: (text, url, title) {
-                  launch(url);
-                },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image(image: AssetImage("media/banner.png"), width: 200,),
+              // show the about.md
+              Container(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
+                child: MarkdownBody(
+                  data: about,
+                  onTapLink: (text, url, title) {
+                    launch(url);
+                  },
+                ),
               ),
-            ),
-            // text with link to open the "changelog"-screen
-            Row(
-              children:[
-                Container(
-                  padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
-                  child: GestureDetector(
-                    child: Text(
-                      LocaleKeys.AboutScreen_show_changelog.tr(),
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                    onTap: () => Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => ChangelogScreen()),
+              // text with link to open the "changelog"-screen
+              Row(
+                children:[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
+                    child: GestureDetector(
+                      child: Text(
+                        LocaleKeys.AboutScreen_show_changelog.tr(),
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                      onTap: () => Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => ChangelogScreen()),
+                      )
                     )
                   )
-                )
-              ]
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final InAppReview inAppReview = InAppReview.instance;
-
-                        // TODO: add store id's
-                        inAppReview.openStoreListing(
-                          appStoreId: '...', 
-                          microsoftStoreId: '...'
-                        );
-                      }, 
-                      child: Text(LocaleKeys.AboutScreen_rate_this_app.tr())
-                    ),
-                  ),
-                ],
+                ]
               ),
-            ),
-          ]
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final InAppReview inAppReview = InAppReview.instance;
+        
+                          // TODO: add store id's
+                          inAppReview.openStoreListing(
+                            appStoreId: '...', 
+                            microsoftStoreId: '...'
+                          );
+                        }, 
+                        child: Text(LocaleKeys.AboutScreen_rate_this_app.tr())
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ]
+          ),
         ),
       )
     );
