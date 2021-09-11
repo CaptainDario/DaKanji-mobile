@@ -204,7 +204,7 @@ class HandlePrediction{
         }
         else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
           print("iOS Japanese");
-          final url = Uri.encodeFull("japanese://search?text=" + char);
+          final url = Uri.encodeFull("japanese://search/" + char);
           if(await canLaunch(url)) 
             launch(url, forceSafariVC: false);
           else {
