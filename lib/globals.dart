@@ -38,6 +38,8 @@ const DISCORD_INVITE = "https://discord.com/invite/gdqaux3r4P";
 const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
 
+const APPSTORE_BASE_URL = "itms-apps://itunes.apple.com/app/";
+
 const APPSTORE_PAGE = "";
 const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
 
@@ -47,6 +49,12 @@ const DAAPPLAB_APPSTORE_PAGE = "";
 const TAKOBOTO_ID = "jp.takoboto";
 const AKEBI_ID = "com.craxic.akebifree";
 const AEDICT_ID = "sk.baka.aedict3";
+
+const SHIRABE_ID = "id1005203380";
+const IMIWA_ID = "id288499125";
+const JAPANESE_ID = "id290664053";
+const MIDORI_ID = "id385231773";
+
 
 const GOOGLE_TRANSLATE_ID = "com.google.android.apps.translate";
 

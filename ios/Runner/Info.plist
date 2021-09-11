@@ -35,6 +35,9 @@
 		<string>https</string>
 		<string>http</string>
 		<string>midori</string>
+		<string>japanese</string>
+		<string>imiwa</string>
+		<string>shirabelookup</string>
 	</array>
 </dict>
 </plist>

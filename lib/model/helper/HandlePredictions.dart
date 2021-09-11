@@ -67,8 +67,9 @@ class HandlePrediction{
       var webDicts = GetIt.I<Settings>().dictionaries.sublist(0, 4);
       if(webDicts.contains(GetIt.I<Settings>().selectedDictionary)){ 
         // use the default browser
-        if(!GetIt.I<Settings>().useWebview)
-          launch(openWithSelectedDictionary(char));
+        if(!GetIt.I<Settings>().useWebview){
+          launch(openWithSelectedDictionary(char), forceSafariVC: false);
+        }
         else
           Navigator.push(
             context, 
@@ -177,19 +178,53 @@ class HandlePrediction{
         // dictionary shirabe (iOS)
         if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){
           print("iOS shirabe");
-          launch("");
+          final url = Uri.encodeFull("shirabelookup://search?w=" + char);
+          if(await canLaunch(url)) 
+            launch(url, forceSafariVC: false);
+          else {
+            print("cannot launch " + url);
+            showDownloadDialogue(context, 
+              "Shirabe Jisho not installed", 
+              "Download", 
+              APPSTORE_BASE_URL + SHIRABE_ID
+            );
+          }
         }
         else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
           print("iOS imiwa?");
-          launch("");
+          final url = Uri.encodeFull("imiwa://dictionary?search=" + char);
+          if(await canLaunch(url))
+            launch(url, forceSafariVC: false);
+          else {
+            print("cannot launch " + url);
+            showDownloadDialogue(context, 
+              "Imiwa? not installed", "Download", APPSTORE_BASE_URL + IMIWA_ID
+            );
+          }
         }
         else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
           print("iOS Japanese");
-          launch("");
+          final url = Uri.encodeFull("japanese://search?text=" + char);
+          if(await canLaunch(url)) 
+            launch(url, forceSafariVC: false);
+          else {
+            print("cannot launch " + url);
+            showDownloadDialogue(context, 
+              "Japanese not installed", "Download", APPSTORE_BASE_URL + JAPANESE_ID
+            );
+          }
         }
         else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[7]){
           print("iOS midori");
-          launch("");
+          final url = Uri.encodeFull("midori://search?text=" + char);
+          if(await canLaunch(url)) 
+            launch(url, forceSafariVC: false);
+          else {
+            print("cannot launch" + url);
+            showDownloadDialogue(context, 
+              "Midori not installed", "Download", APPSTORE_BASE_URL + MIDORI_ID
+            );
+          }
         }
       }
     }
