@@ -64,7 +64,8 @@ class HandlePrediction{
     // only open a page when there is a prediction
     if (char != " " && char != "") {
       // url dict
-      if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3]){
+      var webDicts = GetIt.I<Settings>().dictionaries.sublist(0, 4);
+      if(webDicts.contains(GetIt.I<Settings>().selectedDictionary)){ 
         // use the default browser
         if(!GetIt.I<Settings>().useWebview)
           launch(openWithSelectedDictionary(char));
@@ -79,7 +80,7 @@ class HandlePrediction{
       // handle dictionary opening on ANDROID
       if(Platform.isAndroid){
         // the prediction should be translated with system dialogue
-        if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[3]){ 
+        if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[4]){ 
             AndroidIntent intent = AndroidIntent(
               action: 'android.intent.action.TRANSLATE',
               arguments: <String, dynamic>{

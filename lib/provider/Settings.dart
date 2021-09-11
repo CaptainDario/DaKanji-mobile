@@ -69,6 +69,7 @@ class Settings with ChangeNotifier {
     ];
     if(Platform.isAndroid)
       dictionaries.addAll([
+        "system (app)",
         "aedict (app)",
         "akebi (app)",
         "takoboto (app)", 
