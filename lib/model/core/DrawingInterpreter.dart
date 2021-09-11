@@ -274,7 +274,7 @@ class DrawingInterpreter with ChangeNotifier{
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
-    if (iosInfo.isPhysicalDevice) {
+    if (iosInfo.isPhysicalDevice && false) {
       usedBackend = "IOS Metal Delegate";
       interpreter = await _gpuInterpreterIOS();
     } 
