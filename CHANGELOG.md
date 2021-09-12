@@ -10,6 +10,7 @@ new Features:
     - shirabe jisho
     - Japanese - more than a dictionary
     - imiha
+    - midori
 - allow any screen orientation (try with a dictionary side by side!)
 - localization:
   - English, German
@@ -21,15 +22,14 @@ Changes:
 - require android 6 or newer
 - awesome new popup dialogues
 - new drawer open/close animation
-- use webview_x package
 - loading indicator for webview
-- show used inference backend in about
-- updated to flutter 2.5.0
+- [not done] setting to select inference backend
+- updated to flutter 2.5.0, changed webview
 
 Fixed:
 
 - show "what's new"-popup only when the app was installed
-- predictions not showing up on some devices
+- [check] predictions not showing up on some devices
 
 -------------------------------------------------------------------------
 
