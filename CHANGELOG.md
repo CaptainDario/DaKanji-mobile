@@ -6,11 +6,7 @@
 new Features:
 
 - iOS support
-  - supported app dictionaries:
-    - shirabe jisho
-    - Japanese - more than a dictionary
-    - imiha
-    - midori
+  - supported app dictionaries: shirabe jisho, Japanese, imiha, midori
 - allow any screen orientation (try with a dictionary side by side!)
 - localization:
   - English, German
