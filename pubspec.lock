@@ -193,6 +193,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.2"
+  flutter_native_splash:
+    dependency: "direct main"
+    description:
+      name: flutter_native_splash
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
   flutter_phoenix:
     dependency: "direct main"
     description:
@@ -670,6 +677,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.2"
+  yaml:
+    dependency: transitive
+    description:
+      name: yaml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
 sdks:
   dart: ">=2.13.0 <3.0.0"
   flutter: ">=2.0.0"
