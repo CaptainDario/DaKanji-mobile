@@ -4,30 +4,32 @@
 ## v 1.4.0 - 現地化
 
 new Features:
+
 - iOS support
   - supported app dictionaries:
     - shirabe jisho
     - Japanese - more than a dictionary
     - imiha
+    - midori
 - allow any screen orientation (try with a dictionary side by side!)
 - localization:
-  - English
-  - German
+  - English, German
   - if you want to see DaKanji in more languages please [help translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
 - ask for a rating from time to time
 
 Changes:
 
-- updated to flutter 2.5.0
+- require android 6 or newer
 - awesome new popup dialogues
 - new drawer open/close animation
-- use webview_x package
 - loading indicator for webview
-- show used inference backend in about
+- [not done] setting to select inference backend
+- updated to flutter 2.5.0, changed webview
 
 Fixed:
 
 - show "what's new"-popup only when the app was installed
+- [check] predictions not showing up on some devices
 
 -------------------------------------------------------------------------
 
