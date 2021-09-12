@@ -37,7 +37,7 @@
 				<key>CFBundleTypeRole</key>
 				<string>Editor</string>
 				<key>CFBundleURLName</key>
-				<string>[ANY_URL_NAME]</string>
+				<string>DaKanji</string>
 				<key>CFBundleURLSchemes</key>
 				<array>
 					<string>DaKanji</string>
