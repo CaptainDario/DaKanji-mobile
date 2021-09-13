@@ -37,6 +37,9 @@ class _WebviewScreenState extends State<WebviewScreen>
   /// the webview to show the dictionary search
   WebViewXController webviewController;
 
+  AnimationController _loadingController;
+  Animation<double> _loadingAnimation;
+
 
   @override
   void initState() { 
@@ -45,6 +48,14 @@ class _WebviewScreenState extends State<WebviewScreen>
     loadWebview = false;
     showLoading = false;
 
+    _loadingController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat(reverse: true);
+    _loadingAnimation = CurvedAnimation(
+      parent: _loadingController,
+      curve: Curves.elasticOut,
+    );
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -67,6 +78,7 @@ class _WebviewScreenState extends State<WebviewScreen>
   void dispose() { 
     super.dispose();
     _controller.dispose();
+    _loadingController.dispose();
   }
 
   @override
@@ -157,7 +169,14 @@ class _WebviewScreenState extends State<WebviewScreen>
                                 fontSize: 50,
                                 fontWeight: FontWeight.normal,
                               ),
-                              child: AnimatedTextKit(
+                              child: RotationTransition(
+                                turns: _loadingAnimation,
+                                child: Image(
+                                  image: AssetImage('media/icon.png'),
+                                  width: 150,
+                                ),
+                              ),
+                              /*AnimatedTextKit(
                                 pause: Duration(milliseconds: 500),
                                 animatedTexts: [
                                   TyperAnimatedText(
@@ -165,7 +184,7 @@ class _WebviewScreenState extends State<WebviewScreen>
                                     speed: Duration(milliseconds: 200)
                                   )
                                 ],
-                              ),
+                              ),*/
                             );
                           } (),
                         )
