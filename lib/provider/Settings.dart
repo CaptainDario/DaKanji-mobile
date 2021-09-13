@@ -53,8 +53,8 @@ class Settings with ChangeNotifier {
   /// The available backends for inference
   List<String> inferenceBackends;
 
-  ///
-  String selectedInferenceBackend;
+  /// The inference backend used for the single character CNN
+  String _backendCNNSingleChar;
 
 
 
@@ -91,10 +91,18 @@ class Settings with ChangeNotifier {
 
     inferenceBackends = [
       "CPU",
-      "GPU",
-      "NNAPI"
     ];
-    selectedInferenceBackend = inferenceBackends[0];
+    if(Platform.isAndroid)
+      inferenceBackends.addAll([
+        "GPU",
+        "NNAPI",
+      ]);
+    else if(Platform.isIOS)
+      inferenceBackends.addAll([
+        "Metal",
+        "CoreML"
+      ]);
+    _backendCNNSingleChar = "";
 
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;
@@ -160,6 +168,19 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
 
+  String get backendCNNSingleChar{
+    return _backendCNNSingleChar;
+  }
+
+  set backendCNNSingleChar(String newBackend){
+    if(!inferenceBackends.contains(newBackend))
+      throw(newBackend + "is not a vliad backend.\n Use one of: " 
+        + inferenceBackends.toString());
+
+    _backendCNNSingleChar = newBackend;
+    notifyListeners();
+  }
+
   /// Saves all settings to the SharedPreferences.
   void save() async {
     // obtain shared preferences
@@ -169,7 +190,8 @@ class Settings with ChangeNotifier {
     prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
     prefs.setBool('useWebview', useWebview);
-    
+
+    prefs.setString("backendCNNSingleChar", backendCNNSingleChar);
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
     prefs.setString('selectedDictionary', selectedDictionary);
@@ -181,12 +203,13 @@ class Settings with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     
     // delete the saved preferences
-    // prefs.clear();
+    //prefs.clear();
 
     invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
     emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
     useWebview = prefs.getBool('useWebview') ?? false;
-
+    
+    backendCNNSingleChar = prefs.getString("backendCNNSingleChar") ?? '';
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];

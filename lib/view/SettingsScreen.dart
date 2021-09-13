@@ -242,17 +242,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ListTile(
                         title: Text(LocaleKeys.SettingsScreen_advanced_settings_drawing_inference_backend.tr()),
                         trailing: DropdownButton<String>(
-                            value: settings.selectedInferenceBackend,
+                            value: settings.backendCNNSingleChar,
                             items: settings.inferenceBackends 
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
-                                child: Text(value)
+                                child: () { 
+                                  return Text(value); 
+                                } ()
                               );
                             }).toList(),
                             onChanged: (String newValue) {
-                              settings.selectedDictionary = newValue;
+                              print(newValue);
+                              settings.backendCNNSingleChar = newValue;
                               settings.save();
+                              print(newValue);
                             },
                           ),
                         onTap: (){},
