@@ -55,7 +55,6 @@ Here is a list of a few things which would help this project:
 * You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues) too.
 * PR's for open issues are very welcome too
 
-
 ## Credits
 
 * Design
@@ -67,4 +66,4 @@ Here is a list of a few things which would help this project:
 * Modified Packages: [bitmap](https://github.com/renancaraujo/bitmap), [snappable](https://github.com/MarcinusX/snappable)
 * A big shout out to all testers!
   * Android
-    * Buddha
+    * pa9eup, tsumugii_12
