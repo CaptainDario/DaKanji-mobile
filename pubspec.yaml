@@ -27,6 +27,7 @@ dependencies:
   awesome_dialog: ^2.1.0
   easy_localization: ^3.0.0
   animated_text_kit: ^4.2.1
+  flutter_layout_grid: ^1.0.3 
 
   # do NOT support all target platforms
   webviewx: ^0.1.0                 # android, iOS, web
@@ -34,6 +35,7 @@ dependencies:
   tflite_flutter: ^0.9.0           # android, iOS, Linux, MacOS, windows
   flutter_appavailability: ^0.0.21 # android, iOS
   uni_links: ^0.5.1                # android, iOS, web
+  device_preview: ^0.7.4           # android, iOS, Linux, MacOS, windows
 
   # packages which should only target specific platforms
   android_intent_plus: ^1.0.2      # android

@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
@@ -76,141 +78,183 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
     return DaKanjiDrawer(
       currentScreen: Screens.drawing,
       animationAtStart: !widget.openedByDrawer,
-      child: Center(
-        child: ChangeNotifierProvider.value(
-          value: GetIt.I<Strokes>(),
-          // create responsive layouts
-          child: LayoutBuilder(
-            builder: (context, constraints){
-              // init size of canvas
-              // and assure that it is min. 20 smaller than screen width
-              _canvasSize = constraints.biggest.height * 3/6;
-              if(_canvasSize >= constraints.biggest.width - _canvasPad)
-                _canvasSize = constraints.biggest.height - _canvasPad;
-              
-              return Column( 
-                children: [
-                  // the canvas to draw on
-                  Consumer<Strokes>(
-                    builder: (context, strokes, __){
-                      return DrawingCanvas(
-                        width: _canvasSize, 
-                        height: _canvasSize,
-                        margin: EdgeInsets.fromLTRB(0, _canvasPad, 0, 0),
-                        key: SHOWCASE_DRAWING[0].key,
-                        strokes: strokes,
+      child: ChangeNotifierProvider.value(
+        value: GetIt.I<Strokes>(),
+        child: LayoutBuilder(
+          builder: (context, constraints){
+            bool landscape;
+            // init size of canvas
+            //landscape
+            if(constraints.biggest.width > constraints.biggest.height){
+              _canvasSize = constraints.biggest.height * 0.80;
+              landscape = true;
+              if(_canvasSize >= constraints.biggest.height)
+                _canvasSize = constraints.biggest.width;
+            }
+            // portrait
+            if(constraints.biggest.width < constraints.biggest.height){
+              _canvasSize = constraints.biggest.width - 10;
+              landscape = false;
+              if(_canvasSize >= constraints.biggest.width)
+                _canvasSize = constraints.biggest.height;
+            }
             
-                        onFinishedDrawing: (Uint8List image) async {
-                          GetIt.I<DrawingInterpreter>().runInference(image);
-                        },
-                        onDeletedLastStroke: (Uint8List image) {
-                          if(strokes.strokeCount > 0)
-                            GetIt.I<DrawingInterpreter>().runInference(image);
-                          else
-                            GetIt.I<DrawingInterpreter>().clearPredictions();
-                        },
-                        onDeletedAllStrokes: () {
-                          GetIt.I<DrawingInterpreter>().clearPredictions();
-                        },
-                      );
-                    },
+
+            // the canvas to draw on
+            Widget drawingCanvas = Consumer<Strokes>(
+              builder: (context, strokes, __){
+                return DrawingCanvas(
+                  width: _canvasSize, 
+                  height: _canvasSize,
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  key: SHOWCASE_DRAWING[0].key,
+                  strokes: strokes,
+                  onFinishedDrawing: (Uint8List image) async {
+                    GetIt.I<DrawingInterpreter>().runInference(image);
+                  },
+                  onDeletedLastStroke: (Uint8List image) {
+                    if(strokes.strokeCount > 0)
+                      GetIt.I<DrawingInterpreter>().runInference(image);
+                    else
+                      GetIt.I<DrawingInterpreter>().clearPredictions();
+                  },
+                  onDeletedAllStrokes: () {
+                    GetIt.I<DrawingInterpreter>().clearPredictions();
+                  },
+                );
+              },
+            );
+            // undo
+            Widget undoButton = Consumer<Strokes>(
+              builder: (context, strokes, __) {
+                return Center(
+                  child: IconButton(
+                    key: SHOWCASE_DRAWING[1].key,
+                    icon: Icon(Icons.undo),
+                    iconSize: 20,
+                    onPressed: () {
+                      strokes.playDeleteLastStrokeAnimation = true;
+                    }
                   ),
-                  Container(
-                    height: constraints.biggest.height * 1/6,
-                    child:
-                    // undo/clear button and kanjiBuffer,
-                      Container(
-                        width: _canvasSize,
-                        child: Row(
-                          children: [
-                            // undo
-                            Consumer<Strokes>(
-                              builder: (context, strokes, __) {
-                                return IconButton(
-                                  key: SHOWCASE_DRAWING[1].key,
-                                  icon: Icon(Icons.undo),
-                                  onPressed: () {
-                                    strokes.playDeleteLastStrokeAnimation = true;
-                                  }
-                                );
-                              }
-                            ),
-                            // multi character search input
-                            ChangeNotifierProvider.value(
-                              value: GetIt.I<KanjiBuffer>(),
-                              child: Expanded(
-                                child: Consumer<KanjiBuffer>(
-                                  builder: (context, kanjiBuffer, child){
-                                    return Hero(
-                                    tag: "webviewHero_b_" + 
-                                      (kanjiBuffer.kanjiBuffer == "" 
-                                        ? "Buffer" : kanjiBuffer.kanjiBuffer),
-                                      child: Center(
-                                        key: SHOWCASE_DRAWING[6].key,
-                                        child: KanjiBufferWidget(_canvasSize)
-                                      )
-                                    );
-                                  }
-                                ),
-                              ),
-                            ),
-                            // clear
-                            Consumer<Strokes>(
-                              builder: (contxt, strokes, _) {
-                                return  IconButton(
-                                  key: SHOWCASE_DRAWING[2].key,
-                                  icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    strokes.playDeleteAllStrokesAnimation = true;
-                                  }
-                                );
-                              }
-                            ), 
-                          ]
-                        ),
-                      ),
+                );
+              }
+            );
+            // multi character search input
+            Widget multiCharSearch = ChangeNotifierProvider.value(
+              value: GetIt.I<KanjiBuffer>(),
+              child: Expanded(
+                child: Consumer<KanjiBuffer>(
+                  builder: (context, kanjiBuffer, child){
+                    return Hero(
+                    tag: "webviewHero_b_" + 
+                      (kanjiBuffer.kanjiBuffer == "" 
+                        ? "Buffer" : kanjiBuffer.kanjiBuffer),
+                      child: Center(
+                        key: SHOWCASE_DRAWING[6].key,
+                        child: KanjiBufferWidget(_canvasSize)
+                      )
+                    );
+                  }
+                ),
+              ),
+            );
+            // clear
+            Widget clearButton = Consumer<Strokes>(
+              builder: (contxt, strokes, _) {
+                return Center(
+                  child: IconButton(
+                    key: SHOWCASE_DRAWING[2].key,
+                    icon: Icon(Icons.clear),
+                    iconSize: 20,
+                    onPressed: () {
+                      strokes.playDeleteAllStrokesAnimation = true;
+                    }
                   ),
-                  // prediction buttons
-                  Container(
-                    key: SHOWCASE_DRAWING[3].key,
-                    width: _canvasSize,
-                    // approximated button height (width/5) * numRows + padding  
-                    height: (_canvasSize / 5.0) * 2.0 + 10, 
-                    child: ChangeNotifierProvider.value(
-                      value: GetIt.I<DrawingInterpreter>(),
-                      child: Consumer<DrawingInterpreter>(
-                        builder: (context, interpreter, child){
-                          return GridView.count(
-                            physics: new NeverScrollableScrollPhysics(),
-                            crossAxisCount: 5,
-                            children: List.generate(10, (i) {
-                              Widget widget =
-                                PredictionButton(interpreter.predictions[i]);
-                              // instantiate short/long press showcase button
-                              if(i == 0){
-                                widget = Container(
-                                  key: SHOWCASE_DRAWING[4].key,
-                                  child: widget 
-                                );
-                              }
-                              return Hero(
-                                tag: "webviewHero_" + 
-                                  (interpreter.predictions[i] == " " 
-                                    ? i.toString() : interpreter.predictions[i]),
-                                child: widget,
-                              );
-                            },
-                            )
+                );
+              }
+            );
+            // prediction buttons
+            Widget predictionButtons = Container(
+              key: SHOWCASE_DRAWING[3].key,
+              //color: Colors.green,
+              // (constraints.biggest.height / 5.0 * 2.0) 
+              // use full height in landscape
+              //width :  landscape ? (constraints.biggest.height / 5.0 * 2.0) : _canvasSize,
+              //height: !landscape ? (_canvasSize / 5.0 * 2.0) : constraints.biggest.height, 
+              //use canvas height in landscape
+              width :  landscape ? (_canvasSize / 5.0 * 2.0) : _canvasSize,
+              height: !landscape ? (_canvasSize / 5.0 * 2.0) : _canvasSize, 
+              child: ChangeNotifierProvider.value(
+                value: GetIt.I<DrawingInterpreter>(),
+                child: Consumer<DrawingInterpreter>(
+                  builder: (context, interpreter, child){
+                    return GridView.count(
+                      padding: EdgeInsets.all(2),
+                      physics: new NeverScrollableScrollPhysics(),
+                      scrollDirection: landscape ? Axis.horizontal : Axis.vertical,
+                      crossAxisCount: 5,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      
+                      children: List.generate(10, (i) {
+                        Widget widget = PredictionButton(interpreter.predictions[i]);
+                        // instantiate short/long press showcase button
+                        if(i == 0){
+                          widget = Container(
+                            key: SHOWCASE_DRAWING[4].key,
+                            child: widget 
                           );
                         }
-                      ),
-                    )
-                  ),
-                  Spacer(),
-                ],
-              );
-            }
-          ),
+                        return Hero(
+                          tag: "webviewHero_" + 
+                            (interpreter.predictions[i] == " " 
+                              ? i.toString() : interpreter.predictions[i]),
+                          child: widget,
+                        );
+                      },
+                      )
+                    );
+                  }
+                ),
+              )
+            ); 
+            
+            Widget grid = LayoutGrid(
+              
+              columnSizes: [1.fr, 1.fr, 1.fr, 1.fr, 1.fr], 
+              rowSizes: [FixedTrackSize(_canvasSize), 1.fr, 1.fr, 1.fr],
+              rowGap: 5,
+              columnGap: 5,
+              children: [
+                Center(child: drawingCanvas).withGridPlacement(
+                  columnStart: 0, rowStart: 0, columnSpan: 5 
+                ),
+                undoButton.withGridPlacement(
+                    columnStart: 0, rowStart: 1
+                ),
+                Container(child: multiCharSearch, color: Colors.green).withGridPlacement(
+                  columnStart: 1, rowStart: 1, columnSpan: 3, rowSpan: 1,
+                ),
+                clearButton.withGridPlacement(
+                    columnStart: 4, rowStart: 1
+                ),
+                PredictionButton("1").withGridPlacement(
+                    columnStart: 0, rowStart: 2
+                ),
+                PredictionButton("2").withGridPlacement(
+                    columnStart: 1, rowStart: 2
+                ),
+                PredictionButton("3").withGridPlacement(
+                    columnStart: 2, rowStart: 2
+                ),
+                PredictionButton("6").withGridPlacement(
+                    columnStart: 0, rowStart: 3
+                ),
+              ],
+            );
+
+            return grid;
+          }
         ),
       ),
     );

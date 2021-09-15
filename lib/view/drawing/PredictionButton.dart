@@ -63,46 +63,40 @@ class _PredictionButtonState extends State<PredictionButton>
 
   @override
   Widget build(BuildContext context){
-    return ScaleTransition(
-      scale: animation, 
-      child: Transform.scale(
-          scale: 0.9,
-          child: AspectRatio(
-          aspectRatio: 1,
-          child: GestureDetector(
-            behavior: HitTestBehavior.translucent,
+    return AspectRatio(
+      aspectRatio: 1,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
 
-            onDoubleTap: () {
-              controller.forward(from: 0.0);
-              if(GetIt.I<Settings>().emptyCanvasAfterDoubleTap)
-                GetIt.I<Strokes>().playDeleteAllStrokesAnimation = true; 
-              GetIt.I<KanjiBuffer>().addToKanjiBuffer(widget.char);
-            },
+        onDoubleTap: () {
+          controller.forward(from: 0.0);
+          if(GetIt.I<Settings>().emptyCanvasAfterDoubleTap)
+            GetIt.I<Strokes>().playDeleteAllStrokesAnimation = true; 
+          GetIt.I<KanjiBuffer>().addToKanjiBuffer(widget.char);
+        },
 
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.all(0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(0),
+          ),
+          // handle a short press
+          onPressed: () {
+            GetIt.I<Lookup>().setChar(widget.char);
+            HandlePrediction().handlePress(context);
+          },
+          // handle a long press 
+          onLongPress: () async {
+            GetIt.I<Lookup>().setChar(widget.char, longPress: true);
+            HandlePrediction().handlePress(context);
+          },
+          child: FittedBox(
+            child: Text(
+              widget.char,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 80,
+                fontFamily: "NotoSans"
               ),
-              // handle a short press
-              onPressed: () {
-                GetIt.I<Lookup>().setChar(widget.char);
-                HandlePrediction().handlePress(context);
-              },
-              // handle a long press 
-              onLongPress: () async {
-                GetIt.I<Lookup>().setChar(widget.char, longPress: true);
-                HandlePrediction().handlePress(context);
-              },
-              child: FittedBox(
-                child: Text(
-                  widget.char,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 80,
-                    fontFamily: "NotoSans"
-                  ),
-                )
-              )
             )
           )
         )

@@ -4,6 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:device_preview/device_preview.dart';
 
 import 'package:da_kanji_mobile/model/core/DarkTheme.dart';
 import 'package:da_kanji_mobile/model/core/LightTheme.dart';
@@ -36,18 +37,21 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await init();
   runApp(
-    Phoenix(
-      child: EasyLocalization(
-        supportedLocales: [
-          Locale('en'),
-          Locale('de')
-        ],
-        path: 'assets/translations',
-        fallbackLocale: Locale('en'),
-        useFallbackTranslations: true,
-        useOnlyLangCode: true,
-        assetLoader: CodegenLoader(),
-        child: DaKanjiApp()
+    DevicePreview(
+      enabled: true,
+      builder:(context) => Phoenix(
+        child: EasyLocalization(
+          supportedLocales: [
+            Locale('en'),
+            Locale('de')
+          ],
+          path: 'assets/translations',
+          fallbackLocale: Locale('en'),
+          useFallbackTranslations: true,
+          useOnlyLangCode: true,
+          assetLoader: CodegenLoader(),
+          child: DaKanjiApp()
+        ),
       ),
     )
   );
@@ -113,6 +117,7 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
+      builder: DevicePreview.appBuilder,
       locale: () {
         // if there was no language set use the one from the os
         if(GetIt.I<Settings>().selectedLocale == null){

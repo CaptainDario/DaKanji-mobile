@@ -78,7 +78,7 @@ class DrawingPainter extends CustomPainter {
     return rgbaBytes;
   }
 
-  /// Paints the [_path] on the given [canvas].
+  /// Paints the given [_path] on the given [canvas].
   void drawPath(Canvas canvas) {
     // Setup canvas and paint
     canvas.clipRect(Rect.fromLTWH(0, 0, _size.width, _size.height));
