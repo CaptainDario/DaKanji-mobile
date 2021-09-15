@@ -232,13 +232,13 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                 undoButton.withGridPlacement(
                     columnStart: 0, rowStart: 1
                 ),
-                Container(child: multiCharSearch, color: Colors.green).withGridPlacement(
+                Container(child: multiCharSearch, color: Colors.green,).withGridPlacement(
                   columnStart: 1, rowStart: 1, columnSpan: 3, rowSpan: 1,
                 ),
                 clearButton.withGridPlacement(
                     columnStart: 4, rowStart: 1
                 ),
-                PredictionButton("1").withGridPlacement(
+                Center(child: PredictionButton("1")).withGridPlacement(
                     columnStart: 0, rowStart: 2
                 ),
                 PredictionButton("2").withGridPlacement(
@@ -246,6 +246,12 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                 ),
                 PredictionButton("3").withGridPlacement(
                     columnStart: 2, rowStart: 2
+                ),
+                PredictionButton("4").withGridPlacement(
+                    columnStart: 3, rowStart: 2
+                ),
+                PredictionButton("5").withGridPlacement(
+                    columnStart: 4, rowStart: 2
                 ),
                 PredictionButton("6").withGridPlacement(
                     columnStart: 0, rowStart: 3
