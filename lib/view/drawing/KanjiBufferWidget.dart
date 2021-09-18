@@ -283,7 +283,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
 
   /// Calculates and returns how many characters fit in this KanjiBufferWidget
   int calculateCharactersFit(){
-    int _charactersFit = -3;
+    int _charactersFit = -4;
     String chars = "口口";
     double w = 1;
     while(widget.canvasSize > w){
