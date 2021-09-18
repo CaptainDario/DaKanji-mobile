@@ -119,30 +119,6 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
     ));
     // make sure all characters are show even if page changed
     _scaleInNewCharController.value = 1.0;
-  
-    // set width of the kanjibuffer
-    width = () {
-      double margin = 10;
-      double buttonSize = (widget.canvasSize - 4.0 * margin) / 5;
-      return (buttonSize * 3) + (3 * margin);
-    }();
-
-    // get the maximum no of characters which fit in the kanji buffer
-    charactersFit = -3;
-    String chars = "口口";
-    double w = 1;
-    while(width > w){
-      w = (TextPainter(
-        text: TextSpan(text: chars),
-        maxLines: 1,
-        textScaleFactor: 1.5,
-        textDirection: TextDirection.ltr)
-      ..layout()).size.width;
-
-      chars += "口";
-      charactersFit += 1;
-    }
-
   }
 
   @override
@@ -160,6 +136,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
       _scaleInNewCharController.forward(from: 0.0);
       GetIt.I<KanjiBuffer>().runAnimation = false;
     }
+
+    charactersFit = calculateCharactersFit();
+
     return GestureDetector(
       onPanDown: (details) {
         _springController.stop();
@@ -219,8 +198,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             animation:  _rotationXAnimation,
             child: Container(
             // make the multi character bar the same size as 3 prediction-buttons
-            width: width,
-            padding: EdgeInsets.all(5),
+            width: widget.canvasSize,
             child: OutlinedButton(
               // copy to clipboard and show snackbar
               onPressed: (){
@@ -301,5 +279,25 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
         )
       ),
     );
+  }
+
+  /// Calculates and returns how many characters fit in this KanjiBufferWidget
+  int calculateCharactersFit(){
+    int _charactersFit = -3;
+    String chars = "口口";
+    double w = 1;
+    while(widget.canvasSize > w){
+      w = (TextPainter(
+        text: TextSpan(text: chars),
+        maxLines: 1,
+        textScaleFactor: 1.5,
+        textDirection: TextDirection.ltr)
+      ..layout()).size.width;
+
+      chars += "口";
+      _charactersFit += 1;
+    }
+
+    return _charactersFit;
   }
 }
