@@ -37,23 +37,20 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await init();
   runApp(
-    DevicePreview(
-      enabled: true,
-      builder:(context) => Phoenix(
-        child: EasyLocalization(
-          supportedLocales: [
-            Locale('en'),
-            Locale('de')
-          ],
-          path: 'assets/translations',
-          fallbackLocale: Locale('en'),
-          useFallbackTranslations: true,
-          useOnlyLangCode: true,
-          assetLoader: CodegenLoader(),
-          child: DaKanjiApp()
-        ),
+    Phoenix(
+      child: EasyLocalization(
+        supportedLocales: [
+          Locale('en'),
+          Locale('de')
+        ],
+        path: 'assets/translations',
+        fallbackLocale: Locale('en'),
+        useFallbackTranslations: true,
+        useOnlyLangCode: true,
+        assetLoader: CodegenLoader(),
+        child: DaKanjiApp()
       ),
-    )
+    ),
   );
 }
 
@@ -117,7 +114,6 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
     return MaterialApp(
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      builder: DevicePreview.appBuilder,
       locale: () {
         // if there was no language set use the one from the os
         if(GetIt.I<Settings>().selectedLocale == null){
