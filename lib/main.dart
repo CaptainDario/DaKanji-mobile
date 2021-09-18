@@ -66,17 +66,18 @@ Future<void> init() async {
   VERSION = (await PackageInfo.fromPlatform()).version;
   BUILD_NR = (await PackageInfo.fromPlatform()).buildNumber;
   
-  setupGetIt();
+  await setupGetIt();
 
   await initDeepLinksStream();
   await getInitialDeepLink();
 }
 
 
-void setupGetIt() {
+void setupGetIt() async {
   // services to load from disk
   GetIt.I.registerSingleton<PlatformDependentVariables>(PlatformDependentVariables());
   GetIt.I.registerSingleton<Changelog>(Changelog());
+  await GetIt.I<Changelog>().init();
   GetIt.I.registerSingleton<UserData>(UserData());
   GetIt.I.registerSingleton<Settings>(Settings());
 

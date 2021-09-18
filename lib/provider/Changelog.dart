@@ -60,11 +60,10 @@ class Changelog{
   }
 
 
-  Changelog(){
+  Changelog() {
     _initialized = false;
     _showChangelog = false;
 
-    init();
   }
 
   /// Reads `CHANGELOG.md` from file and returns a converted version.
