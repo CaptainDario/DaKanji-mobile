@@ -88,7 +88,7 @@ class DrawingPainter extends CustomPainter {
     // Setup canvas and paint
     canvas.clipRect(Rect.fromLTWH(0, 0, _size.width, _size.height));
     Paint paint = Paint()
-      ..strokeWidth = _size.width / 50.0
+      ..strokeWidth = _size.width * 0.03
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
