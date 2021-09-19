@@ -1,7 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:da_kanji_mobile/view/drawing/responsiveDrawScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -39,8 +41,6 @@ class DrawScreen extends StatefulWidget {
 class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
   /// the size of the canvas widget
   double _canvasSize;
-  /// the minimum padding around the drawing canvas (left, top, right)
-  double _canvasPad = 10.0;
 
   @override
   void initState() {
@@ -82,31 +82,17 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
         value: GetIt.I<Strokes>(),
         child: LayoutBuilder(
           builder: (context, constraints){
-            bool landscape;
-            // init size of canvas
-            //landscape
-            if(constraints.biggest.width > constraints.biggest.height){
-              _canvasSize = constraints.biggest.height * 0.80;
-              landscape = true;
-              if(_canvasSize >= constraints.biggest.height)
-                _canvasSize = constraints.biggest.width;
-            }
-            // portrait
-            if(constraints.biggest.width < constraints.biggest.height){
-              _canvasSize = constraints.biggest.width - 10;
-              landscape = false;
-              if(_canvasSize >= constraints.biggest.width)
-                _canvasSize = constraints.biggest.height;
-            }
-            
 
+            var t = runInLandscape(constraints, _canvasSize);
+            bool landscape = t.item1;
+            _canvasSize = t.item2;
+            
             // the canvas to draw on
             Widget drawingCanvas = Consumer<Strokes>(
               builder: (context, strokes, __){
                 return DrawingCanvas(
                   width: _canvasSize, 
                   height: _canvasSize,
-                  margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
                   key: SHOWCASE_DRAWING[0].key,
                   strokes: strokes,
                   onFinishedDrawing: (Uint8List image) async {
@@ -142,20 +128,18 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
             // multi character search input
             Widget multiCharSearch = ChangeNotifierProvider.value(
               value: GetIt.I<KanjiBuffer>(),
-              child: Expanded(
-                child: Consumer<KanjiBuffer>(
-                  builder: (context, kanjiBuffer, child){
-                    return Hero(
-                    tag: "webviewHero_b_" + 
-                      (kanjiBuffer.kanjiBuffer == "" 
-                        ? "Buffer" : kanjiBuffer.kanjiBuffer),
-                      child: Center(
-                        key: SHOWCASE_DRAWING[6].key,
-                        child: KanjiBufferWidget(_canvasSize)
-                      )
-                    );
-                  }
-                ),
+              child: Consumer<KanjiBuffer>(
+                builder: (context, kanjiBuffer, child){
+                  return Hero(
+                  tag: "webviewHero_b_" + 
+                    (kanjiBuffer.kanjiBuffer == "" 
+                      ? "Buffer" : kanjiBuffer.kanjiBuffer),
+                    child: Center(
+                      key: SHOWCASE_DRAWING[6].key,
+                      child: KanjiBufferWidget(_canvasSize)
+                    )
+                  );
+                }
               ),
             );
             // clear
@@ -176,20 +160,15 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
             // prediction buttons
             Widget predictionButtons = Container(
               key: SHOWCASE_DRAWING[3].key,
-              //color: Colors.green,
-              // (constraints.biggest.height / 5.0 * 2.0) 
-              // use full height in landscape
-              //width :  landscape ? (constraints.biggest.height / 5.0 * 2.0) : _canvasSize,
-              //height: !landscape ? (_canvasSize / 5.0 * 2.0) : constraints.biggest.height, 
               //use canvas height in landscape
-              width :  landscape ? (_canvasSize / 5.0 * 2.0) : _canvasSize,
-              height: !landscape ? (_canvasSize / 5.0 * 2.0) : _canvasSize, 
+              width :  landscape ? (_canvasSize * 0.4) : _canvasSize,
+              height: !landscape ? (_canvasSize * 0.4) : _canvasSize, 
               child: ChangeNotifierProvider.value(
                 value: GetIt.I<DrawingInterpreter>(),
                 child: Consumer<DrawingInterpreter>(
                   builder: (context, interpreter, child){
                     return GridView.count(
-                      padding: EdgeInsets.all(2),
+                      //padding: EdgeInsets.all(2),
                       physics: new NeverScrollableScrollPhysics(),
                       scrollDirection: landscape ? Axis.horizontal : Axis.vertical,
                       crossAxisCount: 5,
@@ -218,48 +197,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                 ),
               )
             ); 
-            
-            Widget grid = LayoutGrid(
-              
-              columnSizes: [1.fr, 1.fr, 1.fr, 1.fr, 1.fr], 
-              rowSizes: [FixedTrackSize(_canvasSize), 1.fr, 1.fr, 1.fr],
-              rowGap: 5,
-              columnGap: 5,
-              children: [
-                Center(child: drawingCanvas).withGridPlacement(
-                  columnStart: 0, rowStart: 0, columnSpan: 5 
-                ),
-                undoButton.withGridPlacement(
-                    columnStart: 0, rowStart: 1
-                ),
-                Container(child: multiCharSearch, color: Colors.green,).withGridPlacement(
-                  columnStart: 1, rowStart: 1, columnSpan: 3, rowSpan: 1,
-                ),
-                clearButton.withGridPlacement(
-                    columnStart: 4, rowStart: 1
-                ),
-                Center(child: PredictionButton("1")).withGridPlacement(
-                    columnStart: 0, rowStart: 2
-                ),
-                PredictionButton("2").withGridPlacement(
-                    columnStart: 1, rowStart: 2
-                ),
-                PredictionButton("3").withGridPlacement(
-                    columnStart: 2, rowStart: 2
-                ),
-                PredictionButton("4").withGridPlacement(
-                    columnStart: 3, rowStart: 2
-                ),
-                PredictionButton("5").withGridPlacement(
-                    columnStart: 4, rowStart: 2
-                ),
-                PredictionButton("6").withGridPlacement(
-                    columnStart: 0, rowStart: 3
-                ),
-              ],
-            );
 
-            return grid;
+            return responsiveLayout(drawingCanvas, predictionButtons, 
+              multiCharSearch, undoButton, clearButton, _canvasSize, landscape
+            );
           }
         ),
       ),
