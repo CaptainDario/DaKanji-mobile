@@ -27,7 +27,8 @@ dependencies:
   awesome_dialog: ^2.1.0
   easy_localization: ^3.0.0
   animated_text_kit: ^4.2.1
-  flutter_layout_grid: ^1.0.3 
+  flutter_layout_grid: ^1.0.3
+  tuple: ^2.0.0
 
   # do NOT support all target platforms
   webviewx: ^0.1.0                 # android, iOS, web
