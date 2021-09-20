@@ -47,8 +47,6 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
   AnimationController _scaleInNewCharController;
   Animation<double> _scaleInNewCharAnimation;
 
-  /// size of the kanji buffer
-  double width;
   /// how many characters do fit in this box
   int charactersFit = 0;
   /// callback when the kanjibuffer changed
@@ -198,7 +196,8 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             animation:  _rotationXAnimation,
             child: Container(
             // make the multi character bar the same size as 3 prediction-buttons
-            width: widget.canvasSize,
+            width: widget.canvasSize * 0.9,
+            height: widget.canvasSize * 0.1,
             child: OutlinedButton(
               // copy to clipboard and show snackbar
               onPressed: (){
@@ -218,44 +217,49 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    () { 
-                      int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
-                      
-                      // more than one character is in the kanjibuffer
-                      if(length > 1){
-                        // more character in the buffer than can be shown
-                        if(GetIt.I<KanjiBuffer>().kanjiBuffer.length > charactersFit)
-                          return "…" +  GetIt.I<KanjiBuffer>().kanjiBuffer
-                            .substring(length-charactersFit, length-1);
-                        // whole buffer can be shown
-                        else{
-                          return GetIt.I<KanjiBuffer>()
-                            .kanjiBuffer.substring(0, length-1);
+                  FittedBox(
+                    child: Text(
+                      () { 
+                        int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
+                        
+                        // more than one character is in the kanjibuffer
+                        if(length > 1){
+                          // more character in the buffer than can be shown
+                          if(GetIt.I<KanjiBuffer>().kanjiBuffer.length > charactersFit)
+                            return "…" +  GetIt.I<KanjiBuffer>().kanjiBuffer
+                              .substring(length-charactersFit, length-1);
+                          // whole buffer can be shown
+                          else{
+                            return GetIt.I<KanjiBuffer>()
+                              .kanjiBuffer.substring(0, length-1);
+                          }
                         }
-                      }
-                      else
-                        return "";
-                    } (),
-                    textScaleFactor: 1.5,
-                    softWrap: false,
-                    style: TextStyle(
-                      fontFamily: "NotoSans"
+                        else
+                          return " ";
+                      } (),
+                      
+                      softWrap: false,
+                      style: TextStyle(
+                        fontFamily: "NotoSans",
+                        fontSize: 60
+                      ),
                     ),
                   ),
                   ScaleTransition(
                     scale: _scaleInNewCharAnimation,
-                    child: Text(
-                      () {
-                        int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
-                        if(length > 0)
-                          return GetIt.I<KanjiBuffer>().kanjiBuffer[length - 1];
-                        else
-                          return "";
-                      } (),
-                      textScaleFactor: 1.5,
-                      style: TextStyle(
-                        fontFamily: "NotoSans"
+                    child: FittedBox(
+                      child: Text(
+                        () {
+                          int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
+                          if(length > 0)
+                            return GetIt.I<KanjiBuffer>().kanjiBuffer[length - 1];
+                          else
+                            return " ";
+                        } (),
+                        style: TextStyle(
+                          fontFamily: "NotoSans",
+                          fontSize: 600
+                        ),
                       ),
                     )
                   )
