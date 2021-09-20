@@ -47,3 +47,4 @@ android/app/key.jks
 
 # libraries
 *.so
+blobs/libtensorflowlite_c-win.dll
