@@ -16,17 +16,21 @@ Tuple2<bool, double> runInLandscape(BoxConstraints constraints, double canvasSiz
   double cBWidth = constraints.biggest.width;
 
   // set the app in landscape mode if there is space to
-  // place the prediction buttons in two rows 
+  // place the prediction buttons in two rows to the right of the canvas
   if(cBWidth > cBHeight*0.8 + cBHeight*0.8*0.4+10){
-    canvasSize = cBHeight * 0.8;
+    var columnSpacing = 10;
+    canvasSize = cBHeight * 0.8 - columnSpacing;
     landscape = true;
   }
   // portrait
   else{
-    canvasSize = cBWidth - 20;
-    // assure that there is enough space for the PredictionButtons
-    if(canvasSize > cBHeight * 0.66)
-    canvasSize = cBHeight * 0.66;
+    var predictionButtonheight = cBHeight * 0.35;
+    var rowSpacing = 40;
+    canvasSize = cBHeight - predictionButtonheight - rowSpacing;
+    // assure that the canvas is not wider than the screen
+    if(canvasSize > cBWidth)
+      canvasSize = cBWidth - 10;
+
     landscape = false;
   }
 
@@ -60,8 +64,10 @@ Widget portraitLayout(
   layout = Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      drawingCanvas,
+      Container(color: Colors.green, child: drawingCanvas),
+      SizedBox(height: 30,),
       multiCharSearch,
+      SizedBox(height: 10,),
       predictionButtons
     ]
   );
@@ -79,7 +85,7 @@ Widget landscapeLayout(
   layout = Center(
     child: LayoutGrid(
       //rowGap: 5,
-      //columnGap: 5,
+      columnGap: 10,
       columnSizes: [
         FixedTrackSize(canvasSize), 
         FixedTrackSize(canvasSize * 0.2), 
@@ -92,7 +98,7 @@ Widget landscapeLayout(
           columnStart: 1, columnSpan: 2, rowStart: 0
         ),
         multiCharSearch.withGridPlacement(columnStart: 0, rowStart: 1),
-        undoButton,
+        Align(alignment: Alignment.topCenter, child: undoButton),
         clearButton
       ],
     ),
