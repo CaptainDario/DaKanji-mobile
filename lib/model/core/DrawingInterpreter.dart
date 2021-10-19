@@ -317,11 +317,8 @@ class DrawingInterpreter with ChangeNotifier{
   ///
   /// Uses the uses CPU mode.
   Future<Interpreter> _initInterpreterWindows() async {
-    
-    Interpreter interpreter;
-    //interpreter = await _cpuInterpreter();
 
-    return interpreter;
+    return await _cpuInterpreter();
   }
 
   /// Initializes the interpreter with NPU acceleration for Android.
@@ -368,6 +365,22 @@ class DrawingInterpreter with ChangeNotifier{
       _interpreterAssetPath, options: options);
     GetIt.I<Settings>().backendCNNSingleChar = Settings().inferenceBackends[0];
     return i;
+  }
+
+  Future<Interpreter> _XXNPackInterpreter() async {
+
+    Interpreter interpreter;
+    final options = InterpreterOptions()..addDelegate(
+      XNNPackDelegate(
+        options: XNNPackDelegateOptions()
+      )
+    );
+    interpreter = await Interpreter.fromAsset(
+      _interpreterAssetPath,
+      options: options
+    );
+
+    return interpreter;
   }
 
 }
