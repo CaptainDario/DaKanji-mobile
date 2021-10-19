@@ -6,7 +6,12 @@ import 'package:tuple/tuple.dart';
 
 
 
-Tuple2<bool, double> runInLandscape(BoxConstraints constraints, double canvasSize){
+/// Checks if the app should be laied out in landscape mode or portrait mode.
+/// By using the `constraints` of the available space the app runs in.
+/// Returns a tuple of which the first element is a bool. It is true when
+/// the app is running in landscape mode and false otherwise.
+/// The second element is the size of the drawing canvas
+Tuple2<bool, double> DrawScreenRunsInLandscape(BoxConstraints constraints){
 
   bool landscape;
 
@@ -14,6 +19,8 @@ Tuple2<bool, double> runInLandscape(BoxConstraints constraints, double canvasSiz
   //landscape
   double cBHeight = constraints.biggest.height;
   double cBWidth = constraints.biggest.width;
+
+  double canvasSize;
 
   // set the app in landscape mode if there is space to
   // place the prediction buttons in two rows to the right of the canvas
@@ -37,25 +44,28 @@ Tuple2<bool, double> runInLandscape(BoxConstraints constraints, double canvasSiz
   return Tuple2<bool, double>(landscape, canvasSize);
 }
 
-Widget responsiveLayout(
+/// Builds the DrawScreen in landscape or portrait mode according to the current 
+/// device / window it is running on and returns it.
+Widget DrawScreenResponsiveLayout(
   Widget drawingCanvas, Widget predictionButtons, Widget multiCharSearch,
   Widget undoButton, Widget clearButton, double canvasSize, bool landscape){
 
   Widget layout;
 
   if(landscape)
-    layout = landscapeLayout(drawingCanvas, predictionButtons, multiCharSearch, 
+    layout = DrawScreenLandscapeLayout(drawingCanvas, predictionButtons, multiCharSearch, 
       undoButton, clearButton, canvasSize
     );
   else
-    layout = portraitLayout(drawingCanvas, predictionButtons, multiCharSearch,
+    layout = DrawScreenPortraitLayout(drawingCanvas, predictionButtons, multiCharSearch,
       undoButton, clearButton, canvasSize
     );
 
   return layout;
 }
 
-Widget portraitLayout(
+/// Builds the DrawScreen in portrait mode and returns it.
+Widget DrawScreenPortraitLayout(
   Widget drawingCanvas, Widget predictionButtons, Widget multiCharSearch,
   Widget undoButton, Widget clearButton, double canvasSize){
   
@@ -75,8 +85,8 @@ Widget portraitLayout(
   return layout;
 }
 
-/// 
-Widget landscapeLayout(
+/// Builds the DrawScreen in landscape mode and returns it.
+Widget DrawScreenLandscapeLayout(
   Widget drawingCanvas, Widget predictionButtons, Widget multiCharSearch,
   Widget undoButton, Widget clearButton, double canvasSize){
 
