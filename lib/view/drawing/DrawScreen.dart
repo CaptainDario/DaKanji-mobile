@@ -83,7 +83,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
         child: LayoutBuilder(
           builder: (context, constraints){
 
-            var t = runInLandscape(constraints, _canvasSize);
+            var t = DrawScreenRunsInLandscape(constraints);
             bool landscape = t.item1;
             _canvasSize = t.item2;
             
@@ -201,7 +201,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
               )
             ); 
 
-            return responsiveLayout(drawingCanvas, predictionButtons, 
+            return DrawScreenResponsiveLayout(drawingCanvas, predictionButtons, 
               multiCharSearch, undoButton, clearButton, _canvasSize, landscape
             );
           }
