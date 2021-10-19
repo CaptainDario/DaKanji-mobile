@@ -14,8 +14,9 @@ import 'package:get_it/get_it.dart';
 /// released.
 class KanjiBufferWidget extends StatefulWidget {
   final double canvasSize;
+  final double canvasSizePercentageToUse;
 
-  KanjiBufferWidget(this.canvasSize);
+  KanjiBufferWidget(this.canvasSize, this.canvasSizePercentageToUse);
 
   @override
   _KanjiBufferWidgetState createState() => _KanjiBufferWidgetState();
@@ -196,7 +197,7 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             animation:  _rotationXAnimation,
             child: Container(
             // make the multi character bar the same size as 3 prediction-buttons
-            width: widget.canvasSize * 0.9,
+            width: widget.canvasSize * widget.canvasSizePercentageToUse,
             height: widget.canvasSize * 0.1,
             child: OutlinedButton(
               // copy to clipboard and show snackbar

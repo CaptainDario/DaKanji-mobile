@@ -136,7 +136,10 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       ? "Buffer" : kanjiBuffer.kanjiBuffer),
                     child: Center(
                       key: SHOWCASE_DRAWING[6].key,
-                      child: KanjiBufferWidget(_canvasSize)
+                      child: KanjiBufferWidget(
+                        _canvasSize,
+                        landscape ? 1.0 : 0.8,
+                      )
                     )
                   );
                 }
