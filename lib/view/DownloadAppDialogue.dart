@@ -21,8 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
           Center( 
             child: Container(
               padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Wrap(
                 children: [
                   ElevatedButton(
                     onPressed: () async {
