@@ -71,25 +71,28 @@ Widget DrawScreenPortraitLayout(
   
   Widget layout;
   
-  layout = Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Container(
-        color: Colors.green, 
-        child: drawingCanvas
-      ),
-      SizedBox(height: 30,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          undoButton,
-          multiCharSearch,
-          clearButton
-        ],
-      ),
-      SizedBox(height: 10,),
-      predictionButtons
-    ]
+  layout = Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        drawingCanvas,
+        SizedBox(height: 30,),
+        Container(
+          width: canvasSize,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              undoButton,
+              multiCharSearch,
+              clearButton
+            ],
+          ),
+        ),
+        SizedBox(height: 10,),
+        predictionButtons
+      ]
+    ),
   );
 
   return layout;

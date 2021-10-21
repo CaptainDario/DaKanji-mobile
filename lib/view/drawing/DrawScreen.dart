@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:da_kanji_mobile/view/drawing/responsiveDrawScreen.dart';
+import 'package:da_kanji_mobile/view/drawing/DrawScreenResponsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 import 'package:da_kanji_mobile/model/core/Screens.dart';
 import 'package:da_kanji_mobile/model/core/DrawingInterpreter.dart';
@@ -114,13 +113,18 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
             Widget undoButton = Consumer<Strokes>(
               builder: (context, strokes, __) {
                 return Center(
-                  child: IconButton(
-                    key: SHOWCASE_DRAWING[1].key,
-                    icon: Icon(Icons.undo),
-                    iconSize: 20,
-                    onPressed: () {
-                      strokes.playDeleteLastStrokeAnimation = true;
-                    }
+                  child: Container(
+                    width:  _canvasSize * 0.1,
+                    child: FittedBox(
+                      child: IconButton(
+                        key: SHOWCASE_DRAWING[1].key,
+                        icon: Icon(Icons.undo),
+                        iconSize: _canvasSize * 0.075,
+                        onPressed: () {
+                          strokes.playDeleteLastStrokeAnimation = true;
+                        }
+                      ),
+                    ),
                   ),
                 );
               }
@@ -138,7 +142,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       key: SHOWCASE_DRAWING[6].key,
                       child: KanjiBufferWidget(
                         _canvasSize,
-                        landscape ? 1.0 : 0.8,
+                        landscape ? 1.0 : 0.7,
                       )
                     )
                   );
@@ -149,13 +153,18 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
             Widget clearButton = Consumer<Strokes>(
               builder: (contxt, strokes, _) {
                 return Center(
-                  child: IconButton(
-                    key: SHOWCASE_DRAWING[2].key,
-                    icon: Icon(Icons.clear),
-                    iconSize: 20,
-                    onPressed: () {
-                      strokes.playDeleteAllStrokesAnimation = true;
-                    }
+                  child: Container(
+                    width: _canvasSize * 0.1,
+                    child: FittedBox(
+                      child: IconButton(
+                        key: SHOWCASE_DRAWING[2].key,
+                        icon: Icon(Icons.clear),
+                        iconSize: 100,
+                        onPressed: () {
+                          strokes.playDeleteAllStrokesAnimation = true;
+                        }
+                      ),
+                    ),
                   ),
                 );
               }
