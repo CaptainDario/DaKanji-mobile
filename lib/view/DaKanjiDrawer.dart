@@ -107,6 +107,7 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
     else
       _drawerWidth = 500 * 0.5;
     
+
     DragStartDetails _start;
     
     // add a listener to when the Navigator animation finished
@@ -125,75 +126,78 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
     route.animation.addStatusListener(handler);
 
     // create an drawer style application
-    return AnimatedBuilder(
-      animation: _drawerController,
-      child: widget.child,
-      builder: (BuildContext context, Widget child) {
-        return Stack(
-          children: [
-            // the screen (child)
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..translate(_moveDrawer.value * _screenWidth/2)
-                ..rotateY(pi/4 * _moveDrawer.value),
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(
-                    (){
-                      String title;
-                      switch (widget.currentScreen){
-                        case Screens.about:
-                          title = LocaleKeys.AboutScreen_title.tr();
-                          break;
-                        case Screens.changelog:
-                          title = LocaleKeys.ChangelogScreen_title.tr();
-                          break;
-                        case Screens.drawing:
-                          title = LocaleKeys.DrawScreen_title.tr();
-                          break;
-                        case Screens.settings:
-                          title = LocaleKeys.SettingsScreen_title.tr();
-                          break;
-                        case Screens.webviewDrawing:
-                          title = "webview drawinga sdsa";
-                          break;
-                      }
-                      return title;
-                    } ()
-                  ),
-                  leading: Transform.scale(
-                    scale: 0.75,
-                    child: Image.asset("media/icon.png")
-                  ),
-                  actions: [
-                    InkWell(
-                      onTap: () => _drawerController.forward(from: 0.0),
-                      child: Ink(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            child: Icon(Icons.menu),
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: AnimatedBuilder(
+        animation: _drawerController,
+        child: widget.child,
+        builder: (BuildContext context, Widget child) {
+          return Stack(
+            children: [
+              // the screen (child)
+              Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..translate(_moveDrawer.value * _screenWidth/2)
+                  ..rotateY(pi/4 * _moveDrawer.value),
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      (){
+                        String title;
+                        switch (widget.currentScreen){
+                          case Screens.about:
+                            title = LocaleKeys.AboutScreen_title.tr();
+                            break;
+                          case Screens.changelog:
+                            title = LocaleKeys.ChangelogScreen_title.tr();
+                            break;
+                          case Screens.drawing:
+                            title = LocaleKeys.DrawScreen_title.tr();
+                            break;
+                          case Screens.settings:
+                            title = LocaleKeys.SettingsScreen_title.tr();
+                            break;
+                          case Screens.webviewDrawing:
+                            title = "webview drawinga sdsa";
+                            break;
+                        }
+                        return title;
+                      } ()
+                    ),
+                    leading: Transform.scale(
+                      scale: 0.75,
+                      child: Image.asset("media/icon.png")
+                    ),
+                    actions: [
+                      InkWell(
+                        onTap: () => _drawerController.forward(from: 0.0),
+                        child: Ink(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Container(
+                              child: Icon(Icons.menu),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                  body: SafeArea(child: child)
                 ),
-                body: SafeArea(child: child)
               ),
-            ),
-            // overlay area which should close the drawer when tapped
-            if(_drawerController.status != AnimationStatus.dismissed)
-              Positioned(
-                left: (_drawerWidth) * (_moveDrawer.value),
-                top: 0,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: (){
-                    _drawerController.reverse();
-                  },
+              // overlay over the actual page content which should close the 
+              //drawer when tapped
+              if(_drawerController.status != AnimationStatus.dismissed)
+                Positioned(
+                  left: (_drawerWidth) * (_moveDrawer.value),
+                  top: 0,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: (){
+                      _drawerController.reverse();
+                    },
                     onHorizontalDragStart: (DragStartDetails details){
                       if(_start == null)
                         _start = details;
@@ -211,141 +215,144 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                       else
                         _drawerController.forward();
                     },
-                  child: Opacity(
-                    opacity: _moveDrawer.value,
+                    child: Opacity(
+                      opacity: _moveDrawer.value,
+                      child: Container(
+                        color: Colors.grey[900].withAlpha(150),
+                        width: _screenWidth,
+                        height: _screenHeight,
+                      ),
+                    ),
+                  ),
+                ), 
+              // the drawer 
+              if(_drawerController.status != AnimationStatus.dismissed)
+                Transform.translate(
+                  offset: Offset(
+                    (-_drawerWidth) * (1-_moveDrawer.value), 
+                    0
+                  ),
+                  // enable closing the drawer when dragging on it
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onHorizontalDragStart: (DragStartDetails details){
+                      if(_start == null)
+                        _start = details;
+                    },
+                    onHorizontalDragUpdate: (DragUpdateDetails details){
+                      var newState = _start.localPosition.dx - 
+                        details.localPosition.dx;
+                      _drawerController.value = 
+                        1 - (newState / _drawerWidth).clamp(0.0, 1.0);
+                    },
+                    onHorizontalDragEnd: (DragEndDetails details){
+                      _start = null;
+                      if(_moveDrawer.value < 0.5)
+                        _drawerController.reverse();
+                      else
+                        _drawerController.forward();
+                    },
+                    // the actual drawer
                     child: Container(
-                      color: Colors.grey[900].withAlpha(150),
-                      width: _screenWidth,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(10, 0),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
                       height: _screenHeight,
-                    ),
-                  ),
-                ),
-              ), 
-            // the drawer 
-            if(_drawerController.status != AnimationStatus.dismissed)
-            Transform.translate(
-              offset: Offset(
-                (-_drawerWidth) * (1-_moveDrawer.value), 
-                0
-              ),
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onHorizontalDragStart: (DragStartDetails details){
-                  if(_start == null)
-                    _start = details;
-                },
-                onHorizontalDragUpdate: (DragUpdateDetails details){
-                  var newState = _start.localPosition.dx - 
-                    details.localPosition.dx;
-                  _drawerController.value = 
-                    1 - (newState / _drawerWidth).clamp(0.0, 1.0);
-                },
-                onHorizontalDragEnd: (DragEndDetails details){
-                  _start = null;
-                  if(_moveDrawer.value < 0.5)
-                    _drawerController.reverse();
-                  else
-                    _drawerController.forward();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(10, 0),
-                        blurRadius: 10,
-                      )
-                    ],
-                  ),
-                  height: _screenHeight,
-                  width: _drawerWidth,
-                  child: ListTileTheme(
-                    style: ListTileStyle.drawer,
-                    selectedColor: Theme.of(context).colorScheme.secondary,
-                    child: ListView(
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      children: <Widget>[
-                        // DaKanji Logo at the top
-                        SafeArea(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              Image(
-                                height: 84,
-                                image: AssetImage("media/banner.png"),
+                      width: _drawerWidth,
+                      child: ListTileTheme(
+                        style: ListTileStyle.drawer,
+                        selectedColor: Theme.of(context).colorScheme.secondary,
+                        child: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          children: <Widget>[
+                            // DaKanji Logo at the top
+                            SafeArea(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:[
+                                  Image(
+                                    height: 84,
+                                    image: AssetImage("media/banner.png"),
+                                  ),
+                                ]
                               ),
-                            ]
-                          ),
+                            ),
+                            // Drawer entry to go to the Kanji drawing screen
+                            Material(
+                              child: ListTile(
+                                leading: Icon(Icons.brush_outlined),
+                                title: Text(LocaleKeys.DrawScreen_title.tr()),
+                                selected: widget.currentScreen == Screens.drawing,
+                                onTap: () {
+                                  if(ModalRoute.of(context).settings.name != "/drawing"){
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context, "/drawing",
+                                      (Route<dynamic> route) => false,
+                                      arguments: SettingsArguments(true));
+                                  }
+                                  else{
+                                    _drawerController.reverse();
+                                  }
+                                },
+                              ),
+                            ),
+                            // Drawer entry to go to the settings screen
+                            Material(
+                              child: ListTile(
+                                key: SHOW_SHOWCASE_DRAWING ? SHOWCASE_DRAWING[12].key : null,
+                                selected: widget.currentScreen == Screens.settings,
+                                leading: Icon(Icons.settings_applications),
+                                title: Text(LocaleKeys.SettingsScreen_title.tr()),
+                                onTap: () {
+                                  if(ModalRoute.of(context).settings.name != "/settings"){
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context, "/settings",
+                                      (Route<dynamic> route) => false,
+                                      arguments: SettingsArguments(true));
+                                  }
+                                  else{
+                                    _drawerController.reverse();
+                                  }
+                                },
+                              ),
+                            ),
+                            // Drawer entry to go to the about screen
+                            Material(
+                              child: ListTile(
+                                selected: widget.currentScreen == Screens.about,
+                                leading: Icon(Icons.info_outline),
+                                title: Text(LocaleKeys.AboutScreen_title.tr()),
+                                
+                                onTap: () {
+                                  if(ModalRoute.of(context).settings.name != "/about"){
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context, "/about",
+                                      (Route<dynamic> route) => false,
+                                      arguments: SettingsArguments(true));
+                                  }
+                                  else{
+                                    _drawerController.reverse();
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                        // Drawer entry to go to the Kanji drawing screen
-                        Material(
-                          child: ListTile(
-                            leading: Icon(Icons.brush_outlined),
-                            title: Text(LocaleKeys.DrawScreen_title.tr()),
-                            selected: widget.currentScreen == Screens.drawing,
-                            onTap: () {
-                              if(ModalRoute.of(context).settings.name != "/drawing"){
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context, "/drawing",
-                                  (Route<dynamic> route) => false,
-                                  arguments: SettingsArguments(true));
-                              }
-                              else{
-                                _drawerController.reverse();
-                              }
-                            },
-                          ),
-                        ),
-                        // Drawer entry to go to the settings screen
-                        Material(
-                          child: ListTile(
-                            key: SHOW_SHOWCASE_DRAWING ? SHOWCASE_DRAWING[12].key : null,
-                            selected: widget.currentScreen == Screens.settings,
-                            leading: Icon(Icons.settings_applications),
-                            title: Text(LocaleKeys.SettingsScreen_title.tr()),
-                            onTap: () {
-                              if(ModalRoute.of(context).settings.name != "/settings"){
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context, "/settings",
-                                  (Route<dynamic> route) => false,
-                                  arguments: SettingsArguments(true));
-                              }
-                              else{
-                                _drawerController.reverse();
-                              }
-                            },
-                          ),
-                        ),
-                        // Drawer entry to go to the about screen
-                        Material(
-                          child: ListTile(
-                            selected: widget.currentScreen == Screens.about,
-                            leading: Icon(Icons.info_outline),
-                            title: Text(LocaleKeys.AboutScreen_title.tr()),
-                            
-                            onTap: () {
-                              if(ModalRoute.of(context).settings.name != "/about"){
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context, "/about",
-                                  (Route<dynamic> route) => false,
-                                  arguments: SettingsArguments(true));
-                              }
-                              else{
-                                _drawerController.reverse();
-                              }
-                            },
-                          ),
-                        ),
-                      ],
+                      )
                     ),
-                  )
+                  ),
                 ),
-              ),
-            ),
-          ],
-        );
-      }
+            ],
+          );
+        }
+      ),
     );
   }
 }
