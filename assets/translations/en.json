@@ -42,7 +42,7 @@
     "dictionary_system_translator": "OS integrated translator",
     "language": "Language",
     "advanced_settings": {
-      "drawing_inference_backend": "Inference backend",
+      "drawing_inference_backend": "Inference backend (the app needs to be restarted)",
       "title": "Advanced settings"
     }
   },
