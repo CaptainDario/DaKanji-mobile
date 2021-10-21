@@ -194,6 +194,23 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
                   onTap: (){
                     _drawerController.reverse();
                   },
+                    onHorizontalDragStart: (DragStartDetails details){
+                      if(_start == null)
+                        _start = details;
+                    },
+                    onHorizontalDragUpdate: (DragUpdateDetails details){
+                      var newState = _start.localPosition.dx - 
+                        details.localPosition.dx;
+                      _drawerController.value = 
+                        1 - (newState / _drawerWidth).clamp(0.0, 1.0);
+                    },
+                    onHorizontalDragEnd: (DragEndDetails details){
+                      _start = null;
+                      if(_moveDrawer.value < 0.5)
+                        _drawerController.reverse();
+                      else
+                        _drawerController.forward();
+                    },
                   child: Opacity(
                     opacity: _moveDrawer.value,
                     child: Container(
