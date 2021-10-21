@@ -97,11 +97,16 @@ class DaKanjiDrawerState extends State<DaKanjiDrawer>
 
   @override
   Widget build(BuildContext context) {
-    
-    _drawerWidth = MediaQuery.of(context).size.width * 0.6;
-    _screenWidth = MediaQuery.of(context).size.width;
-    _screenHeight = MediaQuery.of(context).size.height;
 
+    _screenHeight = MediaQuery.of(context).size.height;
+    double _screenWidth = MediaQuery.of(context).size.width;
+
+    // drawer should not use 75% of screen if screen is very wide
+    if(_screenWidth < 500)
+      _drawerWidth = _screenWidth * 0.5;
+    else
+      _drawerWidth = 500 * 0.5;
+    
     DragStartDetails _start;
     
     // add a listener to when the Navigator animation finished
