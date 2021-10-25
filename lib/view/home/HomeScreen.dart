@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           dialogType: DialogType.INFO,
           headerAnimationLoop: false,
           body: Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: Column(
               children: [
                 // Header
@@ -93,8 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: MediaQuery.of(context).size.height * 2/4,
                 ),
                 // buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  runAlignment: WrapAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       style: ButtonStyle(
@@ -109,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Text("Complete log")
                     ),
+                    SizedBox(width: 5,),
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: 

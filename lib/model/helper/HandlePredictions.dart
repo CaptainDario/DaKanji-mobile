@@ -227,6 +227,9 @@ class HandlePrediction{
           }
         }
       }
+      else if(Platform.isWindows){
+        print("There are no app dictionaries for windows available!");
+      }
     }
   }
 

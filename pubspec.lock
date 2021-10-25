@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  animated_text_kit:
-    dependency: "direct main"
-    description:
-      name: animated_text_kit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.2.1"
   archive:
     dependency: transitive
     description:
@@ -181,6 +174,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.21"
+  flutter_layout_grid:
+    dependency: "direct main"
+    description:
+      name: flutter_layout_grid
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -537,6 +537,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0"
+  tuple:
+    dependency: "direct main"
+    description:
+      name: tuple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   tutorial_coach_mark:
     dependency: "direct main"
     description:

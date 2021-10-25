@@ -173,10 +173,6 @@ class Settings with ChangeNotifier {
   }
 
   set backendCNNSingleChar(String newBackend){
-    if(!inferenceBackends.contains(newBackend))
-      throw(newBackend + "is not a vliad backend.\n Use one of: " 
-        + inferenceBackends.toString());
-
     _backendCNNSingleChar = newBackend;
     notifyListeners();
   }
@@ -213,7 +209,7 @@ class Settings with ChangeNotifier {
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
-    var localeStr = prefs.getString('selectedLocale');
+    var localeStr = prefs.getString('selectedLocale') ?? "en";
     selectedLocale = localeStr == null ? null : Locale(localeStr);
   }
 }

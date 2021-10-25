@@ -26,6 +26,7 @@ import 'package:da_kanji_mobile/view/drawing/DrawScreen.dart';
 import 'package:da_kanji_mobile/view/AboutScreen.dart';
 import 'package:da_kanji_mobile/globals.dart';
 import 'package:da_kanji_mobile/CodegenLoader.dart';
+import 'package:universal_io/io.dart';
 
 
 Future<void> main() async {
@@ -49,7 +50,7 @@ Future<void> main() async {
         assetLoader: CodegenLoader(),
         child: DaKanjiApp()
       ),
-    )
+    ),
   );
 }
 
@@ -65,17 +66,20 @@ Future<void> init() async {
   VERSION = (await PackageInfo.fromPlatform()).version;
   BUILD_NR = (await PackageInfo.fromPlatform()).buildNumber;
   
-  setupGetIt();
+  await setupGetIt();
 
-  await initDeepLinksStream();
-  await getInitialDeepLink();
+  if(Platform.isAndroid || Platform.isIOS){
+    await initDeepLinksStream();
+    await getInitialDeepLink();
+  }
 }
 
 
-void setupGetIt() {
+void setupGetIt() async {
   // services to load from disk
   GetIt.I.registerSingleton<PlatformDependentVariables>(PlatformDependentVariables());
   GetIt.I.registerSingleton<Changelog>(Changelog());
+  await GetIt.I<Changelog>().init();
   GetIt.I.registerSingleton<UserData>(UserData());
   GetIt.I.registerSingleton<Settings>(Settings());
 

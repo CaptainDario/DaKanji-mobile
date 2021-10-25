@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:webviewx/webviewx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 import 'package:da_kanji_mobile/provider/Lookup.dart';
-import 'package:da_kanji_mobile/locales_keys.dart';
 
 
 
@@ -176,15 +173,6 @@ class _WebviewScreenState extends State<WebviewScreen>
                                   width: 150,
                                 ),
                               ),
-                              /*AnimatedTextKit(
-                                pause: Duration(milliseconds: 500),
-                                animatedTexts: [
-                                  TyperAnimatedText(
-                                    "${LocaleKeys.WebviewScreen_loading.tr()}: ${GetIt.I<Lookup>().chars}",
-                                    speed: Duration(milliseconds: 200)
-                                  )
-                                ],
-                              ),*/
                             );
                           } (),
                         )

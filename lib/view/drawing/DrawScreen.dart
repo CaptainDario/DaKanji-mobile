@@ -1,6 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:da_kanji_mobile/view/drawing/DrawScreenResponsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -37,8 +40,6 @@ class DrawScreen extends StatefulWidget {
 class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
   /// the size of the canvas widget
   double _canvasSize;
-  /// the minimum padding around the drawing canvas (left, top, right)
-  double _canvasPad = 10.0;
 
   @override
   void initState() {
@@ -76,141 +77,143 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
     return DaKanjiDrawer(
       currentScreen: Screens.drawing,
       animationAtStart: !widget.openedByDrawer,
-      child: Center(
-        child: ChangeNotifierProvider.value(
-          value: GetIt.I<Strokes>(),
-          // create responsive layouts
-          child: LayoutBuilder(
-            builder: (context, constraints){
-              // init size of canvas
-              // and assure that it is min. 20 smaller than screen width
-              _canvasSize = constraints.biggest.height * 3/6;
-              if(_canvasSize >= constraints.biggest.width - _canvasPad)
-                _canvasSize = constraints.biggest.height - _canvasPad;
-              
-              return Column( 
-                children: [
-                  // the canvas to draw on
-                  Consumer<Strokes>(
-                    builder: (context, strokes, __){
-                      return DrawingCanvas(
-                        width: _canvasSize, 
-                        height: _canvasSize,
-                        margin: EdgeInsets.fromLTRB(0, _canvasPad, 0, 0),
-                        key: SHOWCASE_DRAWING[0].key,
-                        strokes: strokes,
+      child: ChangeNotifierProvider.value(
+        value: GetIt.I<Strokes>(),
+        child: LayoutBuilder(
+          builder: (context, constraints){
+
+            var t = DrawScreenRunsInLandscape(constraints);
+            bool landscape = t.item1;
+            _canvasSize = t.item2;
             
-                        onFinishedDrawing: (Uint8List image) async {
-                          GetIt.I<DrawingInterpreter>().runInference(image);
-                        },
-                        onDeletedLastStroke: (Uint8List image) {
-                          if(strokes.strokeCount > 0)
-                            GetIt.I<DrawingInterpreter>().runInference(image);
-                          else
-                            GetIt.I<DrawingInterpreter>().clearPredictions();
-                        },
-                        onDeletedAllStrokes: () {
-                          GetIt.I<DrawingInterpreter>().clearPredictions();
-                        },
-                      );
-                    },
-                  ),
-                  Container(
-                    height: constraints.biggest.height * 1/6,
-                    child:
-                    // undo/clear button and kanjiBuffer,
-                      Container(
-                        width: _canvasSize,
-                        child: Row(
-                          children: [
-                            // undo
-                            Consumer<Strokes>(
-                              builder: (context, strokes, __) {
-                                return IconButton(
-                                  key: SHOWCASE_DRAWING[1].key,
-                                  icon: Icon(Icons.undo),
-                                  onPressed: () {
-                                    strokes.playDeleteLastStrokeAnimation = true;
-                                  }
-                                );
-                              }
-                            ),
-                            // multi character search input
-                            ChangeNotifierProvider.value(
-                              value: GetIt.I<KanjiBuffer>(),
-                              child: Expanded(
-                                child: Consumer<KanjiBuffer>(
-                                  builder: (context, kanjiBuffer, child){
-                                    return Hero(
-                                    tag: "webviewHero_b_" + 
-                                      (kanjiBuffer.kanjiBuffer == "" 
-                                        ? "Buffer" : kanjiBuffer.kanjiBuffer),
-                                      child: Center(
-                                        key: SHOWCASE_DRAWING[6].key,
-                                        child: KanjiBufferWidget(_canvasSize)
-                                      )
-                                    );
-                                  }
-                                ),
-                              ),
-                            ),
-                            // clear
-                            Consumer<Strokes>(
-                              builder: (contxt, strokes, _) {
-                                return  IconButton(
-                                  key: SHOWCASE_DRAWING[2].key,
-                                  icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    strokes.playDeleteAllStrokesAnimation = true;
-                                  }
-                                );
-                              }
-                            ), 
-                          ]
-                        ),
-                      ),
-                  ),
-                  // prediction buttons
-                  Container(
-                    key: SHOWCASE_DRAWING[3].key,
-                    width: _canvasSize,
-                    // approximated button height (width/5) * numRows + padding  
-                    height: (_canvasSize / 5.0) * 2.0 + 10, 
-                    child: ChangeNotifierProvider.value(
-                      value: GetIt.I<DrawingInterpreter>(),
-                      child: Consumer<DrawingInterpreter>(
-                        builder: (context, interpreter, child){
-                          return GridView.count(
-                            physics: new NeverScrollableScrollPhysics(),
-                            crossAxisCount: 5,
-                            children: List.generate(10, (i) {
-                              Widget widget =
-                                PredictionButton(interpreter.predictions[i]);
-                              // instantiate short/long press showcase button
-                              if(i == 0){
-                                widget = Container(
-                                  key: SHOWCASE_DRAWING[4].key,
-                                  child: widget 
-                                );
-                              }
-                              return Hero(
-                                tag: "webviewHero_" + 
-                                  (interpreter.predictions[i] == " " 
-                                    ? i.toString() : interpreter.predictions[i]),
-                                child: widget,
-                              );
-                            },
-                            )
-                          );
+            // the canvas to draw on
+            Widget drawingCanvas = Consumer<Strokes>(
+              builder: (context, strokes, __){
+                return DrawingCanvas(
+                  width: _canvasSize, 
+                  height: _canvasSize,
+                  key: SHOWCASE_DRAWING[0].key,
+                  strokes: strokes,
+                  onFinishedDrawing: (Uint8List image) async {
+                    GetIt.I<DrawingInterpreter>().runInference(image);
+                  },
+                  onDeletedLastStroke: (Uint8List image) {
+                    if(strokes.strokeCount > 0)
+                      GetIt.I<DrawingInterpreter>().runInference(image);
+                    else
+                      GetIt.I<DrawingInterpreter>().clearPredictions();
+                  },
+                  onDeletedAllStrokes: () {
+                    GetIt.I<DrawingInterpreter>().clearPredictions();
+                  },
+                );
+              },
+            );
+            // undo
+            Widget undoButton = Consumer<Strokes>(
+              builder: (context, strokes, __) {
+                return Center(
+                  child: Container(
+                    width:  _canvasSize * 0.1,
+                    child: FittedBox(
+                      child: IconButton(
+                        key: SHOWCASE_DRAWING[1].key,
+                        icon: Icon(Icons.undo),
+                        iconSize: _canvasSize * 0.075,
+                        onPressed: () {
+                          strokes.playDeleteLastStrokeAnimation = true;
                         }
                       ),
-                    )
+                    ),
                   ),
-                  Spacer(),
-                ],
-              );
-            }
-          ),
+                );
+              }
+            );
+            // multi character search input
+            Widget multiCharSearch = ChangeNotifierProvider.value(
+              value: GetIt.I<KanjiBuffer>(),
+              child: Consumer<KanjiBuffer>(
+                builder: (context, kanjiBuffer, child){
+                  return Hero(
+                  tag: "webviewHero_b_" + 
+                    (kanjiBuffer.kanjiBuffer == "" 
+                      ? "Buffer" : kanjiBuffer.kanjiBuffer),
+                    child: Center(
+                      key: SHOWCASE_DRAWING[6].key,
+                      child: KanjiBufferWidget(
+                        _canvasSize,
+                        landscape ? 1.0 : 0.7,
+                      )
+                    )
+                  );
+                }
+              ),
+            );
+            // clear
+            Widget clearButton = Consumer<Strokes>(
+              builder: (contxt, strokes, _) {
+                return Center(
+                  child: Container(
+                    width: _canvasSize * 0.1,
+                    child: FittedBox(
+                      child: IconButton(
+                        key: SHOWCASE_DRAWING[2].key,
+                        icon: Icon(Icons.clear),
+                        iconSize: 100,
+                        onPressed: () {
+                          strokes.playDeleteAllStrokesAnimation = true;
+                        }
+                      ),
+                    ),
+                  ),
+                );
+              }
+            );
+            // prediction buttons
+            Widget predictionButtons = Container(
+              key: SHOWCASE_DRAWING[3].key,
+              //use canvas height in landscape
+              width :  landscape ? (_canvasSize * 0.4) : _canvasSize,
+              height: !landscape ? (_canvasSize * 0.4) : _canvasSize, 
+              child: ChangeNotifierProvider.value(
+                value: GetIt.I<DrawingInterpreter>(),
+                child: Consumer<DrawingInterpreter>(
+                  builder: (context, interpreter, child){
+                    return GridView.count(
+                      //padding: EdgeInsets.all(2),
+                      physics: new NeverScrollableScrollPhysics(),
+                      scrollDirection: landscape ? Axis.horizontal : Axis.vertical,
+                      crossAxisCount: 5,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      
+                      children: List.generate(10, (i) {
+                        Widget widget = PredictionButton(interpreter.predictions[i]);
+                        // instantiate short/long press showcase button
+                        if(i == 0){
+                          widget = Container(
+                            key: SHOWCASE_DRAWING[4].key,
+                            child: widget 
+                          );
+                        }
+                        return Hero(
+                          tag: "webviewHero_" + 
+                            (interpreter.predictions[i] == " " 
+                              ? i.toString() : interpreter.predictions[i]),
+                          child: widget,
+                        );
+                      },
+                      )
+                    );
+                  }
+                ),
+              )
+            ); 
+
+            return DrawScreenResponsiveLayout(drawingCanvas, predictionButtons, 
+              multiCharSearch, undoButton, clearButton, _canvasSize, landscape
+            );
+          }
         ),
       ),
     );

@@ -35,8 +35,7 @@ void showRatePopup(BuildContext context, bool hasDoNotShowOption){
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 50,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Wrap(
             children: [
               // close button
               ElevatedButton(
@@ -52,6 +51,7 @@ void showRatePopup(BuildContext context, bool hasDoNotShowOption){
                 },
                 child: Text(LocaleKeys.HomeScreen_RatePopup_close.tr())
               ),
+              SizedBox(width: 5,),
               // do not ask again button
               if(hasDoNotShowOption)
                 ElevatedButton(
@@ -69,6 +69,7 @@ void showRatePopup(BuildContext context, bool hasDoNotShowOption){
                   },
                   child: Text(LocaleKeys.HomeScreen_RatePopup_dont_ask_again.tr())
                 ),
+              SizedBox(width: 5,),
               // rate button
               ElevatedButton(
                 style: ButtonStyle(

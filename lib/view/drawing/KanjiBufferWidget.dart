@@ -14,8 +14,9 @@ import 'package:get_it/get_it.dart';
 /// released.
 class KanjiBufferWidget extends StatefulWidget {
   final double canvasSize;
+  final double canvasSizePercentageToUse;
 
-  KanjiBufferWidget(this.canvasSize);
+  KanjiBufferWidget(this.canvasSize, this.canvasSizePercentageToUse);
 
   @override
   _KanjiBufferWidgetState createState() => _KanjiBufferWidgetState();
@@ -47,8 +48,6 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
   AnimationController _scaleInNewCharController;
   Animation<double> _scaleInNewCharAnimation;
 
-  /// size of the kanji buffer
-  double width;
   /// how many characters do fit in this box
   int charactersFit = 0;
   /// callback when the kanjibuffer changed
@@ -119,30 +118,6 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
     ));
     // make sure all characters are show even if page changed
     _scaleInNewCharController.value = 1.0;
-  
-    // set width of the kanjibuffer
-    width = () {
-      double margin = 10;
-      double buttonSize = (widget.canvasSize - 4.0 * margin) / 5;
-      return (buttonSize * 3) + (3 * margin);
-    }();
-
-    // get the maximum no of characters which fit in the kanji buffer
-    charactersFit = -3;
-    String chars = "口口";
-    double w = 1;
-    while(width > w){
-      w = (TextPainter(
-        text: TextSpan(text: chars),
-        maxLines: 1,
-        textScaleFactor: 1.5,
-        textDirection: TextDirection.ltr)
-      ..layout()).size.width;
-
-      chars += "口";
-      charactersFit += 1;
-    }
-
   }
 
   @override
@@ -160,6 +135,9 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
       _scaleInNewCharController.forward(from: 0.0);
       GetIt.I<KanjiBuffer>().runAnimation = false;
     }
+
+    charactersFit = calculateCharactersFit();
+
     return GestureDetector(
       onPanDown: (details) {
         _springController.stop();
@@ -219,8 +197,8 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
             animation:  _rotationXAnimation,
             child: Container(
             // make the multi character bar the same size as 3 prediction-buttons
-            width: width,
-            padding: EdgeInsets.all(5),
+            width: widget.canvasSize * widget.canvasSizePercentageToUse,
+            height: widget.canvasSize * 0.1,
             child: OutlinedButton(
               // copy to clipboard and show snackbar
               onPressed: (){
@@ -240,44 +218,49 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    () { 
-                      int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
-                      
-                      // more than one character is in the kanjibuffer
-                      if(length > 1){
-                        // more character in the buffer than can be shown
-                        if(GetIt.I<KanjiBuffer>().kanjiBuffer.length > charactersFit)
-                          return "…" +  GetIt.I<KanjiBuffer>().kanjiBuffer
-                            .substring(length-charactersFit, length-1);
-                        // whole buffer can be shown
-                        else{
-                          return GetIt.I<KanjiBuffer>()
-                            .kanjiBuffer.substring(0, length-1);
+                  FittedBox(
+                    child: Text(
+                      () { 
+                        int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
+                        
+                        // more than one character is in the kanjibuffer
+                        if(length > 1){
+                          // more character in the buffer than can be shown
+                          if(GetIt.I<KanjiBuffer>().kanjiBuffer.length > charactersFit)
+                            return "…" +  GetIt.I<KanjiBuffer>().kanjiBuffer
+                              .substring(length-charactersFit, length-1);
+                          // whole buffer can be shown
+                          else{
+                            return GetIt.I<KanjiBuffer>()
+                              .kanjiBuffer.substring(0, length-1);
+                          }
                         }
-                      }
-                      else
-                        return "";
-                    } (),
-                    textScaleFactor: 1.5,
-                    softWrap: false,
-                    style: TextStyle(
-                      fontFamily: "NotoSans"
+                        else
+                          return " ";
+                      } (),
+                      
+                      softWrap: false,
+                      style: TextStyle(
+                        fontFamily: "NotoSans",
+                        fontSize: 60
+                      ),
                     ),
                   ),
                   ScaleTransition(
                     scale: _scaleInNewCharAnimation,
-                    child: Text(
-                      () {
-                        int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
-                        if(length > 0)
-                          return GetIt.I<KanjiBuffer>().kanjiBuffer[length - 1];
-                        else
-                          return "";
-                      } (),
-                      textScaleFactor: 1.5,
-                      style: TextStyle(
-                        fontFamily: "NotoSans"
+                    child: FittedBox(
+                      child: Text(
+                        () {
+                          int length = GetIt.I<KanjiBuffer>().kanjiBuffer.length;
+                          if(length > 0)
+                            return GetIt.I<KanjiBuffer>().kanjiBuffer[length - 1];
+                          else
+                            return " ";
+                        } (),
+                        style: TextStyle(
+                          fontFamily: "NotoSans",
+                          fontSize: 600
+                        ),
                       ),
                     )
                   )
@@ -301,5 +284,30 @@ class _KanjiBufferWidgetState extends State<KanjiBufferWidget>
         )
       ),
     );
+  }
+
+  /// Calculates and returns how many characters fit in this KanjiBufferWidget
+  int calculateCharactersFit(){
+    int _charactersFit = -1; // -1 too assure there is enough space for the '...'
+    String chars = "";
+    double w = 0;
+    while(widget.canvasSize * 0.8 > w){
+      w = (TextPainter(
+        text: TextSpan(
+          text: chars,
+          style: TextStyle(
+            fontFamily: "NotoSans",
+            fontSize: 60
+          ),
+        ),
+        maxLines: 1,
+        textDirection: TextDirection.ltr)..layout()
+      ).size.width;
+
+      chars += "口";
+      _charactersFit += 1;
+    }
+
+    return _charactersFit;
   }
 }

@@ -152,7 +152,7 @@ class _DrawingCanvasState extends State<DrawingCanvas>
           // allow only one pointer at a time
           if(_pointerID == null){
             _pointerID = details.pointer;
-            Offset point = details.localPosition;
+            Offset point = details.localPosition / widget.height;
             widget.strokes.moveTo(point.dx, point.dy);
           }
         },
@@ -160,7 +160,7 @@ class _DrawingCanvasState extends State<DrawingCanvas>
         onPointerMove: (details) {
           // allow only one pointer at a time
           if(_pointerID == details.pointer){
-            Offset point = details.localPosition;
+            Offset point = details.localPosition / widget.height;
             widget.strokes.lineTo(point.dx, point.dy);
             pointerMoved = true;
           }

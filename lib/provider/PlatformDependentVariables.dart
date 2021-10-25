@@ -29,6 +29,11 @@ class PlatformDependentVariables {
       _appStoreLink = APPSTORE_PAGE;
       _daapplabStorePage = DAAPPLAB_APPSTORE_PAGE;
     }
+    // TODO: add desktop and web 
+    else{
+      _appStoreLink = "None";
+      _daapplabStorePage = "None";
+    }
   }
 
 }

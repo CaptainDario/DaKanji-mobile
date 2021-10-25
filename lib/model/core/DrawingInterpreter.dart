@@ -104,6 +104,8 @@ class DrawingInterpreter with ChangeNotifier{
       _interpreter = await _initInterpreterAndroid();
     else if (Platform.isIOS) 
       _interpreter = await _initInterpreterIOS();
+    else if(Platform.isWindows)
+      _interpreter = await _initInterpreterWindows();
     else
       throw PlatformException(code: "Platform not supported.");
     GetIt.I<Settings>().save();
@@ -289,8 +291,7 @@ class DrawingInterpreter with ChangeNotifier{
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
     // if no inference backend was set -> automatically set one
-    String selectedBackend =
-      GetIt.I<Settings>().backendCNNSingleChar;
+    String selectedBackend = GetIt.I<Settings>().backendCNNSingleChar;
     if(!GetIt.I<Settings>().inferenceBackends.contains(selectedBackend)){
       if (iosInfo.isPhysicalDevice && false) {
         interpreter = await _metalInterpreterIOS();
@@ -310,6 +311,14 @@ class DrawingInterpreter with ChangeNotifier{
     
     return interpreter;
 
+  }
+
+  /// Initializes the TFLite interpreter on iOS.
+  ///
+  /// Uses the uses CPU mode.
+  Future<Interpreter> _initInterpreterWindows() async {
+
+    return await _cpuInterpreter();
   }
 
   /// Initializes the interpreter with NPU acceleration for Android.
@@ -357,4 +366,21 @@ class DrawingInterpreter with ChangeNotifier{
     GetIt.I<Settings>().backendCNNSingleChar = Settings().inferenceBackends[0];
     return i;
   }
+
+  Future<Interpreter> _XXNPackInterpreter() async {
+
+    Interpreter interpreter;
+    final options = InterpreterOptions()..addDelegate(
+      XNNPackDelegate(
+        options: XNNPackDelegateOptions()
+      )
+    );
+    interpreter = await Interpreter.fromAsset(
+      _interpreterAssetPath,
+      options: options
+    );
+
+    return interpreter;
+  }
+
 }
