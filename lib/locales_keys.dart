@@ -53,6 +53,7 @@ abstract class  LocaleKeys {
   static const AboutScreen_rate_this_app = 'AboutScreen.rate_this_app';
   static const AboutScreen_about_text = 'AboutScreen.about_text';
   static const AboutScreen_show_changelog = 'AboutScreen.show_changelog';
+  static const AboutScreen_software_informations_button = 'AboutScreen.software_informations_button';
   static const AboutScreen = 'AboutScreen';
   static const ChangelogScreen_title = 'ChangelogScreen.title';
   static const ChangelogScreen = 'ChangelogScreen';
