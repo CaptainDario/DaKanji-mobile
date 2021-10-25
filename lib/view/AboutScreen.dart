@@ -59,7 +59,7 @@ class AboutScreen extends StatelessWidget {
                   },
                 ),
               ),
-              // text with link to open the "changelog"-screen
+              // text with link to open the "complete changelog"-screen
               Row(
                 children:[
                   Container(
