@@ -190,6 +190,7 @@ class HandlePrediction{
             );
           }
         }
+        // imiwa?
         else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[5]){
           print("iOS imiwa?");
           final url = Uri.encodeFull("imiwa://dictionary?search=" + char);
@@ -202,9 +203,10 @@ class HandlePrediction{
             );
           }
         }
+        // Japanese
         else if(GetIt.I<Settings>().selectedDictionary == GetIt.I<Settings>().dictionaries[6]){
           print("iOS Japanese");
-          final url = Uri.encodeFull("japanese://search/" + char);
+          final url = Uri.encodeFull("japanese://search/word/" + char);
           if(await canLaunch(url)) 
             launch(url, forceSafariVC: false);
           else {
