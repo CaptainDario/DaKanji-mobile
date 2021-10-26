@@ -1,5 +1,5 @@
 name: da_kanji_mobile
-description: A kanji recognizer app. 
+description: A cross platform app for mobile, desktop and web to help learn and use the Japanese language.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -28,6 +28,7 @@ dependencies:
   easy_localization: ^3.0.0
   flutter_layout_grid: ^1.0.3
   tuple: ^2.0.0
+  yaml: ^3.1.0
 
   # do NOT support all target platforms
   webviewx: ^0.1.0                 # android, iOS, web
@@ -88,6 +89,7 @@ flutter:
     - assets/kanji_drawing_aid_w.png
 
     - CHANGELOG.md
+    - pubspec.yaml
 
     - media/icon.png
     - media/banner.png

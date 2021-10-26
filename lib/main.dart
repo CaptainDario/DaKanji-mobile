@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:yaml/yaml.dart';
+import 'package:universal_io/io.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -26,7 +27,6 @@ import 'package:da_kanji_mobile/view/drawing/DrawScreen.dart';
 import 'package:da_kanji_mobile/view/AboutScreen.dart';
 import 'package:da_kanji_mobile/globals.dart';
 import 'package:da_kanji_mobile/CodegenLoader.dart';
-import 'package:universal_io/io.dart';
 
 
 Future<void> main() async {
@@ -63,8 +63,11 @@ Future<void> main() async {
 /// * initializes tensorflow lite and reads the labels from file 
 Future<void> init() async {
   // get the app's version 
-  VERSION = (await PackageInfo.fromPlatform()).version;
-  BUILD_NR = (await PackageInfo.fromPlatform()).buildNumber;
+  File f = new File("pubspec.yaml");
+  await f.readAsString().then((String text) {
+    Map yaml = loadYaml(text);
+    VERSION = yaml['version'];
+  });
   
   await setupGetIt();
 
