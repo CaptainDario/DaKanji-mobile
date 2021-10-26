@@ -12,9 +12,6 @@ const String APP_LINK = r"dakanji://dakanji/";
 // the version number of this app
 // ignore: non_constant_identifier_names
 String VERSION;
-// the build version of this app
-// ignore: non_constant_identifier_names
-String BUILD_NR;
 // all versions which implemented new features for the drawing screen
 // ignore: non_constant_identifier_names
 List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];

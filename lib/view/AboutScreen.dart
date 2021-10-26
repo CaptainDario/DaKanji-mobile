@@ -33,7 +33,6 @@ class AboutScreen extends StatelessWidget {
       GetIt.I<PlatformDependentVariables>().appStoreLink)
     .replaceAll("DAAPPLAB_STORE_PAGE", 
       GetIt.I<PlatformDependentVariables>().daapplabStorePage)
-    .replaceAll("VERSION", "$VERSION#$BUILD_NR")
     .replaceAll("DISCORD_SERVER", DISCORD_INVITE);
 
   AboutScreen(this.openedByDrawer);
@@ -94,6 +93,29 @@ class AboutScreen extends StatelessWidget {
                           );
                         }, 
                         child: Text(LocaleKeys.AboutScreen_rate_this_app.tr())
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 2),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          showAboutDialog(
+                            context: context,
+                            applicationName: APP_TITLE,
+                            applicationVersion: VERSION,
+                            applicationIcon: Image(
+                              image: AssetImage("media/icon.png",),
+                              width: 50,
+                            ) 
+                          );
+                        }, 
+                        child: Text(LocaleKeys.AboutScreen_software_informations_button.tr())
                       ),
                     ),
                   ],
