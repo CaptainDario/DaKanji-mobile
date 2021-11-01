@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:yaml/yaml.dart';
 import 'package:universal_io/io.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
