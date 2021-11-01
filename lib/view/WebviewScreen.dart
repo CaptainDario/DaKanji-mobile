@@ -33,8 +33,9 @@ class _WebviewScreenState extends State<WebviewScreen>
   Animation _rotationAnimation;
   /// the webview to show the dictionary search
   WebViewXController webviewController;
-
+  /// the controller to animate the DaKanji icon while the webview is loading
   AnimationController _loadingController;
+  /// the animation to rotate the DaKanji icon while the webview is loading
   Animation<double> _loadingAnimation;
 
 
@@ -44,7 +45,7 @@ class _WebviewScreenState extends State<WebviewScreen>
 
     loadWebview = false;
     showLoading = false;
-
+    
     _loadingController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -74,8 +75,8 @@ class _WebviewScreenState extends State<WebviewScreen>
   @override
   void dispose() { 
     super.dispose();
-    _controller.dispose();
-    _loadingController.dispose();
+    //_controller.dispose();
+    //_loadingController.dispose();
   }
 
   @override
@@ -97,8 +98,10 @@ class _WebviewScreenState extends State<WebviewScreen>
     
     return Scaffold(
       appBar: AppBar(title: Text(GetIt.I<Lookup>().chars)),
-      body: WillPopScope(
-        // when leaving this screen hide the webview and  
+      body: 
+      
+      WillPopScope(
+        // when leaving this screen hide the webview  
         onWillPop: () {
           setState(() {
             showLoading = false;
@@ -127,7 +130,8 @@ class _WebviewScreenState extends State<WebviewScreen>
                         if(loadWebview){
                           return WebViewX(
                             initialContent:  GetIt.I<Lookup>().url,
-                            initialSourceType: SourceType.URL,
+                            height: MediaQuery.of(context).size.height,
+                            width: width,
                             onPageFinished: (s) {
                               _controller.forward(from: 0.0);
                             }
@@ -184,7 +188,6 @@ class _WebviewScreenState extends State<WebviewScreen>
             ),
           )
         )
-      //)
     );
   }
 }
