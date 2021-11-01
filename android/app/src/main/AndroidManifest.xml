@@ -59,10 +59,19 @@
     </application>
 
     <queries>
-    <!-- If your app opens https URLs -->
-    <intent>
-      <action android:name="android.intent.action.VIEW" />
-      <data android:scheme="https" />
-    </intent>
-  </queries>
+      <!-- If your app opens https URLs -->
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+      </intent>
+      <intent>
+        <action android:name="android.intent.action.TRANSLATE" />
+      </intent>
+
+      <!-- App dictionary visibility -->
+      <package android:name="jp.takoboto" />
+      <package android:name="com.craxic.akebifree" />
+      <package android:name="sk.baka.aedict3" />
+
+    </queries>
 </manifest>
