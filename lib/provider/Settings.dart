@@ -205,7 +205,7 @@ class Settings with ChangeNotifier {
     emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
     useWebview = prefs.getBool('useWebview') ?? false;
     
-    backendCNNSingleChar = prefs.getString("backendCNNSingleChar") ?? '';
+    backendCNNSingleChar = prefs.getString("backendCNNSingleChar") ?? 'CPU';
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
