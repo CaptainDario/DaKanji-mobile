@@ -62,12 +62,6 @@ Future<void> main() async {
 /// * loads the settings
 /// * initializes tensorflow lite and reads the labels from file 
 Future<void> init() async {
-  // get the app's version 
-  File f = new File("pubspec.yaml");
-  await f.readAsString().then((String text) {
-    Map yaml = loadYaml(text);
-    VERSION = yaml['version'];
-  });
   
   await setupGetIt();
 
