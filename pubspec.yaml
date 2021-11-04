@@ -40,8 +40,9 @@ dependencies:
   android_intent_plus: ^3.0.2      # android
 
   # utility 
-  #flutter_launcher_icons: ^0.9.2  # android, iOS, Linux, MacOS, windows
-  #flutter_native_splash: ^1.2.3   # android, iOS, web
+  flutter_launcher_icons: ^0.9.2  # android, iOS, Linux, MacOS, windows
+  flutter_native_splash: ^1.2.3   # android, iOS, web
+  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -50,11 +51,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  
 flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "media/icon.png"
+  remove_alpha_ios: true
 
 # The following section is specific to Flutter.
 flutter:
