@@ -143,7 +143,7 @@ class _WebviewScreenState extends State<WebviewScreen>
                   )
                 ),
                 
-                // only show predicted character while the webview is loading
+                // show DaKanji icon while the webview is loading
                 Transform.translate(
                   offset: Offset(
                     (width) * (1 - _rotationAnimation.value) - width,
@@ -161,6 +161,7 @@ class _WebviewScreenState extends State<WebviewScreen>
                         + (GetIt.I<Lookup>().buffer ? "b_" : "")
                         + GetIt.I<Lookup>().chars,
                       child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: Center(
                           child: () {
                             return DefaultTextStyle(
