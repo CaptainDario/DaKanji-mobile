@@ -97,11 +97,11 @@ class Settings with ChangeNotifier {
         "GPU",
         "NNAPI",
       ]);
-    else if(Platform.isIOS)
-      inferenceBackends.addAll([
-        "Metal",
-        "CoreML"
-      ]);
+    //else if(Platform.isIOS)
+    //  inferenceBackends.addAll([
+    //    "Metal",
+    //    "CoreML"
+    //  ]);
     _backendCNNSingleChar = "";
 
     invertShortLongPress = false;
