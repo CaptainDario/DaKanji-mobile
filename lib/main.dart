@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:universal_io/io.dart';
 import 'package:get_it/get_it.dart';
@@ -62,12 +63,21 @@ Future<void> main() async {
 /// * initializes tensorflow lite and reads the labels from file 
 Future<void> init() async {
   
+  // NOTE: uncomment to clear the SharedPreferences
+  //await clearPreferences();
+  
   await setupGetIt();
 
   if(Platform.isAndroid || Platform.isIOS){
     await initDeepLinksStream();
     await getInitialDeepLink();
   }
+}
+
+/// Convenience function to clear the SharedPreferences
+void clearPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.clear();
 }
 
 
