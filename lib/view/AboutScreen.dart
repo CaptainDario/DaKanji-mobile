@@ -86,10 +86,9 @@ class AboutScreen extends StatelessWidget {
                         onPressed: () async {
                           final InAppReview inAppReview = InAppReview.instance;
         
-                          // TODO: add store id's
                           inAppReview.openStoreListing(
-                            appStoreId: '...', 
-                            microsoftStoreId: '...'
+                            appStoreId: APPSTORE_ID, 
+                            //microsoftStoreId: '...'
                           );
                         }, 
                         child: Text(LocaleKeys.AboutScreen_rate_this_app.tr())

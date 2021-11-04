@@ -1,3 +1,4 @@
+import 'package:da_kanji_mobile/globals.dart';
 import 'package:flutter/material.dart';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -85,9 +86,8 @@ void showRatePopup(BuildContext context, bool hasDoNotShowOption){
                     inAppReview.requestReview();
                   }
                   else{
-                    // TODO: add store id's
                     inAppReview.openStoreListing(
-                      appStoreId: '...', 
+                      appStoreId: APPSTORE_ID, 
                       microsoftStoreId: '...'
                     );
                   }
