@@ -104,10 +104,8 @@ void setupGetIt() async {
 /// The starting widget of the app
 class DaKanjiApp extends StatefulWidget {
 
-
   @override
   _DaKanjiAppState createState() => _DaKanjiAppState();
-
 }
 
 class _DaKanjiAppState extends State<DaKanjiApp> {
@@ -121,6 +119,7 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: () {
