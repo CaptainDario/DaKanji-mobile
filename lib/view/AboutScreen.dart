@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -12,6 +11,7 @@ import 'package:da_kanji_mobile/view/ChangelogScreen.dart';
 import 'package:da_kanji_mobile/provider/PlatformDependentVariables.dart';
 import 'package:da_kanji_mobile/locales_keys.dart';
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/model/helper/reviews.dart';
 
 
 
@@ -84,13 +84,7 @@ class AboutScreen extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () async {
-                          final InAppReview inAppReview = InAppReview.instance;
-        
-                          // TODO: add store id's
-                          inAppReview.openStoreListing(
-                            appStoreId: '...', 
-                            microsoftStoreId: '...'
-                          );
+                          openReview();
                         }, 
                         child: Text(LocaleKeys.AboutScreen_rate_this_app.tr())
                       ),

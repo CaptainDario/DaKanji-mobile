@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:yaml/yaml.dart';
 import 'package:universal_io/io.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -63,12 +63,21 @@ Future<void> main() async {
 /// * initializes tensorflow lite and reads the labels from file 
 Future<void> init() async {
   
+  // NOTE: uncomment to clear the SharedPreferences
+  //await clearPreferences();
+  
   await setupGetIt();
 
   if(Platform.isAndroid || Platform.isIOS){
     await initDeepLinksStream();
     await getInitialDeepLink();
   }
+}
+
+/// Convenience function to clear the SharedPreferences
+void clearPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.clear();
 }
 
 
@@ -95,10 +104,8 @@ void setupGetIt() async {
 /// The starting widget of the app
 class DaKanjiApp extends StatefulWidget {
 
-
   @override
   _DaKanjiAppState createState() => _DaKanjiAppState();
-
 }
 
 class _DaKanjiAppState extends State<DaKanjiApp> {
@@ -112,6 +119,7 @@ class _DaKanjiAppState extends State<DaKanjiApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: () {

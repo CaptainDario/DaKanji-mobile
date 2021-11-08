@@ -97,11 +97,11 @@ class Settings with ChangeNotifier {
         "GPU",
         "NNAPI",
       ]);
-    else if(Platform.isIOS)
-      inferenceBackends.addAll([
-        "Metal",
-        "CoreML"
-      ]);
+    //else if(Platform.isIOS)
+    //  inferenceBackends.addAll([
+    //    "Metal",
+    //    "CoreML"
+    //  ]);
     _backendCNNSingleChar = "";
 
     invertShortLongPress = false;
@@ -198,9 +198,6 @@ class Settings with ChangeNotifier {
   void load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     
-    // delete the saved preferences
-    //prefs.clear();
-
     invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
     emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
     useWebview = prefs.getBool('useWebview') ?? false;

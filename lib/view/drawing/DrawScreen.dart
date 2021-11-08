@@ -119,7 +119,7 @@ class _DrawScreenState extends State<DrawScreen> with TickerProviderStateMixin {
                       child: IconButton(
                         key: SHOWCASE_DRAWING[1].key,
                         icon: Icon(Icons.undo),
-                        iconSize: _canvasSize * 0.075,
+                        iconSize: 100,
                         onPressed: () {
                           strokes.playDeleteLastStrokeAnimation = true;
                         }

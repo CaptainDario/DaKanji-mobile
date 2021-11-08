@@ -2,6 +2,7 @@ import 'package:universal_io/io.dart';
 
 import 'package:da_kanji_mobile/globals.dart';
 
+/// Class to handle platform dependent variables
 
 class PlatformDependentVariables {
 
@@ -29,7 +30,6 @@ class PlatformDependentVariables {
       _appStoreLink = APPSTORE_PAGE;
       _daapplabStorePage = DAAPPLAB_APPSTORE_PAGE;
     }
-    // TODO: add desktop and web 
     else{
       _appStoreLink = "None";
       _daapplabStorePage = "None";

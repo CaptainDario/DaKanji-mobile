@@ -11,7 +11,7 @@ const String APP_LINK = r"dakanji://dakanji/";
 
 // the version number of this app
 // ignore: non_constant_identifier_names
-String VERSION = "1.4.0+22";
+String VERSION = "1.4.0+28";
 // all versions which implemented new features for the drawing screen
 // ignore: non_constant_identifier_names
 List<String> DRAWING_SCREEN_NEW_FEATURES = ["1.0.0", "1.1.0"];
@@ -33,15 +33,14 @@ const GITHUB_ISSUES = "https://github.com/CaptainDario/DaKanji-Mobile/issues/new
 const DISCORD_INVITE = "https://discord.com/invite/gdqaux3r4P";
 
 const PLAYSTORE_BASE_URL = "https://play.google.com/store/apps/details?id=";
+const PLAYSTORE_PAGE = PLAYSTORE_BASE_URL + "com.DaAppLab.DaKanjiRecognizer";
 const PLAYSTORE_BASE_INTENT =  "market://details?id=";
+const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab";
 
 const APPSTORE_BASE_URL = "itms-apps://itunes.apple.com/app/";
-
-const APPSTORE_PAGE = "";
-const PLAYSTORE_PAGE = "https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer";
-
-const DAAPPLAB_PLAYSTORE_PAGE = "https://play.google.com/store/apps/developer?id=DaAppLab";
-const DAAPPLAB_APPSTORE_PAGE = "";
+const APPSTORE_ID = "1593741764";
+const APPSTORE_PAGE = "https://apps.apple.com/de/app/DaKanji/id" + APPSTORE_ID;
+const DAAPPLAB_APPSTORE_PAGE = "https://apps.apple.com/us/developer/dario-klepoch/id1193537491";
 
 const TAKOBOTO_ID = "jp.takoboto";
 const AKEBI_ID = "com.craxic.akebifree";
