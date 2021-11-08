@@ -3,12 +3,18 @@
 <img src="./media/banner.png" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
   <tr>
-    <a href='https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' width="250"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'  width="20%"/></a>
+    <a href='https://play.google.com/store/apps/details?id=com.DaAppLab.DaKanjiRecognizer&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' width="250"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'  width="20%"/>
+    </a>
    <tr/>
   <tr>
-
-   <tr/>
+    <a href="https://apps.apple.com/us/app/dakanji/id1593741764?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; width: 20%;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1636329600&h=fddbb9c21f6d7f05a15cefdfa128586a" alt="Download on the App Store" style="border-radius: 13px; width: 100%;">
+    </a>
+  <tr/>
+  <tr>
+  <tr/>
 <table/>
+
+
 
 ## What is this
 
