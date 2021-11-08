@@ -1,8 +1,10 @@
-import 'package:da_kanji_mobile/globals.dart';
-import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'dart:ui';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_io/io.dart';
+
+
 
 class Settings with ChangeNotifier {
   /// The placeholder in the URL's which will be replaced by the predicted kanji
@@ -25,9 +27,6 @@ class Settings with ChangeNotifier {
 
   /// The string representation of the dictionary which will be used (long press)
   String _selectedDictionary;
-
-  // the application version used when this settings object was saved
-  String versionUsed;
   
   /// The theme which the application will use.
   /// System will match the settings of the system.
@@ -45,38 +44,79 @@ class Settings with ChangeNotifier {
   /// Should the canvas be cleared when a prediction was copied to kanjibuffer
   bool _emptyCanvasAfterDoubleTap;
 
+  /// should the default app browser be used for opening predictions
   bool _useDefaultBrowser;
 
+  /// the currently used locale
+  Locale selectedLocale;
 
-  Settings(){
+  /// The available backends for inference
+  List<String> inferenceBackends;
+
+  /// The inference backend used for the single character CNN
+  String _backendCNNSingleChar;
+
+
+
+  Settings() {
     kanjiPlaceholder = "%X%";
-
+    
     dictionaries = [
-      "jisho (web)", 
+      "jisho (web)",
       "wadoku (web)",
       "weblio (web)",
-      "a custom URL",
-      "systemTranslator",
-      "aedict (app)",
-      "akebi (app)",
-      "takoboto (app)",
+      "url (web)"
     ];
+    if(Platform.isAndroid)
+      dictionaries.addAll([
+        "system (app)",
+        "aedict (app)",
+        "akebi (app)",
+        "takoboto (app)", 
+      ]);
+    else if(Platform.isIOS)
+      dictionaries.addAll([
+        "shirabe jisho (app)",
+        "imiwa? (app)",
+        "Japanese (app)",
+        "midori (app)",
+      ]);
 
     themes = ["light", "dark", "system"];
-
     themesDict = {
       "light": ThemeMode.light,
       "dark": ThemeMode.dark,
       "system": ThemeMode.system
     };
 
+    inferenceBackends = [
+      "CPU",
+    ];
+    if(Platform.isAndroid)
+      inferenceBackends.addAll([
+        "GPU",
+        "NNAPI",
+      ]);
+    //else if(Platform.isIOS)
+    //  inferenceBackends.addAll([
+    //    "Metal",
+    //    "CoreML"
+    //  ]);
+    _backendCNNSingleChar = "";
+
     invertShortLongPress = false;
     emptyCanvasAfterDoubleTap = true;
-    useDefaultBrowser = true;
+    useWebview = true;
+
+    _selectedDictionary = "";
+    selectedTheme = "";
 
     jishoURL = "https://jisho.org/search/" + kanjiPlaceholder;
     wadokuURL = "https://www.wadoku.de/search/" + kanjiPlaceholder;
     weblioURL = "https://www.weblio.jp/content/" + kanjiPlaceholder;
+
+    load();
+    save();
   }
 
   String get selectedDictionary{
@@ -119,12 +159,21 @@ class Settings with ChangeNotifier {
     notifyListeners();
   }
   
-  bool get useDefaultBrowser{
+  bool get useWebview{
     return _useDefaultBrowser;
   }
   
-  set useDefaultBrowser(bool empty){
+  set useWebview(bool empty){
     _useDefaultBrowser = empty;
+    notifyListeners();
+  }
+
+  String get backendCNNSingleChar{
+    return _backendCNNSingleChar;
+  }
+
+  set backendCNNSingleChar(String newBackend){
+    _backendCNNSingleChar = newBackend;
     notifyListeners();
   }
 
@@ -136,39 +185,29 @@ class Settings with ChangeNotifier {
     // set value in shared preferences
     prefs.setBool('invertShortLongPress', invertShortLongPress);
     prefs.setBool('emptyCanvasAfterDoubleTap', emptyCanvasAfterDoubleTap);
-    prefs.setBool('useDefaultBrowser', useDefaultBrowser);
-    
+    prefs.setBool('useWebview', useWebview);
+
+    prefs.setString("backendCNNSingleChar", backendCNNSingleChar);
     prefs.setString('customURL', customURL);
     prefs.setString('selectedTheme', _selectedTheme);
-    prefs.setString('versionUsed', VERSION);
     prefs.setString('selectedDictionary', selectedDictionary);
+    prefs.setString('selectedLocale', selectedLocale.toString());
   }
 
   /// Load all saved settings from SharedPreferences.
   void load() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    
     invertShortLongPress = prefs.getBool('invertShortLongPress') ?? false;
     emptyCanvasAfterDoubleTap = prefs.getBool('emptyCanvasAfterDoubleTap') ?? false;
-    useDefaultBrowser = prefs.getBool('useDefaultBrowser') ?? true;
-
+    useWebview = prefs.getBool('useWebview') ?? false;
+    
+    backendCNNSingleChar = prefs.getString("backendCNNSingleChar") ?? 'CPU';
     customURL = prefs.getString('customURL') ?? '';
     _selectedTheme = prefs.getString('selectedTheme') ?? themes[2];
-    versionUsed = prefs.getString('versionUsed') ?? '';
     selectedDictionary = prefs.getString('selectedDictionary') ?? dictionaries[0];
-
-    // a different version than last time is being used
-    //VERSION = "0.0.0";
-    if(versionUsed != VERSION){
-
-      // show the changelog
-      GetIt.I<Changelog>().showChangelog = true;
-
-      // this version has new features for drawing screen => show tutorial
-      if(DRAWING_SCREEN_NEW_FEATURES.contains(VERSION)){
-        SHOW_SHOWCASE_DRAWING = true;
-      }
-    }
+    var localeStr = prefs.getString('selectedLocale') ?? "en";
+    selectedLocale = localeStr == null ? null : Locale(localeStr);
   }
 }
 

@@ -20,8 +20,6 @@ final ThemeData darkTheme = ThemeData(
   primaryColorBrightness: Brightness.dark,
   primaryColorLight: Color( 0xff9e9e9e ),
   primaryColorDark: Color( 0xff000000 ),
-  accentColor: Color( 0xff64ffda ),
-  accentColorBrightness: Brightness.light,
   canvasColor: Color( 0xff303030 ),
   scaffoldBackgroundColor: Color( 0xff303030 ),
   bottomAppBarColor: Color( 0xff424242 ),
@@ -32,7 +30,6 @@ final ThemeData darkTheme = ThemeData(
   selectedRowColor: Color( 0xfff5f5f5 ),
   unselectedWidgetColor: Color( 0xb3ffffff ),
   disabledColor: Color( 0x62ffffff ),
-  buttonColor: Colors.white,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle( 
       backgroundColor:
@@ -125,26 +122,6 @@ final ThemeData darkTheme = ThemeData(
     fontStyle: FontStyle.normal,
   ),
   ),
-  accentTextTheme: TextTheme(
-    caption: TextStyle(
-    color: Color( 0x8a000000 ),
-    fontSize: null,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-  ),
-    button: TextStyle(
-    color: Color( 0xdd000000 ),
-    fontSize: null,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-  ),
-    overline: TextStyle(
-    color: Color( 0xff000000 ),
-    fontSize: null,
-    fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.normal,
-  ),
-  ),
   inputDecorationTheme:   InputDecorationTheme(
   labelStyle: TextStyle(
     color: Color( 0xffffffff ),
@@ -226,11 +203,6 @@ final ThemeData darkTheme = ThemeData(
   ),
   primaryIconTheme: IconThemeData(
     color: Color( 0xffffffff ),
-    opacity: 1,
-    size: 24,
-  ),
-  accentIconTheme: IconThemeData(
-    color: Color( 0xff000000 ),
     opacity: 1,
     size: 24,
   ),

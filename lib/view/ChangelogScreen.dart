@@ -1,10 +1,15 @@
-import 'package:da_kanji_mobile/globals.dart';
-import 'package:da_kanji_mobile/provider/Changelog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:da_kanji_mobile/provider/Changelog.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
+
 
 
 /// The "changelog"-screen.
@@ -16,7 +21,7 @@ class ChangelogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(title: Text(APP_TITLE + " - Changelog"),),
+      appBar: AppBar(title: Text("$APP_TITLE - ${LocaleKeys.ChangelogScreen_title.tr()}")),
       body: WillPopScope(
         onWillPop: () async {
           return true;

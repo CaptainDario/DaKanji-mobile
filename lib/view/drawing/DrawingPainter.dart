@@ -8,6 +8,11 @@ import 'package:flutter/material.dart';
 class DrawingPainter extends CustomPainter {
   
   /// the path which should be drawn on the canvas
+  /// 
+  /// **Note:** the stored path and sub paths are normalized between 0 .. 1
+  /// this has to be done to be resolution and size independent
+  /// when this path gets drawn the normalized coordinates are scale to the 
+  /// current size
   Path _path;
   /// if the app is running in dark mode
   bool _darkMode;
@@ -78,19 +83,28 @@ class DrawingPainter extends CustomPainter {
     return rgbaBytes;
   }
 
-  /// Paints the [_path] on the given [canvas].
+  /// Paints the given [_path] on the given [canvas].
   void drawPath(Canvas canvas) {
     // Setup canvas and paint
     canvas.clipRect(Rect.fromLTWH(0, 0, _size.width, _size.height));
     Paint paint = Paint()
-      ..strokeWidth = _size.width / 50.0
+      ..strokeWidth = _size.width * 0.02
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
 
+    // set the stroke color for creating an image and mode selection
     if (this._darkMode || this._recording)
       paint.color = Colors.white;
     else
       paint.color = Colors.black;
+
+    // create the scale transformation matrix (paths are normalized [0..1])
+    Float64List scale = Float64List.fromList([
+      _size.width,           0, 0, 0,
+      0,           _size.width, 0, 0,
+      0,                     0, 1, 0,
+      0,                     0, 0, 1,
+    ]);
 
     // animate deleting the last stroke only if the animation is running
     if(_deleteProgress < 1){
@@ -106,13 +120,13 @@ class DrawingPainter extends CustomPainter {
         else
           percentage = metric.length * _deleteProgress;
         Path extractPath = metric.extractPath(0.0, percentage);
-        canvas.drawPath(extractPath, paint);
+        canvas.drawPath(extractPath.transform(scale), paint);
         metricsCount += 1;
       }
     }
     // otherwise just draw the whole path (improved drawing performance)
     else
-      canvas.drawPath(_path, paint);
+      canvas.drawPath(_path.transform(scale), paint);
   }
 
   @override

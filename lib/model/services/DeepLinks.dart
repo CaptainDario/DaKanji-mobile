@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/services.dart';
 
 import 'package:get_it/get_it.dart';
@@ -7,6 +6,7 @@ import 'package:uni_links/uni_links.dart';
 
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:universal_io/io.dart';
 
 
 StreamSubscription linkSub;
@@ -15,7 +15,7 @@ Future<Null> initDeepLinksStream() async {
   // ... check initialUri
 
   // Attach a listener to the stream
-  linkSub = getLinksStream().listen((String link) {
+  linkSub = linkStream.listen((String link) {
 
     print("Stream: "+ (link ?? "none"));
     handleLink(link);
@@ -75,6 +75,24 @@ void handleLink(String link){
     }
     else if(short.startsWith("takoboto")){
       print("contains takoboto");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[7];
+    }
+  }
+  else if(Platform.isIOS){
+    if(short.startsWith("shirabe")){
+      print("contains shirabe");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[4];
+    }
+    else if(short.startsWith("imiwa")){
+      print("contains imiwa");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[5];
+    }
+    else if(short.startsWith("japanese")){
+      print("contains japanese");
+      GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[6];
+    }
+    else if(short.startsWith("midori")){
+      print("contains midori");
       GetIt.I<Settings>().selectedDictionary = GetIt.I<Settings>().dictionaries[7];
     }
   }

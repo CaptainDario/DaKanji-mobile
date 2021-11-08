@@ -1,14 +1,15 @@
-import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:da_kanji_mobile/model/core/DrawingIsolateUtils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-import 'package:device_info/device_info.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image/image.dart' as image;
-
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:universal_io/io.dart';
+
+import 'package:da_kanji_mobile/model/core/DrawingIsolateUtils.dart';
+import 'package:da_kanji_mobile/provider/Settings.dart';
 
 
 
@@ -16,8 +17,6 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 /// 
 /// Notifies listeners when the predictions changed.
 class DrawingInterpreter with ChangeNotifier{
-  
-
 
   /// the tf lite interpreter to recognize kanjis
   Interpreter _interpreter;
@@ -32,9 +31,6 @@ class DrawingInterpreter with ChangeNotifier{
   
   /// The path to the interpreter asset
   String _labelAssetPath;
-
-  /// the backend used for inference CPU/GPU
-  String usedBackend;
 
   /// The list of all labels the model can recognize.
   List<String> _labels;
@@ -79,10 +75,9 @@ class DrawingInterpreter with ChangeNotifier{
     return _interpreter.address;
   }
 
-
   DrawingInterpreter() {
-    _interpreterAssetPath = "model_CNN_kanji_only.tflite";
-    _labelAssetPath = "assets/labels_CNN_kanji_only.txt"; 
+    _interpreterAssetPath = "CNN_single_char.tflite";
+    _labelAssetPath = "assets/CNN_single_char_labels.txt";
 
     height = 64;
     width = 64;
@@ -109,10 +104,13 @@ class DrawingInterpreter with ChangeNotifier{
       _interpreter = await _initInterpreterAndroid();
     else if (Platform.isIOS) 
       _interpreter = await _initInterpreterIOS();
+    else if(Platform.isWindows)
+      _interpreter = await _initInterpreterWindows();
     else
       throw PlatformException(code: "Platform not supported.");
+    GetIt.I<Settings>().save();
 
-    print(usedBackend);
+    print(GetIt.I<Settings>().backendCNNSingleChar);
 
     var l = await rootBundle.loadString(_labelAssetPath);
     _labels = l.split("");
@@ -120,7 +118,7 @@ class DrawingInterpreter with ChangeNotifier{
     // allocate memory for inference in / output
     _input = List<List<double>>.generate(
       height, (i) => List.generate(width, (j) => 0.0)).
-      reshape<double>([1, height, width, 1]);
+    reshape<double>([1, height, width, 1]);
     this._output =
       List<List<double>>.generate(1, (i) => 
       List<double>.generate(_labels.length, (j) => 0.0));
@@ -192,8 +190,10 @@ class DrawingInterpreter with ChangeNotifier{
       image.Image base = image.decodeImage(inputImage);
       image.Image resizedImage = image.copyResize(base,
         height: height, width: width, interpolation: image.Interpolation.cubic);
+        //resizedImage = image.gaussianBlur(resizedImage, 2);
       Uint8List resizedBytes = 
         resizedImage.getBytes(format: image.Format.luminance);
+      //var imgStr = resizedBytes.toString();
 
       // convert image for inference into shape [1, height, width, 1]
       // also apply thresholding and normalization [0, 1]
@@ -240,25 +240,39 @@ class DrawingInterpreter with ChangeNotifier{
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
-    try{
-      if(androidInfo.isPhysicalDevice){
-        // use NNAPI on android if android API >= 27
-        if (androidInfo.version.sdkInt >= 27) {
-          interpreter = await _nnapiInterpreter();
+    // if no inference backend was set -> automatically set one
+    String selectedBackend = GetIt.I<Settings>().backendCNNSingleChar;
+    if(!GetIt.I<Settings>().inferenceBackends.contains(selectedBackend)){
+      try{
+        if(androidInfo.isPhysicalDevice){
+          // use NNAPI on android if android API >= 27
+          if (androidInfo.version.sdkInt >= 27) {
+            interpreter = await _nnapiInterpreter();
+          }
+          // otherwise fallback to GPU delegate
+          else {
+            interpreter = await _gpuInterpreterAndroid();
+          }
         }
-        // otherwise fallback to GPU delegate
-        else {
-          usedBackend = "Android GPU Delegate";
-          interpreter = await _gpuInterpreterAndroid();
+        // use CPU inference on emulators
+        else{ 
+          interpreter = await _cpuInterpreter();
         }
       }
-      // use CPU inference on emulators
-      else 
+      // use CPU inference on exceptions
+      catch (e){
         interpreter = await _cpuInterpreter();
+      }
     }
-    // use CPU inference on exceptions
-    catch (e){
+    // use the inference backend from the settings
+    else if(selectedBackend == Settings().inferenceBackends[0]){
       interpreter = await _cpuInterpreter();
+    }
+    else if(selectedBackend == Settings().inferenceBackends[1]){
+      interpreter = await _gpuInterpreterAndroid();
+    }
+    else if(selectedBackend == Settings().inferenceBackends[2]){
+      interpreter = await _nnapiInterpreter();
     }
 
     return interpreter;
@@ -276,58 +290,97 @@ class DrawingInterpreter with ChangeNotifier{
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
 
-    if (iosInfo.isPhysicalDevice) {
-      usedBackend = "IOS Metal Delegate";
-      interpreter = await _gpuInterpreterIOS();
-    } 
-    // use CPU inference on emulators
-    else 
+    // if no inference backend was set -> automatically set one
+    String selectedBackend = GetIt.I<Settings>().backendCNNSingleChar;
+    if(!GetIt.I<Settings>().inferenceBackends.contains(selectedBackend)){
+      if (iosInfo.isPhysicalDevice && false) {
+        interpreter = await _metalInterpreterIOS();
+      }
+      // use CPU inference on emulators
+      else{
+        interpreter = await _cpuInterpreter();
+      }
+    }
+    // use the inference backend from the settings
+    else if(selectedBackend == Settings().inferenceBackends[0]){
       interpreter = await _cpuInterpreter();
+    }
+    else if(selectedBackend == Settings().inferenceBackends[3]){
+      interpreter = await _metalInterpreterIOS();
+    }
     
     return interpreter;
 
   }
 
+  /// Initializes the TFLite interpreter on iOS.
+  ///
+  /// Uses the uses CPU mode.
+  Future<Interpreter> _initInterpreterWindows() async {
+
+    return await _cpuInterpreter();
+  }
+
   /// Initializes the interpreter with NPU acceleration for Android.
   Future<Interpreter> _nnapiInterpreter() async {
     final options = InterpreterOptions()..useNnApiForAndroid = true;
-    Interpreter i = await Interpreter.fromAsset(_interpreterAssetPath, options: options);
-    usedBackend = "Android NNAPI Delegate";
+    Interpreter i = await Interpreter.fromAsset(
+      _interpreterAssetPath, 
+      options: options
+    );
+    GetIt.I<Settings>().backendCNNSingleChar = Settings().inferenceBackends[2];
     return i; 
   }
 
   /// Initializes the interpreter with GPU acceleration for Android.
   Future<Interpreter> _gpuInterpreterAndroid() async {
-    final gpuDelegateV2 = GpuDelegateV2(
-      options: GpuDelegateOptionsV2(
-        false,
-        TfLiteGpuInferenceUsage.fastSingleAnswer,
-        TfLiteGpuInferencePriority.minLatency,
-        TfLiteGpuInferencePriority.auto,
-        TfLiteGpuInferencePriority.auto
-      )
-    );
+    final gpuDelegateV2 = GpuDelegateV2();
     final options = InterpreterOptions()..addDelegate(gpuDelegateV2);
-    Interpreter i = await Interpreter.fromAsset(_interpreterAssetPath, options: options);
-
+    Interpreter i = await Interpreter.fromAsset(
+      _interpreterAssetPath,
+      options: options
+    );
+    GetIt.I<Settings>().backendCNNSingleChar = Settings().inferenceBackends[1];
     return i;
   }
 
   /// Initializes the interpreter with GPU acceleration for iOS.
-  Future<Interpreter> _gpuInterpreterIOS() async {
+  Future<Interpreter> _metalInterpreterIOS() async {
 
-    final gpuDelegate = GpuDelegate(
-      options: GpuDelegateOptions(true, TFLGpuDelegateWaitType.active),
-    );
+    final gpuDelegate = GpuDelegate();
     var interpreterOptions = InterpreterOptions()..addDelegate(gpuDelegate);
-    return await Interpreter.fromAsset(_interpreterAssetPath, options: interpreterOptions);
+    Interpreter i = await Interpreter.fromAsset(
+      _interpreterAssetPath,
+      options: interpreterOptions
+    );
+    GetIt.I<Settings>().backendCNNSingleChar = Settings().inferenceBackends[1];
+    return i;
   }
 
   /// Initializes the interpreter with CPU mode set.
   Future<Interpreter> _cpuInterpreter() async {
-    usedBackend = "CPU";
     final options = InterpreterOptions()
       ..threads = Platform.numberOfProcessors - 1;
-    return await Interpreter.fromAsset(_interpreterAssetPath, options: options);
+    Interpreter i = await Interpreter.fromAsset(
+      _interpreterAssetPath, options: options);
+    GetIt.I<Settings>().backendCNNSingleChar = Settings().inferenceBackends[0];
+    return i;
   }
+
+  Future<Interpreter> _XXNPackInterpreter() async {
+
+    Interpreter interpreter;
+    final options = InterpreterOptions()..addDelegate(
+      XNNPackDelegate(
+        options: XNNPackDelegateOptions()
+      )
+    );
+    interpreter = await Interpreter.fromAsset(
+      _interpreterAssetPath,
+      options: options
+    );
+
+    return interpreter;
+  }
+
 }

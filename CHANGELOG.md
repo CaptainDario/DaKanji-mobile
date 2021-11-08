@@ -1,6 +1,34 @@
 
 # Da Kanji - changelog
 
+## v 1.4.0 - 現地化
+
+new Features:
+
+- responsive design (try with a dictionary side by side!)
+- iOS support
+  - supported app dictionaries: shirabe jisho, Japanese, imiha, midori
+- localization:
+  - English, German
+  - if you want to see DaKanji in more languages please [help translate it](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization)
+- ask for a rating from time to time
+
+Changes:
+
+- require android 6 or newer
+- awesome new popup dialogues
+- new drawer open/close animation
+- loading indicator for webview
+- setting to select inference backend
+- updated to flutter 2.5.3
+
+Fixed:
+
+- show "what's new"-popup only when the app was installed before
+- predictions not showing up on some devices
+
+-------------------------------------------------------------------------
+
 ## v 1.3.0 - 漢字検定
 
 new Features:

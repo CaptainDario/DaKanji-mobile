@@ -3,61 +3,101 @@ import 'package:flutter/widgets.dart';
 
 import 'package:get_it/get_it.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:da_kanji_mobile/model/core/Showcase.dart';
 import 'package:da_kanji_mobile/model/core/ShowcaseTuple.dart';
 import 'package:da_kanji_mobile/provider/Settings.dart';
 import 'package:da_kanji_mobile/provider/DrawerListener.dart';
 import 'package:da_kanji_mobile/globals.dart';
+import 'package:da_kanji_mobile/locales_keys.dart';
 
 
 /// The showcase of the features of the draw screen.
 class DrawScreenShowcase extends Showcase {
-
 
   /// Initialize the elements which should be shown in the showcase
   DrawScreenShowcase () {
 
     SHOWCASE_DRAWING = [
       // 0 - Drawing canvas
-      ShowcaseTuple(GlobalKey(), "Drawing",
-        "Draw a character here", ContentAlign.bottom),
+      ShowcaseTuple(GlobalKey(),
+        "drawing",
+        LocaleKeys.DrawScreen_tutorial_drawing.tr(),
+        ContentAlign.bottom
+      ),
       // 1 - undo last stroke
-      ShowcaseTuple(GlobalKey(), "Undo", 
-        "Press to undo the last stroke", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(), 
+        "undo",
+        LocaleKeys.DrawScreen_tutorial_undo.tr(),
+        ContentAlign.bottom
+      ), 
       // 2 - clear canvas
-      ShowcaseTuple(GlobalKey(), "Clear", 
-        "Erase all strokes", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(), 
+        "clear", 
+        LocaleKeys.DrawScreen_tutorial_clear.tr(), 
+        ContentAlign.bottom
+      ), 
       // 3 - prediction buttons
-      ShowcaseTuple(GlobalKey(), "Predictions", 
-        "The predicted characters will be shown here", ContentAlign.top), 
+      ShowcaseTuple(GlobalKey(),
+        "predictions", 
+        LocaleKeys.DrawScreen_tutorial_predictions.tr(), 
+        ContentAlign.top
+      ), 
       // 4 - short press prediction button
-      ShowcaseTuple(GlobalKey(), "Short Press Prediction",
-        "A short press copies the prediction", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(), 
+        "short press prediction", 
+        LocaleKeys.DrawScreen_tutorial_short_press_prediction.tr(), 
+        ContentAlign.bottom
+      ), 
       // 5 - long press prediction button
-      ShowcaseTuple(GlobalKey(), "Long Press Prediction",
-        "A long press opens the prediction in a dictionary", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(),
+        "long press prediction", 
+        LocaleKeys.DrawScreen_tutorial_long_press_prediction.tr(), 
+        ContentAlign.bottom
+      ), 
       // 6 - multi search box
-      ShowcaseTuple(GlobalKey(), "Multi search",
-        "Here you can search multiple characters at once", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(), 
+        "multi search", 
+        LocaleKeys.DrawScreen_tutorial_multi_search.tr(), 
+        ContentAlign.bottom
+      ), 
       // 7 - double tap prediction button
-      ShowcaseTuple(GlobalKey(), "Double Tap Prediction",
-        "A Double Tap adds the character to the search box", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(), 
+        "double tap prediction", 
+        LocaleKeys.DrawScreen_tutorial_double_tap_prediction.tr(), 
+        ContentAlign.bottom
+      ), 
       // 8 - multi search short press 
-      ShowcaseTuple(GlobalKey(), "Multi search short press",
-        "A short press copies the characters to the clipboard", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(),
+        "short press multi search", 
+        LocaleKeys.DrawScreen_tutorial_multi_search_short_press.tr(), 
+        ContentAlign.bottom
+      ), 
       // 9 - multi search long press
-      ShowcaseTuple(GlobalKey(), "Multi search long press",
-        "A long press opens the characters in a dictionary", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(), 
+        "long press multi search", 
+        LocaleKeys.DrawScreen_tutorial_multi_search_long_press.tr(), 
+        ContentAlign.bottom
+      ), 
       // 10 - multi search double tap
-      ShowcaseTuple(GlobalKey(), "Multi search double tap",
-        "A double tap empties the field", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(),
+        "multi search double tap", 
+        LocaleKeys.DrawScreen_tutorial_multi_search_double_tap.tr(), 
+        ContentAlign.bottom
+      ), 
       // 11 - multi search swipe left
-      ShowcaseTuple(GlobalKey(), "Multi search swipe left",
-        "Swiping left on this field deletes the last character", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(),
+        "multi search swipe left", 
+        LocaleKeys.DrawScreen_tutorial_multi_search_swipe_left.tr(), 
+        ContentAlign.bottom
+      ), 
       // 12 - change dict in settings
-      ShowcaseTuple(GlobalKey(), "Dictionary Settings",
-        "In the settings the translation service can be chosen", ContentAlign.bottom), 
+      ShowcaseTuple(GlobalKey(),
+        "dictionary settings", 
+        LocaleKeys.DrawScreen_tutorial_dictionary_settings.tr(), 
+        ContentAlign.bottom
+      ), 
     ];
 
   }
@@ -136,7 +176,7 @@ class DrawScreenShowcase extends Showcase {
       context,
       targets: this.targets,
       colorShadow: Colors.red,
-      textSkip: "SKIP",
+      textSkip: LocaleKeys.DrawScreen_tutorial_skip.tr(),
       paddingFocus: 10,
       opacityShadow: 0.8,
       onFinish: () {

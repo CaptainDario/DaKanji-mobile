@@ -1,9 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webviewx/webviewx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:da_kanji_mobile/provider/Settings.dart';
 
 import 'package:da_kanji_mobile/provider/Lookup.dart';
 
@@ -33,7 +32,12 @@ class _WebviewScreenState extends State<WebviewScreen>
   /// the animation to rotate the loading / webview
   Animation _rotationAnimation;
   /// the webview to show the dictionary search
-  WebView webview;
+  WebViewXController webviewController;
+  /// the controller to animate the DaKanji icon while the webview is loading
+  AnimationController _loadingController;
+  /// the animation to rotate the DaKanji icon while the webview is loading
+  Animation<double> _loadingAnimation;
+
 
   @override
   void initState() { 
@@ -41,7 +45,15 @@ class _WebviewScreenState extends State<WebviewScreen>
 
     loadWebview = false;
     showLoading = false;
-
+    
+    _loadingController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat(reverse: true);
+    _loadingAnimation = CurvedAnimation(
+      parent: _loadingController,
+      curve: Curves.elasticOut,
+    );
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -62,9 +74,9 @@ class _WebviewScreenState extends State<WebviewScreen>
 
   @override
   void dispose() { 
-    super.dispose();
     _controller.dispose();
-    WebView.platform = SurfaceAndroidWebView();
+    _loadingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -85,14 +97,11 @@ class _WebviewScreenState extends State<WebviewScreen>
     route.animation.addStatusListener(handler);
     
     return Scaffold(
-      appBar: AppBar(
-        title: 
-        Text(GetIt.I<Settings>().selectedDictionary
-        + ": "
-        + GetIt.I<Lookup>().chars),
-      ),
-      body: WillPopScope(
-        // when leaving this screen hide the webview and  
+      appBar: AppBar(title: Text(GetIt.I<Lookup>().chars)),
+      body: 
+      
+      WillPopScope(
+        // when leaving this screen hide the webview  
         onWillPop: () {
           setState(() {
             showLoading = false;
@@ -104,6 +113,7 @@ class _WebviewScreenState extends State<WebviewScreen>
           child: 
             Stack(
               children: [
+                // webview
                 Transform.translate(
                   offset: Offset(
                     (width) * (1 - _rotationAnimation.value), 
@@ -118,8 +128,10 @@ class _WebviewScreenState extends State<WebviewScreen>
                     alignment: Alignment.centerLeft,
                     child: () {
                         if(loadWebview){
-                          return WebView(
-                            initialUrl: GetIt.I<Lookup>().url,
+                          return WebViewX(
+                            initialContent:  GetIt.I<Lookup>().url,
+                            height: MediaQuery.of(context).size.height,
+                            width: width,
                             onPageFinished: (s) {
                               _controller.forward(from: 0.0);
                             }
@@ -131,7 +143,7 @@ class _WebviewScreenState extends State<WebviewScreen>
                   )
                 ),
                 
-                // only show predicted character while the webview is loading
+                // show DaKanji icon while the webview is loading
                 Transform.translate(
                   offset: Offset(
                     (width) * (1 - _rotationAnimation.value) - width,
@@ -149,16 +161,25 @@ class _WebviewScreenState extends State<WebviewScreen>
                         + (GetIt.I<Lookup>().buffer ? "b_" : "")
                         + GetIt.I<Lookup>().chars,
                       child: Container(
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: Center(
-                          child: Text(
-                            GetIt.I<Lookup>().chars,
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.button.color,
-                              decoration: TextDecoration.none,
-                              fontSize: 60,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
+                          child: () {
+                            return DefaultTextStyle(
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.button.color,
+                                decoration: TextDecoration.none,
+                                fontSize: 50,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              child: RotationTransition(
+                                turns: _loadingAnimation,
+                                child: Image(
+                                  image: AssetImage('media/icon.png'),
+                                  width: 150,
+                                ),
+                              ),
+                            );
+                          } (),
                         )
                       )
                     )
@@ -168,7 +189,6 @@ class _WebviewScreenState extends State<WebviewScreen>
             ),
           )
         )
-      //)
     );
   }
 }

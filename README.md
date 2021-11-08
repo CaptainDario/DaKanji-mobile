@@ -55,10 +55,15 @@ Here is a list of a few things which would help this project:
 * You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues) too.
 * PR's for open issues are very welcome too
 
-
 ## Credits
 
-* design and UI: Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now.
-* icon/banner
-  * Thanks "Buddha, with kudos to 2ch/fl/ and HatNyan" for helping with the icon design and making the banner. Also thank you [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the banner font.
+* Design
+  * icon / banner
+    * Thanks "Buddha, with kudos to 2ch/fl/ and HatNyan" for helping design the icon and the banner.
+    * Thanks [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the font.
+  * UI
+    * Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now
 * Modified Packages: [bitmap](https://github.com/renancaraujo/bitmap), [snappable](https://github.com/MarcinusX/snappable)
+* A big shout out to all testers!
+  * Android
+    * pa9eup, tsumugii_12

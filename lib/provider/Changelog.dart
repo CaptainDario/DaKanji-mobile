@@ -2,20 +2,19 @@
 
 import 'package:flutter/services.dart';
 
+/// Class to handle reading and storing the CHANGELOG.md
 class Changelog{
 
+  /// the changelog read from CHANGELOG.md
   String _changelog;
+  /// only the newest section from CHANGELOG.md
   String _newestChangelog;
+  /// the complete changelog without the first few header lines
   String _wholeChangelog;
-
+  /// if the changelog should be shown when the app starts
   bool _showChangelog;
-
+  /// if this object was initialized
   bool _initialized;
-
-  Changelog(){
-    _initialized = false;
-    _showChangelog = false;
-  }
 
   String get changelog{
     if(!_initialized)
@@ -60,6 +59,12 @@ class Changelog{
     _showChangelog = showChangelog;
   }
 
+
+  Changelog() {
+    _initialized = false;
+    _showChangelog = false;
+
+  }
 
   /// Reads `CHANGELOG.md` from file and returns a converted version.
   /// 
