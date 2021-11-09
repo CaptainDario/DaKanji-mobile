@@ -7,7 +7,7 @@
     </a>
    <tr/>
   <tr>
-    <a href="https://apps.apple.com/us/app/dakanji/id1593741764?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; width: 20%;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1636329600&h=fddbb9c21f6d7f05a15cefdfa128586a" alt="Download on the App Store" style="border-radius: 13px; width: 20%;">
+    <a href="https://apps.apple.com/us/app/dakanji/id1593741764?ign-itscg=30200&ign-itsct=apps_box_link" style="display: inline-block; overflow: hidden; width: 20%;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1636329600&h=fddbb9c21f6d7f05a15cefdfa128586a" alt="Download on the App Store" style="border-radius: 13px; width: 20%;">
     </a>
   <tr/>
   <tr>
