@@ -1,6 +1,22 @@
 
 # Da Kanji - changelog
 
+# v 2.0.0 - 隈なく
+
+new Features:
+
+- None
+
+Changes:
+
+- None
+
+Fixed:
+
+- None
+
+-------------------------------------------------------------------------
+
 ## v 1.4.0 - 現地化
 
 new Features:
