@@ -1,3 +1,9 @@
+# Important!
+This repository is not longer being updated.
+For various reasons I decided to no longer make the code of DaKanji publicly available.
+However the release section will always have the newest releases.
+Also bugs can be reported here and I will take care of them.
+
 <img src="./media/banner.png" alt="DaKanji" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
   <tr>
@@ -20,8 +26,6 @@ DaKanji helps students of the Japanese language and people who use it.
 Currently it can recognize 6500+ characters (Kanji, Hiragana, Katakana, Romaji, Arabic Numbers) which the user draws by hand.
 But the feature set will be vastly improved in the coming releases. <br/>
 For more details about the features take a look at the [usage section](#usage).
-</br></br>
-<img src="./media/preview.gif" style="display:block;margin-left:auto;margin-right:auto;" width="20%"/>
 </br>
 
 ## What the users say
@@ -32,10 +36,8 @@ For more details about the features take a look at the [usage section](#usage).
 
 ## Getting started
 
-**Currently only android is supported** </br>
 The easiest way is to download the app for android from the PlayStore.
-You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases) or [setup a development environment](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Setting-up-a-development-environment) and build the app on your own.
-
+You can also download the latest release from the [releases page](https://github.com/CaptainDario/DaKanji-Mobile/releases).
 ## Usage
 
 In this section the features of the app are explained in more detail.
@@ -47,17 +49,15 @@ Those dictionaries include translation apps, app dictionaries and web dictionari
 Currently 6500+ characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
-### Contributing
+## Contributing
 
 <a href="https://discord.gg/gdqaux3r4P"><img src="https://discordapp.com/api/guilds/852915748300783636/widget.png?style=banner2" width="25%"></a>
 
 All contributions are welcome! <br/>
 Here is a list of a few things which would help this project:
-* Testing (beta) releases please join the [discord server](https://discord.gg/cYTcpFStbs) and ask in the "become a tester"-channel. All testing is much appreciated!
-* DaKanji does not support your (native) language yet? Head over to the [wiki](https://github.com/CaptainDario/DaKanji-Mobile/wiki/Internationalization-and-localization) and learn how to add it to DaKanji
+* For testing (beta) releases please join the [discord server](https://discord.gg/cYTcpFStbs) and ask in the "become a tester"-channel. All testing is much appreciated!
 * If you have ideas how to improve this app [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues).
 * You found a bug? Please [open an issue](https://github.com/CaptainDario/DaKanji-Mobile/issues) too.
-* PR's for open issues are very welcome too
 
 ## Credits
 
@@ -66,8 +66,10 @@ Here is a list of a few things which would help this project:
     * Thanks "Buddha, with kudos to 2ch/fl/ and HatNyan" for helping design the icon and the banner.
     * Thanks [Adrian Jordanov](https://www.1001fonts.com/theater-font.html) for the font.
   * UI
-    * Massive shout out to [Ellina](https://github.com/nurellina)! Without your help the app would not look and feel half as good as it does now
+    * Shout out to Nurellina! Without your help the app would not look and feel half as good as it does now
 * Modified Packages: [bitmap](https://github.com/renancaraujo/bitmap), [snappable](https://github.com/MarcinusX/snappable)
 * A big shout out to all testers!
   * Android
     * pa9eup, tsumugii_12
+  * iOS
+    * Nurellina
