@@ -1,8 +1,8 @@
 # Important!
-This repository is not longer being updated.
-For various reasons I decided to no longer make the code of DaKanji publicly available.
-However the release section will always have the newest releases.
-Also bugs can be reported here and I will take care of them.
+For various reasons, I decided to no longer make the code of DaKanji publicly available.
+Therefore the source code of this repository will not be updated anymore.
+However, the release section will always have the newest releases.
+Also, bugs can be reported here and I will take care of them.
 
 <img src="./media/banner.png" alt="DaKanji" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
@@ -23,7 +23,7 @@ Also bugs can be reported here and I will take care of them.
 ## What is this
 
 DaKanji helps students of the Japanese language and people who use it.
-Currently it can recognize 6500+ characters (Kanji, Hiragana, Katakana, Romaji, Arabic Numbers) which the user draws by hand.
+Currently, it can recognize 6500+ characters (Kanji, Hiragana, Katakana, Romaji, Arabic Numbers) which the user draws by hand.
 But the feature set will be vastly improved in the coming releases. <br/>
 For more details about the features take a look at the [usage section](#usage).
 </br>
@@ -44,9 +44,10 @@ In this section the features of the app are explained in more detail.
 
 ### Handwritten kanji recognition
 
-The user can draw a character in the UI and the app will predict which character was drawn. This prediction can than be opened in a dictionary of choice. A dictionary can be chosen in the settings.
-Those dictionaries include translation apps, app dictionaries and web dictionaries.</br>
-Currently 6500+ characters are supported. 
+The user can draw a character in the UI and the app will predict which character was drawn.
+This prediction can then be opened in a dictionary of choice. A dictionary can be chosen in the settings.
+Those dictionaries include translation apps, app dictionaries, and web dictionaries.</br>
+Currently, 6500+ characters are supported. 
 All supported characters can be found [here](https://github.com/CaptainDario/DaKanji-Mobile/blob/main/assets/labels_CNN_kanji_only.txt).</br>
 
 ## Contributing
