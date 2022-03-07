@@ -1,9 +1,3 @@
-# Important!
-For various reasons, I decided to no longer make the code of DaKanji publicly available.
-Therefore the source code of this repository will not be updated anymore.
-However, the release section will always have the newest releases.
-Also, bugs can be reported here and I will take care of them.
-
 <img src="./media/banner.png" alt="DaKanji" style="display:block;margin-left:auto;margin-right:auto;" width="40%"/>
 <table>
   <tr>
@@ -78,3 +72,9 @@ Here is a list of a few things which would help this project:
     * pa9eup, tsumugii_12
   * iOS
     * Nurellina
+
+## Notes
+For various reasons, I decided to no longer make the code of DaKanji publicly available.
+Therefore the source code of this repository will not be updated anymore.
+However, the release section will always have the newest releases.
+Also, bugs can be reported here and I will take care of them.
